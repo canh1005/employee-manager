@@ -45,44 +45,82 @@ export const appGlass = makeStyles({
 });
 
 export const employeeModal = makeStyles({
-  root: {
-    maxWidth: "600px",
-  },
+  root: {},
   box: {
     background: "#fff",
-    width: "100%",
+    maxWidth: "600px",
+    margin: "auto",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   },
   title: {
     background: "blue",
     color: "white",
     padding: "10px 20px",
     marginBottom: "20px!important",
+    textAlign: "center",
   },
   form: {
     display: "flex",
     flexWrap: "wrap",
-    "& .MuiTextField-root:first-child": {
-      width: "100%",
-    },
+
     "& .MuiTextField-root:not(:first-child)": {
       width: "50%",
     },
+    "& .MuiTextField-root:first-child": {
+      width: "100%",
+    },
     "& .MuiTextField-root": {
       marginBottom: "20px",
-      '& .MuiInputLabel-root.Mui-focused,.MuiInputLabel-root.MuiFormLabel-filled':{
-        transform: 'translate(24px, -9px) scale(.75)'
+      "& .MuiInputLabel-root.Mui-focused,.MuiInputLabel-root.MuiFormLabel-filled": {
+        transform: "translate(24px, -9px) scale(.75)",
       },
       "& .MuiInputBase-root": {
         margin: "0 10px",
       },
     },
   },
-  btn: {
+  buttonBox: {
     marginBottom: "20px",
     textAlign: "right",
     width: "100%",
     "& button": {
       margin: "0 5px",
     },
+  },
+});
+
+export const employeeDetail = makeStyles({
+  card: {
+    margin: '20px 0'
+  },
+  cardContent: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& p':{
+      margin: '0 20px',
+      display: 'flex',
+      '& span:first-child':{
+        marginRight: '5px',
+      }
+    }
+  },
+  img: {
+    border: "5px solid #fff",
+    boxShadow:
+      "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;",
+    width: "110px",
+    height: "110px",
+    margin: '0 auto',
+    borderRadius: "50%",
+    position: "relative",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: 'hidden',
   },
 });
