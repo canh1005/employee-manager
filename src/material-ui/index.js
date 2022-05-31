@@ -94,33 +94,71 @@ export const employeeModal = makeStyles({
 
 export const employeeDetail = makeStyles({
   card: {
-    margin: '20px 0'
+    margin: "20px 0",
+    overflow: "unset!important",
+    position: "relative",
   },
   cardContent: {
-    textAlign: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '& p':{
-      margin: '0 20px',
-      display: 'flex',
-      '& span:first-child':{
-        marginRight: '5px',
-      }
+    textAlign: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    "& div": {
+      display: "flex",
+    },
+    "& h5": {
+      marginBottom: "10px",
+    },
+    "& p": {
+      margin: "0 20px",
+      display: "flex",
+      "& span:first-child": {
+        marginRight: "5px",
+      },
+    },
+  },
+  employeeInfoBtn: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    '& button':{
+      margin: '5px 5px 0 0'
     }
+  },
+  imgBox: {
+    position: "relative",
+    marginTop: "60px",
   },
   img: {
     border: "5px solid #fff",
     boxShadow:
       "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;",
-    width: "110px",
-    height: "110px",
-    margin: '0 auto',
-    borderRadius: "50%",
-    position: "relative",
+    width: "110px!important",
+    height: "110px!important",
+    margin: "0 auto",
+    overflow: "hidden",
+    position: "absolute",
+    top: "-50px",
+  },
+  employeeTabs: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    overflow: 'hidden',
+    "& a": {
+      textDecoration: "none",
+      padding: "10px 20px",
+    },
+  },
+  employeeTabsBox: {
+    background: "#fff",
+    padding: "10px 20px",
+    borderRadius: "5px",
+  },
+});
+
+export const employeeTabs = makeStyles({
+  box: {
+    background: "#fff",
   },
 });

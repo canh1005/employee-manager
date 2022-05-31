@@ -40,7 +40,7 @@ function ListEmployee(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const handleEditEmployee = (employee) => {
+  const handleEmployeeDetail = (employee) => {
     navigate(`${employee.no}`, { replace: true });
   };
   const renderListEmployee = () => {
@@ -69,10 +69,10 @@ function ListEmployee(props) {
               <TableCell align="right">{employee.age}</TableCell>
               <TableCell align="right">{employee.address}</TableCell>
               <TableCell>
-                <Button onClick={() => handleEditEmployee(employee)}>
+                <Button onClick={() => handleEmployeeDetail(employee)}>
                   <InfoOutlinedIcon />
                 </Button>
-                <Button>
+                <Button >
                   <DeleteIcon />
                 </Button>
               </TableCell>
