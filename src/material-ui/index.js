@@ -104,6 +104,7 @@ export const employeeDetail = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
+    paddingTop: '90px!important',
     "& div": {
       display: "flex",
     },
@@ -138,8 +139,10 @@ export const employeeDetail = makeStyles({
     height: "110px!important",
     margin: "0 auto",
     overflow: "hidden",
-    position: "absolute",
+    position: "absolute!important",
     top: "-50px",
+    left: '50%',
+    transform: 'translateX(-50%)'
   },
   employeeTabs: {
     display: "flex",

@@ -14,25 +14,32 @@ import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { employeeDetail } from "../../material-ui";
 import { actEmployeeDetailAPI } from "../../redux/modules/EmployeeDetailReducer/action";
 import { actGetImageAPI } from "../../redux/modules/GetImageReducer/action";
+import { actEmployeeEdited } from "../../redux/modules/UpdateEmployeeReducer/action";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ResponsiveDialog from "../Dialog";
+import EmployeeModal from "../EmployeeModal";
 
 function EmployeeDetail(props) {
   const { employeeInfo, imageInfo } = props;
   const employeeId = useParams().id;
   const classes = employeeDetail();
   const navigate = useNavigate();
-  
+
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openEditModel, setOpenEditModel] = useState(false);
   useEffect(() => {
     props.fetchEmployeeInfo(employeeId);
     props.fetchImage(employeeId);
     navigate("info", { replace: true });
+    return () => {props.fetchEmployeeEdited(null)}
   }, []);
   const handleDeleteClick = () => {
     setOpenDialog(true);
-    console.log(openDialog); 
+  };
+  const handleEditModel = () => {
+    setOpenEditModel(true);
+    props.fetchEmployeeEdited(employeeInfo);
   };
   const renderEmployeeInfo = () => {
     if (employeeInfo) {
@@ -76,11 +83,11 @@ function EmployeeDetail(props) {
           />
         </Box>
         <Box className={classes.employeeInfoBtn}>
-          <Button variant="contained">
+          <Button variant="contained" onClick={handleEditModel}>
             <ModeEditIcon />
           </Button>
           <Button variant="contained" onClick={handleDeleteClick}>
-            <DeleteIcon  />
+            <DeleteIcon />
           </Button>
         </Box>
         {renderEmployeeInfo()}
@@ -96,9 +103,18 @@ function EmployeeDetail(props) {
           <Outlet />
         </Box>
       </Box>
-      <ResponsiveDialog open={openDialog} setOpen={setOpenDialog}/>
+      {openDialog ? (
+        <ResponsiveDialog open={openDialog} setOpen={setOpenDialog} />
+      ) : (
+        <></>
+      )}
+      {openEditModel ? (
+        <EmployeeModal open={openEditModel} setOpenModal={setOpenEditModel}/>
+      ) : (
+        <></>
+      )}
+      {/* <ResponsiveDialog open={openDialog} setOpen={setOpenDialog} /> */}
     </Box>
-    
   );
 }
 const mapStateToProps = (state) => {
@@ -114,6 +130,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     fetchImage: (id) => {
       dispatch(actGetImageAPI(id));
+    },
+    fetchEmployeeEdited: (employee) => {
+      dispatch(actEmployeeEdited(employee));
     },
   };
 };
