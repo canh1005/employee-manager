@@ -4,8 +4,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardMedia,
-  Tabs,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -32,7 +30,9 @@ function EmployeeDetail(props) {
     props.fetchEmployeeInfo(employeeId);
     props.fetchImage(employeeId);
     navigate("info", { replace: true });
-    return () => {props.fetchEmployeeEdited(null)}
+    return () => {
+      props.fetchEmployeeEdited(null);
+    };
   }, []);
   const handleDeleteClick = () => {
     setOpenDialog(true);
@@ -40,6 +40,10 @@ function EmployeeDetail(props) {
   const handleEditModel = () => {
     setOpenEditModel(true);
     props.fetchEmployeeEdited(employeeInfo);
+  };
+  const handleDeleteConfirm = () => {
+    console.log("ID", employeeId);
+    setOpenDialog(false);
   };
   const renderEmployeeInfo = () => {
     if (employeeInfo) {
@@ -80,6 +84,7 @@ function EmployeeDetail(props) {
                 ? imageInfo.config.baseURL + imageInfo.config.url
                 : ""
             }
+            
           />
         </Box>
         <Box className={classes.employeeInfoBtn}>
@@ -104,16 +109,20 @@ function EmployeeDetail(props) {
         </Box>
       </Box>
       {openDialog ? (
-        <ResponsiveDialog open={openDialog} setOpen={setOpenDialog} />
+        <ResponsiveDialog
+          open={openDialog}
+          setOpen={setOpenDialog}
+          title={"Are you sure to delete this employee?"}
+          handleSubmit={handleDeleteConfirm}
+        />
       ) : (
         <></>
       )}
       {openEditModel ? (
-        <EmployeeModal open={openEditModel} setOpenModal={setOpenEditModel}/>
+        <EmployeeModal open={openEditModel} setOpenModal={setOpenEditModel} />
       ) : (
         <></>
       )}
-      {/* <ResponsiveDialog open={openDialog} setOpen={setOpenDialog} /> */}
     </Box>
   );
 }

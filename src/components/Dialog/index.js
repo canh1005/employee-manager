@@ -8,27 +8,19 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Slide } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
-import { actDeleteEmployeeAPI } from "../../redux/modules/DeleteEmployeeReducer/action";
-import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function ResponsiveDialog(props) {
-  const { open, setOpen } = props;
-  const employeeID = useParams().id;
-  const navigate = useNavigate();
-  console.log("e", employeeID);
+
+function ResponsiveDialog({ title, ...props }) {
+  const { open, setOpen, handleSubmit } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleClose = () => {
     setOpen(false);
-  };
-  const handleSubmit = () => {
-    console.log(employeeID);
-    navigate("/", { replace: true });
   };
   return (
     <div>
@@ -39,9 +31,7 @@ function ResponsiveDialog(props) {
         TransitionComponent={Transition}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">
-          {"Are you sure to delete this employee?"}
-        </DialogTitle>
+        <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Will be delete all data from this employee
@@ -59,11 +49,8 @@ function ResponsiveDialog(props) {
     </div>
   );
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fecthDeleteEmployee: (id) => {
-      dispatch(actDeleteEmployeeAPI(id));
-    },
-  };
+ResponsiveDialog.propTypes = {
+  title: PropTypes.string.isRequired,
 };
-export default connect(null, mapDispatchToProps)(React.memo(ResponsiveDialog));
+
+export default React.memo(ResponsiveDialog);

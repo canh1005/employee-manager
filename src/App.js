@@ -10,7 +10,7 @@ import TeamPage from "./pages/TeamPage";
 import ListEmployee from "./components/ListEmployee";
 import EmployeeInfo from "./components/EmployeeInfo";
 import EmployeeWorking from "./components/EmployeeWorking";
-import EmployeeAdvances from "./components/EmployeeWorking";
+import EmployeeAdvances from "./components/EmployeeAdvances";
 import EmployeeStatistic from "./components/EmployeeStatistic";
 
 function App() {

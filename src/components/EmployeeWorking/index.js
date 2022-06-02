@@ -1,65 +1,63 @@
 import React, { useEffect } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { connect } from "react-redux";
-import { actGetWorkingAPI } from "../../redux/modules/EmployeeWorkingReducer/action";
 import { useParams } from "react-router-dom";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DataTable from "../DataTable";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Button } from "@mui/material";
+import { actGetWorkingAPI } from "../../redux/modules/GetWorkingReducer/action";
+import moment from "moment";
+const workingColumns = [
+  {
+    field: "no",
+    headerName: "No#",
+  },
+  {
+    field: "date",
+    headerName: "Date",
+  },
+  {
+    field: "hour",
+    headerName: "Hour",
+  },
+  {
+    field: "option",
+    headerName: "Option",
+  },
+];
 
 function EmployeeWorking(props) {
-  const { workInfo } = props;
-  const employeeId = useParams().id;
+  const { workingInfo } = props;
+  const employeeID = useParams().id;
   useEffect(() => {
-    props.fetchWorkInfo(employeeId);
+    props.fetchWorkingInfo(employeeID);
   }, []);
-  const renderWorkingInfo = () => {
-    if (workInfo) {
-      {
-        return workInfo.map((workItems) => (
-          <TableRow
-            key={workItems.no}
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
-            <TableCell component="th" scope="row">
-              {workItems.no}
-            </TableCell>
-            <TableCell align="center">{workItems.date}</TableCell>
-            <TableCell align="center">{workItems.hour}</TableCell>
-            <TableCell align="center"><DeleteIcon/></TableCell>
-          </TableRow>
-        ));
-      }
+  const renderAdvancesInfo = () => {
+    if (workingInfo) {
+      const workingInfoRows = workingInfo.map((row) => ({
+        no: row.no,
+        date: moment(row.date).format('DD-MM-YYYY'),
+        hour: row.hour,
+        option: (
+          <Button>
+            <DeleteIcon />
+          </Button>
+        ),
+      }));
+      return <DataTable rows={workingInfoRows} columns={workingColumns} />;
     }
   };
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>No.</TableCell>
-            <TableCell align="center">Date</TableCell>
-            <TableCell align="center">Hour</TableCell>
-            <TableCell align="center">Options</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>{renderWorkingInfo()}</TableBody>
-      </Table>
-    </TableContainer>
+    <div style={{ height: 400, width: "100%" }}>{renderAdvancesInfo()}</div>
   );
 }
 const mapStateToProps = (state) => {
   return {
-    workInfo: state.getWorkingReducer.data,
+    workingInfo: state.getWorkingReducer.data,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchWorkInfo: (id) => {
+    fetchWorkingInfo: (id) => {
       dispatch(actGetWorkingAPI(id));
     },
   };
