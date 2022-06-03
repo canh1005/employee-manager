@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import { actListEmpAPI } from "../../redux/modules/ListEmployeeReducer/action";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -16,6 +16,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import EmployeeModal from "../EmployeeModal";
@@ -69,12 +70,16 @@ function ListEmployee(props) {
               <TableCell align="right">{employee.age}</TableCell>
               <TableCell align="right">{employee.address}</TableCell>
               <TableCell>
-                <Button onClick={() => handleEmployeeDetail(employee)}>
-                  <InfoOutlinedIcon />
-                </Button>
-                <Button >
-                  <DeleteIcon />
-                </Button>
+                <Tooltip title="Employee information">
+                  <Button onClick={() => handleEmployeeDetail(employee)}>
+                    <InfoOutlinedIcon />
+                  </Button>
+                </Tooltip>
+                <Tooltip title="Delete employee">
+                  <Button>
+                    <DeleteIcon />
+                  </Button>
+                </Tooltip>
               </TableCell>
             </TableRow>
           );
@@ -84,10 +89,14 @@ function ListEmployee(props) {
   };
   return (
     <Box>
-      <Button onClick={handleOpenModal}>
-        <PersonAddAltRoundedIcon />
-        <Typography variant="span">Add employee</Typography>
-      </Button>
+      <Box>
+        <Tooltip title="Add new employee">
+          <Button onClick={handleOpenModal} variant="contained">
+            <PersonAddAltRoundedIcon />
+          </Button>
+        </Tooltip>
+      </Box>
+      <Typography>List of employee</Typography>
       <EmployeeModal open={openModal} setOpenModal={setOpenModal} />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -104,17 +113,20 @@ function ListEmployee(props) {
                   }}
                 />
               </TableCell>
-              <TableCell>No.</TableCell>
+              <TableCell>No#</TableCell>
               <TableCell align="right">FullName</TableCell>
               <TableCell align="right">Phone</TableCell>
               <TableCell align="right">Team</TableCell>
-              <TableCell>Option</TableCell>
+              <TableCell align="center">Option</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{renderListEmployee()}</TableBody>
         </Table>
       </TableContainer>
-      <Paginations setPage={setPage} />
+      <Paginations
+        setPage={setPage}
+        numberOfPage={listEmp ? listEmp.totalPages : 1}
+      />
     </Box>
   );
 }

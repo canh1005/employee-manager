@@ -2,9 +2,9 @@ import React from "react";
 import Pagination from "@mui/material/Pagination";
 
 export default function Paginations(props) {
-  const handleChange = (event) => {
-    props.setPage(event.target.textContent);
-    console.log(event.target.textContent);
+  const { numberOfPage, setPage } = props;
+  const handleChange = (event, value) => {
+    setPage(value);
   };
   const style = {
     marginTop: "20px",
@@ -14,11 +14,11 @@ export default function Paginations(props) {
   };
   return (
     <Pagination
-      count={2}
+      count={numberOfPage}
       variant="outlined"
       shape="rounded"
       color="primary"
-      onChange={(event) => handleChange(event)}
+      onChange={handleChange}
       sx={style}
     />
   );

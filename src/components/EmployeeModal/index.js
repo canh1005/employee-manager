@@ -14,12 +14,20 @@ import { connect } from "react-redux";
 import { actListTeamAPI } from "../../redux/modules/ListAllTeamReducer/action";
 import { actAddEmployeeAPI } from "../../redux/modules/AddEmployeeReducer/action";
 import { useNavigate } from "react-router-dom";
+import {
+  checkAge,
+  checkEmpty,
+  checkIsNumber,
+  checkMoney,
+  checkPhoneNumber,
+} from "../../utils/Validations";
 
 function EmployeeModal(props) {
   const { open, setOpenModal, listTeam, employeeEdit } = props;
   const handleClose = () => setOpenModal(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const classes = employeeModal();
+  const navigate = useNavigate();
   const genderOptions = [
     {
       value: true,
@@ -37,7 +45,21 @@ function EmployeeModal(props) {
     male: true,
     teamID: 1,
   });
-  const navigate = useNavigate();
+  const [errors, setErrors] = useState({
+    fullName: "",
+    age: "",
+    address: "",
+    moneyPerHour: "",
+    phone: "",
+    frmSubmit: {
+      fullNameValid: false,
+      ageValid: false,
+      addressValid: false,
+      moneyPerHourValid: false,
+      phoneValid: false,
+      frmValid: false,
+    },
+  });
   useEffect(() => {
     props.fetchListTeam();
     if (props.employeeEdit) {
@@ -97,6 +119,64 @@ function EmployeeModal(props) {
     // navigate("/", { replace: true });
     console.log("employeeInfo", employee);
   };
+  const handleError = (event) => {
+    const { name, value } = event.target;
+    let message = checkEmpty(value);
+    let {
+      fullNameValid,
+      ageValid,
+      addressValid,
+      phoneValid,
+      moneyPerHourValid,
+    } = errors.frmSubmit;
+    switch (name) {
+      case "fullName":
+        fullNameValid = message !== "" ? false : true;
+        break;
+      case "age":
+        if (value !== "") {
+          message = checkIsNumber(value);
+          message = checkAge(value);
+          ageValid = message !== "" ? false : true;
+        }
+        break;
+      case "address":
+        addressValid = message !== "" ? false : true;
+        break;
+      case "phone":
+        if (value !== "") {
+          message = checkPhoneNumber(value);
+          phoneValid = message !== "" ? false : true;
+        }
+        break;
+      case "moneyPerHour":
+        if (value !== "") {
+          message = checkMoney(value);
+          moneyPerHourValid = message !== "" ? false : true;
+        }
+        break;
+      
+      default:
+        break;
+    }
+    setErrors({
+      ...errors,
+      [name]: message,
+      frmSubmit: {
+        ageValid,
+        fullNameValid,
+        phoneValid,
+        moneyPerHourValid,
+        addressValid,
+        frmValid:
+          ageValid &&
+          fullNameValid &&
+          phoneValid &&
+          moneyPerHourValid &&
+          addressValid,
+      },
+    });
+  };
   return (
     <>
       <Modal
@@ -118,7 +198,13 @@ function EmployeeModal(props) {
               label="Full Name"
               value={employee.fullName}
               onChange={handleChange}
+              onBlur={handleError}
             />
+            {errors.fullName ? (
+              <Typography variant="span">{errors.fullName}</Typography>
+            ) : (
+              ""
+            )}
             <TextField
               variant="outlined"
               type="text"
@@ -126,7 +212,13 @@ function EmployeeModal(props) {
               label="Address"
               value={employee.address}
               onChange={handleChange}
+              onBlur={handleError}
             />
+            {errors.address ? (
+              ""
+            ) : (
+              <Typography variant="span">{errors.address}</Typography>
+            )}
             <TextField
               variant="outlined"
               name="sex"
@@ -150,12 +242,19 @@ function EmployeeModal(props) {
               label="Age"
               value={employee.age}
               onChange={handleChange}
+              onBlur={handleError}
             />
+            {errors.age ? (
+              <Typography variant="span">{errors.age}</Typography>
+            ) : (
+              ""
+            )}
             <DatePicker
               label="Start date"
               onChange={handleSelectedDate}
               value={employeeEdit ? employee.startDay : selectedDate}
               renderInput={(params) => <TextField {...params} />}
+              
             />
             <TextField
               variant="outlined"
@@ -164,7 +263,13 @@ function EmployeeModal(props) {
               label="Money/hour"
               value={employee.moneyPerHour}
               onChange={handleChange}
+              onBlur={handleError}
             />
+            {errors.moneyPerHour ? (
+              <Typography variant="span">{errors.moneyPerHour}</Typography>
+            ) : (
+              ""
+            )}
             <TextField
               variant="outlined"
               type="text"
@@ -172,7 +277,13 @@ function EmployeeModal(props) {
               label="Phone number"
               value={employee.phone}
               onChange={handleChange}
+              onBlur={handleError}
             />
+            {errors.phone ? (
+              <Typography variant="span">{errors.phone}</Typography>
+            ) : (
+              ""
+            )}
             <TextField
               variant="outlined"
               select
@@ -201,7 +312,12 @@ function EmployeeModal(props) {
               >
                 Cancle
               </Button>
-              <Button variant="contained" color="primary" type="submit">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={!errors.frmSubmit.frmValid}
+              >
                 Submit
               </Button>
             </Box>
