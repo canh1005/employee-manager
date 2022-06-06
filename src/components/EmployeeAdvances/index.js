@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import { actGetAdvancesAPI } from "../../redux/modules/GetAdvancesReducer/action";
 import DataTable from "../DataTable";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import moment from "moment";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AdvanceModal from "../AdvanceModal";
+
 const advancesColumns = [
   {
     field: "no",
@@ -28,6 +31,7 @@ const advancesColumns = [
 function EmployeeAdvances(props) {
   const { advancesInfo } = props;
   const employeeID = useParams().id;
+  const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     props.fetchAdvancesInfo(employeeID);
   }, []);
@@ -35,7 +39,7 @@ function EmployeeAdvances(props) {
     if (advancesInfo) {
       const advancesInfoRows = advancesInfo.map((row) => ({
         no: row.no,
-        date: moment(row.date).format('DD-MM-YYYY'),
+        date: moment(row.date).format("DD-MM-YYYY"),
         money: row.money,
         option: (
           <Button>
@@ -47,7 +51,15 @@ function EmployeeAdvances(props) {
     }
   };
   return (
-    <div style={{ height: 400, width: "100%" }}>{renderAdvancesInfo()}</div>
+    <>
+      <Tooltip title="Add new advance">
+        <Button variant="contained" onClick={() => setOpenModal(true)}>
+          <AddCircleOutlineIcon />
+        </Button>
+      </Tooltip>
+      <div style={{ height: 400, width: "100%" }}>{renderAdvancesInfo()}</div>
+      <AdvanceModal open={openModal} setOpen={setOpenModal} />
+    </>
   );
 }
 const mapStateToProps = (state) => {

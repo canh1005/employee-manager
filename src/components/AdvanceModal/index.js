@@ -6,7 +6,8 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { actAddWorkingAPI } from "../../redux/modules/AddWorkingReducer/action";
-import { checkEmpty } from "../../utils/Validations";
+import { actGetAdvancesAPI } from "../../redux/modules/GetAdvancesReducer/action";
+import { actAddAdvanceAPI } from "../../redux/modules/AddAdvanceReducer/action";
 
 const style = {
   position: "absolute",
@@ -29,67 +30,41 @@ const style = {
     },
   },
 };
-function WorkingModal(props) {
+function AdvanceModal(props) {
   const { open, setOpen } = props;
   const employeeID = useParams().id;
-  const [working, setWorking] = useState({
+  const [advance, setAdvance] = useState({
     date: "",
     employee_id: employeeID,
-    hour: "",
-    errors: {
-      hour: "",
-      hourValid: false,
-      frmValid: false,
-    },
+    money: "",
   });
   const handleClose = () => setOpen(false);
   const handleDate = (event) => {
     let formatDate = moment(event).format("YYYY-MM-DD");
-    setWorking({
-      ...working,
+    setAdvance({
+      ...advance,
       date: formatDate,
     });
   };
   const handleOnChange = (event) => {
     const { name, value } = event.target;
-    setWorking({
-      ...working,
+    setAdvance({
+      ...advance,
       [name]: value,
     });
-  };
-  const handleErrors = (event) => {
-    const { name, value } = event.target;
-    let message = checkEmpty(value);
-    let { hourValid } = working.errors;
-    switch (name) {
-      case "hour":
-        hourValid = message !== "" ? false : true;
-        break;
-      default:
-        break;
-    }
-    setWorking({
-      ...working,
-      errors: {
-        [name]: message,
-        hourValid,
-        frmValid: hourValid ,
-      },
-    });
-    console.log("frmValid", working);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
     setOpen(false);
-    console.log("working", working);
-    props.fetchWorking(working);
+    console.log("working", advance);
+    props.fetchAdvance(advance);
   };
   return (
     <>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <Typography variant="h6" component="h2">
-            Add working
+            Add advance
           </Typography>
           <form onSubmit={handleSubmit}>
             <Box sx={{ display: "flex" }}>
@@ -97,21 +72,14 @@ function WorkingModal(props) {
                 label="Date"
                 name="date"
                 onChange={handleDate}
-                value={working.date}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                  />
-                )}
+                value={advance.date}
+                renderInput={(params) => <TextField {...params} />}
               />
               <TextField
-                error={working.errors.hour ? true : false}
-                label="Hour"
-                name="hour"
+                label="Money"
+                name="money"
                 type="text"
                 onChange={handleOnChange}
-                onBlur={handleErrors}
-                helperText={working.errors.hour}
               />
             </Box>
             <Box className="btn-box">
@@ -122,12 +90,7 @@ function WorkingModal(props) {
               >
                 Cancle
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={!working.errors.frmValid}
-              >
+              <Button variant="contained" color="primary" type="submit">
                 Submit
               </Button>
             </Box>
@@ -139,9 +102,9 @@ function WorkingModal(props) {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchWorking: (working) => {
-      dispatch(actAddWorkingAPI(working));
+    fetchAdvance: (advance_item) => {
+      dispatch(actAddAdvanceAPI(advance_item));
     },
   };
 };
-export default connect(null, mapDispatchToProps)(WorkingModal);
+export default connect(null, mapDispatchToProps)(AdvanceModal);

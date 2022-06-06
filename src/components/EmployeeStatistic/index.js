@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import { actGetStatisticAPI } from "../../redux/modules/GetStatisticsReducer/action";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 function EmployeeAdvances(props) {
   const { statisticInfo } = props;
@@ -13,7 +13,10 @@ function EmployeeAdvances(props) {
   const renderStatisticInfo = () => {
     if (statisticInfo) {
       return <Box>
-
+        <Typography>Number of working day:{statisticInfo.numberOfWorkingDay}</Typography>
+        <Typography>Total get:{statisticInfo.totalGet}</Typography>
+        <Typography>Total advances:{statisticInfo.totalAdvances}</Typography>
+        <Typography>Summary:{statisticInfo.summary}</Typography>
       </Box>
     }
   };

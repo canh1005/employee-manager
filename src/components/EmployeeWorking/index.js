@@ -9,6 +9,7 @@ import moment from "moment";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ResponsiveDialog from "../Dialog";
 import WorkingModal from "../WorkingModal";
+import { actDeleteWorkingAPI } from "../../redux/modules/DeleteWorkingReducer/action";
 const workingColumns = [
   {
     field: "no",
@@ -31,17 +32,31 @@ const workingColumns = [
 function EmployeeWorking(props) {
   const { workingInfo } = props;
   const employeeID = useParams().id;
-  const [openDelete, setOpenDelete] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: "",
+  });
   const [openModal, setOpenModal] = useState(false);
-  // useEffect(() => {
-  //   props.fetchWorkingInfo(employeeID);
-  // }, []);
-  useMemo(() => props.fetchWorkingInfo(employeeID), [employeeID])
-  const handleClick = () => {
-    setOpenDelete(true);
+  useEffect(() => {
+    props.fetchWorkingInfo(employeeID);
+  }, []);
+  const handleClick = (working_id) => {
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: true,
+      title: "Are you sure to delete this working?",
+      onConfirm: () => handleDelete(working_id),
+    });
   };
   const handleOpenModal = () => {
-    setOpenModal(true)
+    setOpenModal(true);
+  };
+  const handleDelete = (working_id) => {
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false,
+    });
+    props.fetchDeleteWorking(employeeID, working_id);
   };
   const renderAdvancesInfo = () => {
     if (workingInfo) {
@@ -51,7 +66,7 @@ function EmployeeWorking(props) {
         hour: row.hour,
         option: (
           <Button>
-            <DeleteIcon onClick={handleClick} />
+            <DeleteIcon onClick={() => handleClick(row.no)} />
           </Button>
         ),
       }));
@@ -67,11 +82,10 @@ function EmployeeWorking(props) {
       </Tooltip>
       <div style={{ height: 400, width: "100%" }}>{renderAdvancesInfo()}</div>
       <ResponsiveDialog
-        title="Are you sure to delete this working?"
-        open={openDelete}
-        setOpen={setOpenDelete}
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
       />
-      <WorkingModal open={openModal} setOpen={setOpenModal}/>
+      <WorkingModal open={openModal} setOpen={setOpenModal} />
     </>
   );
 }
@@ -84,6 +98,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchWorkingInfo: (id) => {
       dispatch(actGetWorkingAPI(id));
+    },
+    fetchDeleteWorking: (id, working_id) => {
+      dispatch(actDeleteWorkingAPI(id, working_id));
     },
   };
 };

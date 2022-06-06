@@ -131,6 +131,12 @@ export const employeeDetail = makeStyles({
     position: "relative",
     marginTop: "60px",
   },
+  imgButton:{
+    position: 'absolute!important',
+    top: "-50px",
+    left: '50%',
+    transform: 'translateX(-50%)'
+  },
   img: {
     border: "5px solid #fff",
     boxShadow:
@@ -139,10 +145,10 @@ export const employeeDetail = makeStyles({
     height: "110px!important",
     margin: "0 auto",
     overflow: "hidden",
-    position: "absolute!important",
-    top: "-50px",
-    left: '50%',
-    transform: 'translateX(-50%)'
+    // position: "absolute!important",
+    // top: "-50px",
+    // left: '50%',
+    // transform: 'translateX(-50%)'
   },
   employeeTabs: {
     display: "flex",

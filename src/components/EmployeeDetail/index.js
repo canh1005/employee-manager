@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  Input,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -76,16 +77,25 @@ function EmployeeDetail(props) {
     <Box>
       <Card className={classes.card}>
         <Box className={classes.imgBox}>
-          <Avatar
-            className={classes.img}
-            alt={employeeInfo ? `${employeeInfo.fullName} avatar` : ""}
-            src={
-              imageInfo && imageInfo.status !== 400
-                ? imageInfo.config.baseURL + imageInfo.config.url
-                : ""
-            }
-            
-          />
+          <Button className={classes.imgButton} component='label'>
+            <Input
+              accept="image/*"
+              id="contained-button-file"
+              multiple
+              type="file"
+              hidden
+              sx={{display: 'none'}}
+            />
+            <Avatar
+              className={classes.img}
+              alt={employeeInfo ? `${employeeInfo.fullName} avatar` : ""}
+              src={
+                imageInfo && imageInfo.status !== 400
+                  ? imageInfo.config.baseURL + imageInfo.config.url
+                  : ""
+              }
+            />
+          </Button>
         </Box>
         <Box className={classes.employeeInfoBtn}>
           <Button variant="contained" onClick={handleEditModel}>

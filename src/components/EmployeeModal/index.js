@@ -18,8 +18,8 @@ import {
   checkAge,
   checkEmpty,
   checkIsNumber,
-  checkMoney,
   checkPhoneNumber,
+  checkPositiveNumber,
 } from "../../utils/Validations";
 
 function EmployeeModal(props) {
@@ -151,11 +151,11 @@ function EmployeeModal(props) {
         break;
       case "moneyPerHour":
         if (value !== "") {
-          message = checkMoney(value);
+          message = checkPositiveNumber(value);
           moneyPerHourValid = message !== "" ? false : true;
         }
         break;
-      
+
       default:
         break;
     }
@@ -192,6 +192,7 @@ function EmployeeModal(props) {
           </Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
+              error={errors.fullName ? true : false}
               variant="outlined"
               type="text"
               name="fullName"
@@ -199,13 +200,10 @@ function EmployeeModal(props) {
               value={employee.fullName}
               onChange={handleChange}
               onBlur={handleError}
+              helperText={errors.fullName}
             />
-            {errors.fullName ? (
-              <Typography variant="span">{errors.fullName}</Typography>
-            ) : (
-              ""
-            )}
             <TextField
+              error={errors.address ? true : false}
               variant="outlined"
               type="text"
               name="address"
@@ -213,12 +211,8 @@ function EmployeeModal(props) {
               value={employee.address}
               onChange={handleChange}
               onBlur={handleError}
+              helperText={errors.address}
             />
-            {errors.address ? (
-              ""
-            ) : (
-              <Typography variant="span">{errors.address}</Typography>
-            )}
             <TextField
               variant="outlined"
               name="sex"
@@ -236,6 +230,7 @@ function EmployeeModal(props) {
               })}
             </TextField>
             <TextField
+              error={errors.age ? true : false}
               variant="outlined"
               type="text"
               name="age"
@@ -243,20 +238,16 @@ function EmployeeModal(props) {
               value={employee.age}
               onChange={handleChange}
               onBlur={handleError}
+              helperText={errors.age}
             />
-            {errors.age ? (
-              <Typography variant="span">{errors.age}</Typography>
-            ) : (
-              ""
-            )}
             <DatePicker
               label="Start date"
               onChange={handleSelectedDate}
               value={employeeEdit ? employee.startDay : selectedDate}
               renderInput={(params) => <TextField {...params} />}
-              
             />
             <TextField
+              error={errors.moneyPerHour ? true : false}
               variant="outlined"
               type="text"
               name="moneyPerHour"
@@ -264,13 +255,10 @@ function EmployeeModal(props) {
               value={employee.moneyPerHour}
               onChange={handleChange}
               onBlur={handleError}
+              helperText={errors.moneyPerHour}
             />
-            {errors.moneyPerHour ? (
-              <Typography variant="span">{errors.moneyPerHour}</Typography>
-            ) : (
-              ""
-            )}
             <TextField
+              error={errors.phone ? true : false}
               variant="outlined"
               type="text"
               name="phone"
@@ -278,12 +266,8 @@ function EmployeeModal(props) {
               value={employee.phone}
               onChange={handleChange}
               onBlur={handleError}
+              helperText={errors.phone}
             />
-            {errors.phone ? (
-              <Typography variant="span">{errors.phone}</Typography>
-            ) : (
-              ""
-            )}
             <TextField
               variant="outlined"
               select

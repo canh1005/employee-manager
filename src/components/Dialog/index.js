@@ -14,34 +14,44 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ResponsiveDialog({ title, ...props }) {
-  const { open, setOpen, handleSubmit } = props;
+function ResponsiveDialog({ ...props }) {
+  const { confirmDialog, setConfirmDialog } = props;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleClose = () => {
-    setOpen(false);
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false,
+    });
   };
   return (
     <div>
       <Dialog
         fullScreen={fullScreen}
-        open={open}
+        open={confirmDialog.isOpen}
         onClose={handleClose}
         TransitionComponent={Transition}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
+        <DialogTitle id="responsive-dialog-title">
+          {confirmDialog.title}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
             Will be delete all data from this employee
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button
+            autoFocus
+            onClick={() =>
+              setConfirmDialog({ ...confirmDialog, isOpen: false })
+            }
+          >
             Disagree
           </Button>
-          <Button onClick={handleSubmit} autoFocus>
+          <Button onClick={confirmDialog.onConfirm} autoFocus>
             Agree
           </Button>
         </DialogActions>
@@ -49,8 +59,5 @@ function ResponsiveDialog({ title, ...props }) {
     </div>
   );
 }
-ResponsiveDialog.propTypes = {
-  title: PropTypes.string.isRequired,
-};
 
 export default React.memo(ResponsiveDialog);

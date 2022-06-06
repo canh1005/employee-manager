@@ -22,8 +22,8 @@ export const checkIsNumber = (input) => {
   }
   return "";
 };
-export const checkMoney = (money) => {
-  if (money < 1) {
+export const checkPositiveNumber = (input) => {
+  if (input < 1) {
     return "Money must be over 0";
   }
   return "";
