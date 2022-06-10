@@ -16,7 +16,7 @@ import { actGetImageAPI } from "../../redux/modules/GetImageReducer/action";
 import { actEmployeeEdited } from "../../redux/modules/UpdateEmployeeReducer/action";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import ResponsiveDialog from "../Dialog";
+import ResponsiveDialog from "../Commons/Dialog";
 import EmployeeModal from "../EmployeeModal";
 
 function EmployeeDetail(props) {

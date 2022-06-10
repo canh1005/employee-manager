@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import DataTable from "../components/DataTable";
+import DataTable from "../components/Commons/DataTable";
 import { actGetTeamAPI } from "../redux/modules/GetTeamReducer/action";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import { actGetEmployeeByTeamAPI } from "../redux/modules/GetEmployeeByTeamReducer/action";

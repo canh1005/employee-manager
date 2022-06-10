@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import { actGetAdvancesAPI } from "../../redux/modules/GetAdvancesReducer/action";
-import DataTable from "../DataTable";
+// import DataTable from "../Commons/DataTable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Tooltip } from "@mui/material";
 import moment from "moment";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import AdvanceModal from "../AdvanceModal";
+import DataTable from "components/Commons/DataTable";
 
 const advancesColumns = [
   {

@@ -7,11 +7,11 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import EmployeeDetail from "./components/EmployeeDetail";
 import TeamPage from "./pages/TeamPage";
-import ListEmployee from "./components/ListEmployee";
 import EmployeeInfo from "./components/EmployeeInfo";
 import EmployeeWorking from "./components/EmployeeWorking";
 import EmployeeAdvances from "./components/EmployeeAdvances";
 import EmployeeStatistic from "./components/EmployeeStatistic";
+import ListEmployee from "components/ListEmployee";
 
 function App() {
   return (

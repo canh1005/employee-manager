@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import EmployeeModal from "../EmployeeModal";
-import Paginations from "../Pagination";
+import { Paginations } from "components/Commons/Pagination";
 
 function ListEmployee(props) {
   const [page, setPage] = useState(1);

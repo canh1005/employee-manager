@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
-import DataTable from "../DataTable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Tooltip } from "@mui/material";
-import { actGetWorkingAPI } from "../../redux/modules/GetWorkingReducer/action";
+import { actGetWorkingAPI } from "redux/modules/GetWorkingReducer/action";
 import moment from "moment";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import ResponsiveDialog from "../Dialog";
-import WorkingModal from "../WorkingModal";
-import { actDeleteWorkingAPI } from "../../redux/modules/DeleteWorkingReducer/action";
+import WorkingModal from "components/WorkingModal";
+import ResponsiveDialog from 'components/Commons/Dialog'
+import DataTable from 'components/Commons/DataTable'
+import { actDeleteWorkingAPI } from "redux/modules/DeleteWorkingReducer/action";
+
 const workingColumns = [
   {
     field: "no",
