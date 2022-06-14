@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { actListEmpAPI } from "../../redux/modules/ListEmployeeReducer/action";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
@@ -21,33 +20,72 @@ import {
 } from "@mui/material";
 import EmployeeModal from "../EmployeeModal";
 import { Paginations } from "components/Commons/Pagination";
-
+import SearchFrom from "components/Commons/Search";
+import {
+  actGetKeyword,
+  actSearchAPI,
+} from "redux/modules/SearchEmployeeReducer/action";
+import queryString from "query-string";
 function ListEmployee(props) {
-  const [page, setPage] = useState(1);
+  const { searchList } = props;
   const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const [selected, setSelected] = useState([]);
-  const { listEmp } = props;
+  const [selected, setSelected] = useState({ ids: [] });
+  const [filter, setFilter] = useState({
+    page: 1,
+    name: "",
+  });
+
   const navigate = useNavigate();
+
+  const handleOpenModal = () => setOpenModal(true);
+
   const handleSelect = (e) => {
-    console.log(e.target);
-    // if (listEmp) {
-    //   let newSelect = listEmp.map((employee)=> employee.id === )
-    // }
+    const { name, checked } = e.target;
+    if (checked && name === "selectAll") {
+      let checkedAll = searchList.content.map((item) => {
+        return item.no;
+      });
+      setSelected((prevs) => ({
+        ...prevs,
+        ids: [...selected.ids, checkedAll], 
+      }));
+      let obj = {
+        ids: checkedAll
+      }
+    console.log("checked", queryString.stringify(obj));
+
+      console.log(obj);
+    } else {
+      setSelected((prevs) => ({
+        ...prevs,
+        ids: [...selected.ids, name],
+      }));
+    }
+    const params = queryString.stringify(selected);
+    console.log("selected",selected);
+    console.log("check", params);
   };
 
   useEffect(() => {
-    props.fetchListEmp(page);
+    const paramsString = queryString.stringify(filter);
+    props.fetchListSearched(paramsString);
+    console.log("filter", filter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
+  }, [filter]);
   const handleEmployeeDetail = (employee) => {
     navigate(`${employee.no}`, { replace: true });
   };
+  const handleKeywordChange = (keyword) => {
+    setFilter({
+      ...filter,
+      name: keyword,
+      page: 1,
+    });
+  };
   const renderListEmployee = () => {
-    if (listEmp) {
+    if (searchList) {
       {
-        return listEmp.content.map((employee) => {
+        return searchList.content.map((employee) => {
           return (
             <TableRow
               key={employee.no}
@@ -56,11 +94,9 @@ function ListEmployee(props) {
               <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
-                  // checked={selected}
-                  onClick={(event) => handleSelect(event, employee.id)}
-                  // inputProps={{
-                  //   "aria-labelledby": labelId,
-                  // }}
+                  onClick={(event) => handleSelect(event)}
+                  name={employee.no}
+                  checked={selected.checked}
                 />
               </TableCell>
               <TableCell component="th" scope="row">
@@ -89,6 +125,7 @@ function ListEmployee(props) {
   };
   return (
     <Box>
+      <SearchFrom onSubmit={handleKeywordChange} />
       <Box>
         <Tooltip title="Add new employee">
           <Button onClick={handleOpenModal} variant="contained">
@@ -105,8 +142,7 @@ function ListEmployee(props) {
               <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
-                  // indeterminate={numSelected > 0 && numSelected < rowCount}
-                  // checked={rowCount > 0 && numSelected === rowCount}
+                  name="selectAll"
                   onChange={handleSelect}
                   inputProps={{
                     "aria-label": "select all desserts",
@@ -124,21 +160,22 @@ function ListEmployee(props) {
         </Table>
       </TableContainer>
       <Paginations
-        setPage={setPage}
-        numberOfPage={listEmp ? listEmp.totalPages : 1}
+        filter={filter}
+        setPage={setFilter}
+        numberOfPage={searchList ? searchList.totalPages : 1}
       />
     </Box>
   );
 }
 const mapStateToProps = (state) => {
   return {
-    listEmp: state.listEmpReducer.data,
+    searchList: state.searchReducer.data,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchListEmp: (page) => {
-      dispatch(actListEmpAPI(page));
+    fetchListSearched: (filter) => {
+      dispatch(actSearchAPI(filter));
     },
   };
 };

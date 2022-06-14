@@ -2,9 +2,12 @@ import React from "react";
 import Pagination from "@mui/material/Pagination";
 
 export function Paginations(props) {
-  const { numberOfPage, setPage } = props;
+  const { numberOfPage, setPage, filter } = props;
   const handleChange = (event, value) => {
-    setPage(value);
+    setPage({
+      ...filter,
+      page: value
+    });
   };
   const style = {
     marginTop: "20px",

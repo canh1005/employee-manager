@@ -104,7 +104,7 @@ export const employeeDetail = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    paddingTop: '90px!important',
+    paddingTop: "90px!important",
     "& div": {
       display: "flex",
     },
@@ -123,19 +123,19 @@ export const employeeDetail = makeStyles({
     position: "absolute",
     top: 0,
     right: 0,
-    '& button':{
-      margin: '5px 5px 0 0'
-    }
+    "& button": {
+      margin: "5px 5px 0 0",
+    },
   },
   imgBox: {
     position: "relative",
     marginTop: "60px",
   },
-  imgButton:{
-    position: 'absolute!important',
+  imgButton: {
+    position: "absolute!important",
     top: "-50px",
-    left: '50%',
-    transform: 'translateX(-50%)'
+    left: "50%",
+    transform: "translateX(-50%)",
   },
   img: {
     border: "5px solid #fff",
@@ -169,5 +169,33 @@ export const employeeDetail = makeStyles({
 export const employeeTabs = makeStyles({
   box: {
     background: "#fff",
+  },
+});
+export const searchStyled = makeStyles({
+  search: {
+    position: "relative",
+    borderRadius: "10px",
+    backgroundColor: "white",
+    marginLeft: 0,
+    width: "300px",
+  },
+  searchIconWrapper: {
+    padding: "0 20px",
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inputBase: {
+    padding: "0 25px",
+    color: "inherit",
+    width: "100%",
+    "& .MuiInputBase-input": {
+      padding: "10px 20px",
+      // vertical padding + font size from searchIcon
+      width: "100%",
+    },
   },
 });

@@ -15,6 +15,7 @@ import { deleteWorkingReducer } from "../redux/modules/DeleteWorkingReducer/redu
 import { addAdvanceReducer } from "../redux/modules/AddAdvanceReducer/reducer";
 import { getTeamReducer } from "../redux/modules/GetTeamReducer/reducer";
 import { getEmployeeByTeamReducer } from "../redux/modules/GetEmployeeByTeamReducer/reducer";
+import { searchReducer } from "../redux/modules/SearchEmployeeReducer/reducer";
 
 const rootReducers = combineReducers({
   listEmpReducer,
@@ -31,7 +32,8 @@ const rootReducers = combineReducers({
   deleteWorkingReducer,
   addAdvanceReducer,
   getTeamReducer,
-  getEmployeeByTeamReducer
+  getEmployeeByTeamReducer,
+  searchReducer
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export const store = createStore(
