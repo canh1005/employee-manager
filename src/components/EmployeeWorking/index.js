@@ -7,9 +7,10 @@ import { actGetWorkingAPI } from "redux/modules/GetWorkingReducer/action";
 import moment from "moment";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import WorkingModal from "components/WorkingModal";
-import ResponsiveDialog from 'components/Commons/Dialog'
-import DataTable from 'components/Commons/DataTable'
+import ResponsiveDialog from "components/Commons/Dialog";
+import DataTable from "components/Commons/DataTable";
 import { actDeleteWorkingAPI } from "redux/modules/DeleteWorkingReducer/action";
+import Notification from "components/Commons/Notifications/Notification";
 
 const workingColumns = [
   {
@@ -38,6 +39,11 @@ function EmployeeWorking(props) {
     title: "",
   });
   const [openModal, setOpenModal] = useState(false);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "info",
+  });
   useEffect(() => {
     props.fetchWorkingInfo(employeeID);
   }, []);
@@ -57,7 +63,12 @@ function EmployeeWorking(props) {
       ...confirmDialog,
       isOpen: false,
     });
-    props.fetchDeleteWorking(employeeID, working_id);
+    // props.fetchDeleteWorking(employeeID, working_id);
+    setNotify({
+      isOpen: true,
+      message: "Delete successful",
+      type: "error"
+    })
   };
   const renderAdvancesInfo = () => {
     if (workingInfo) {
@@ -87,6 +98,7 @@ function EmployeeWorking(props) {
         setConfirmDialog={setConfirmDialog}
       />
       <WorkingModal open={openModal} setOpen={setOpenModal} />
+      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 }

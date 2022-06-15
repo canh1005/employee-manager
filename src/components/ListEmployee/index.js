@@ -8,68 +8,63 @@ import {
   Box,
   Button,
   Checkbox,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Tooltip,
   Typography,
 } from "@mui/material";
 import EmployeeModal from "../EmployeeModal";
 import { Paginations } from "components/Commons/Pagination";
 import SearchFrom from "components/Commons/Search";
-import {
-  actGetKeyword,
-  actSearchAPI,
-} from "redux/modules/SearchEmployeeReducer/action";
+import { actSearchAPI } from "redux/modules/SearchEmployeeReducer/action";
 import queryString from "query-string";
+import DataTable from "components/Commons/DataTable";
+import { actGetTeamAPI } from "redux/modules/GetTeamReducer/action";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import { actDeleteEmployeeAPI } from "redux/modules/DeleteEmployeeReducer/action";
 function ListEmployee(props) {
-  const { searchList } = props;
+  const { searchList, getTeam } = props;
   const [openModal, setOpenModal] = useState(false);
-  const [selected, setSelected] = useState({ ids: [] });
+  const [selected, setSelected] = useState([]);
   const [filter, setFilter] = useState({
     page: 1,
     name: "",
   });
+  console.log("Checked", selected);
 
   const navigate = useNavigate();
 
   const handleOpenModal = () => setOpenModal(true);
 
   const handleSelect = (e) => {
-    const { name, checked } = e.target;
-    if (checked && name === "selectAll") {
-      let checkedAll = searchList.content.map((item) => {
-        return item.no;
-      });
-      setSelected((prevs) => ({
-        ...prevs,
-        ids: [...selected.ids, checkedAll], 
-      }));
-      let obj = {
-        ids: checkedAll
-      }
-    console.log("checked", queryString.stringify(obj));
+    const { name } = e.target;
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
 
-      console.log(obj);
-    } else {
-      setSelected((prevs) => ({
-        ...prevs,
-        ids: [...selected.ids, name],
-      }));
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
     }
-    const params = queryString.stringify(selected);
-    console.log("selected",selected);
-    console.log("check", params);
+    setSelected(newSelected);
   };
-
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      const checkedAll = searchList.content.map((item) => item.no.toString());
+      setSelected(checkedAll);
+    } else {
+      setSelected([]);
+    }
+  };
   useEffect(() => {
     const paramsString = queryString.stringify(filter);
     props.fetchListSearched(paramsString);
-    console.log("filter", filter);
+    props.fetchTeam();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
   const handleEmployeeDetail = (employee) => {
@@ -82,46 +77,83 @@ function ListEmployee(props) {
       page: 1,
     });
   };
-  const renderListEmployee = () => {
-    if (searchList) {
+
+  const renderEmployeeTable = () => {
+    const columns = [
       {
-        return searchList.content.map((employee) => {
-          return (
-            <TableRow
-              key={employee.no}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  onClick={(event) => handleSelect(event)}
-                  name={employee.no}
-                  checked={selected.checked}
-                />
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {employee.no}
-              </TableCell>
-              <TableCell align="right">{employee.fullName}</TableCell>
-              <TableCell align="right">{employee.age}</TableCell>
-              <TableCell align="right">{employee.address}</TableCell>
-              <TableCell>
-                <Tooltip title="Employee information">
-                  <Button onClick={() => handleEmployeeDetail(employee)}>
-                    <InfoOutlinedIcon />
-                  </Button>
-                </Tooltip>
-                <Tooltip title="Delete employee">
-                  <Button>
-                    <DeleteIcon />
-                  </Button>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
-          );
-        });
-      }
+        field: "checkBox",
+        headerName: (
+          <Checkbox
+            name="selectAll"
+            onChange={handleSelectAll}
+            checked={
+              selected.length ===
+              (searchList ? searchList.numberOfElements : "")
+            }
+          />
+        ),
+      },
+      {
+        field: "no",
+        headerName: "No#",
+      },
+      {
+        field: "fullName",
+        headerName: "Full Name",
+      },
+      {
+        field: "phone",
+        headerName: "Phone",
+      },
+      {
+        field: "team",
+        headerName: "Team",
+      },
+      {
+        field: "option",
+        headerName: "Option",
+      },
+    ];
+    if (searchList) {
+      const rows = searchList.content.map((employee) => ({
+        checkBox: (
+          <Checkbox
+            onClick={handleSelect}
+            name={employee.no.toString()}
+            checked={selected.indexOf(employee.no.toString()) !== -1}
+          />
+        ),
+        phone: employee.phone,
+        fullName: employee.fullName,
+        no: employee.no,
+        team: getTeam
+          ? getTeam.find((item) => item.no === employee.teamID).name
+          : "",
+        option: (
+          <>
+            <Tooltip title="Employee information">
+              <Button onClick={() => handleEmployeeDetail(employee)}>
+                <InfoOutlinedIcon />
+              </Button>
+            </Tooltip>
+            <Tooltip title="Delete employee">
+              <Button>
+                <DeleteIcon />
+              </Button>
+            </Tooltip>
+          </>
+        ),
+      }));
+
+      return <DataTable columns={columns} rows={rows} />;
     }
+  };
+  const handleDeleteSelected = () => {
+    let selectedObj = {
+      ids: selected,
+    };
+    console.log("Check", queryString.stringify(selectedObj));
+    props.fetchDelete(queryString.stringify(selectedObj))
   };
   return (
     <Box>
@@ -132,33 +164,21 @@ function ListEmployee(props) {
             <PersonAddAltRoundedIcon />
           </Button>
         </Tooltip>
+        <Tooltip title="Delete selected employee">
+          <Typography variant="span">
+            <Button
+              onClick={handleDeleteSelected}
+              variant="contained"
+              disabled={selected.length < 2 ? true : false}
+            >
+              <DeleteRoundedIcon />
+            </Button>
+          </Typography>
+        </Tooltip>
       </Box>
       <Typography>List of employee</Typography>
       <EmployeeModal open={openModal} setOpenModal={setOpenModal} />
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  name="selectAll"
-                  onChange={handleSelect}
-                  inputProps={{
-                    "aria-label": "select all desserts",
-                  }}
-                />
-              </TableCell>
-              <TableCell>No#</TableCell>
-              <TableCell align="right">FullName</TableCell>
-              <TableCell align="right">Phone</TableCell>
-              <TableCell align="right">Team</TableCell>
-              <TableCell align="center">Option</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{renderListEmployee()}</TableBody>
-        </Table>
-      </TableContainer>
+      {renderEmployeeTable()}
       <Paginations
         filter={filter}
         setPage={setFilter}
@@ -170,12 +190,19 @@ function ListEmployee(props) {
 const mapStateToProps = (state) => {
   return {
     searchList: state.searchReducer.data,
+    getTeam: state.getTeamReducer.data,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchListSearched: (filter) => {
       dispatch(actSearchAPI(filter));
+    },
+    fetchTeam: () => {
+      dispatch(actGetTeamAPI());
+    },
+    fetchDelete: (ids) => {
+      dispatch(actDeleteEmployeeAPI(ids));
     },
   };
 };

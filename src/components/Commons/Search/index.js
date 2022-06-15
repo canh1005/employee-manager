@@ -1,5 +1,5 @@
 import { Box, InputBase } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useRef  } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { searchStyled } from "material-ui";
 import PropTypes from "prop-types";

@@ -27,7 +27,6 @@ function EmployeeModal(props) {
   const handleClose = () => setOpenModal(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const classes = employeeModal();
-  const navigate = useNavigate();
   const genderOptions = [
     {
       value: true,
@@ -115,7 +114,7 @@ function EmployeeModal(props) {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    // props.fetchAddEmploye(employee);
+    props.fetchAddEmploye(employee);
     // navigate("/", { replace: true });
     console.log("employeeInfo", employee);
   };
@@ -273,7 +272,6 @@ function EmployeeModal(props) {
               select
               name="team"
               label="Team"
-              value={employee.teamID}
               onChange={handleTeamChange}
             >
               {listTeam ? (

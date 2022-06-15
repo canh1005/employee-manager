@@ -22,6 +22,7 @@ import EmployeeModal from "../EmployeeModal";
 function EmployeeDetail(props) {
   const { employeeInfo, imageInfo } = props;
   const employeeId = useParams().id;
+  console.log(useParams());
   const classes = employeeDetail();
   const navigate = useNavigate();
 

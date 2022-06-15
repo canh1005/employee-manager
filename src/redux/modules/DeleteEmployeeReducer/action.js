@@ -1,11 +1,11 @@
 import * as ActionTypes from "./contances";
 import { api } from "../../../utils/api";
 
-export const actDeleteEmployeeAPI = (id) => {
+export const actDeleteEmployeeAPI = (ids) => {
   return (dispatch) => {
     dispatch(actDeleteEmployeeRequest());
     api
-      .get(`employee/delete/${id}`)
+      .delete(`employee/delete-multi?${ids}`)
       .then((result) => {
         dispatch(actDeleteEmployeeSuccess(result.data));
       })
