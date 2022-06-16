@@ -5,16 +5,16 @@ let initialState = {
   error: null,
 };
 
-export const getAdvancesReducer = (state = initialState, action) => {
+export const statisticReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.GET_ADVANCES_REQUEST:
+    case ActionTypes.GET_STATISTICS_REQUEST:
       state.data = null;
       return { ...state };
-    case ActionTypes.GET_ADVANCES_SUCCESS:
+    case ActionTypes.GET_STATISTICS_SUCCESS:
       state.data = action.data;
       state.error = null;
       return { ...state };
-    case ActionTypes.GET_ADVANCES_FAILED:
+    case ActionTypes.GET_STATISTICS_FAILED:
       state.data = null;
       state.error = action.err;
       return { ...state };

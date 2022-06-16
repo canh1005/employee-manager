@@ -1,5 +1,5 @@
 import * as ActionTypes from "./constance";
-import { api } from "../../../utils/api";
+import { api } from "utils/api";
 
 export const actSearchAPI = (filter) => {
   return (dispatch) => {
@@ -22,12 +22,12 @@ const actSearchRequest = () => {
 const actSearchSuccess = (data) => {
   return {
     type: ActionTypes.SEARCH_SUCCESS,
-    data: data,
+    data
   };
 };
 const actSearchFailed = (err) => {
   return {
     type: ActionTypes.SEARCH_FAILED,
-    error: err,
+    err
   };
 };

@@ -1,10 +1,10 @@
 import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import DataTable from "../components/Commons/DataTable";
-import { actGetTeamAPI } from "../redux/modules/GetTeamReducer/action";
+import { connect, useDispatch, useSelector } from "react-redux";
+import DataTable from "components/Commons/DataTable";
+import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import { actGetEmployeeByTeamAPI } from "../redux/modules/GetEmployeeByTeamReducer/action";
+import { actGetEmployeeByTeamAPI } from "redux/modules/GetEmployeeByTeamReducer/action";
 const teamTableColumns = [
   {
     field: "no",
@@ -42,17 +42,19 @@ const employeeTableColumns = [
   },
 ];
 function TeamPage(props) {
-  const { teamInfo, employeeByTeam } = props;
+  const teamInfo = useSelector(state=>state.teamReducer.data);
+  const employeeByTeam = useSelector(state=>state.getEmployeeByTeamReducer.data);
+  const dispatch = useDispatch();
   const [value, setValue] = React.useState("1");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   useEffect(() => {
-    props.fetchTeam();
+    dispatch(actGetTeamAPI());
   }, []);
   const handleDetail = (teamID) => {
     console.log("teamID", teamID);
-    props.fetchEmployeeByTeam(teamID);
+    dispatch(actGetEmployeeByTeamAPI(teamID))
   };
   const renderTeamTable = () => {
     if (teamInfo) {
@@ -103,25 +105,9 @@ function TeamPage(props) {
         {renderTeamTable()}
       </Box>
       <br />
-
       {renderEmployeeTable()}
     </Box>
   );
 }
-const mapStateToProps = (state) => {
-  return {
-    teamInfo: state.getTeamReducer.data,
-    employeeByTeam: state.getEmployeeByTeamReducer.data,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchTeam: () => {
-      dispatch(actGetTeamAPI());
-    },
-    fetchEmployeeByTeam: (teamID) => {
-      dispatch(actGetEmployeeByTeamAPI(teamID));
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(TeamPage);
+
+export default (TeamPage);

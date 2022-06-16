@@ -7,24 +7,34 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { employeeModal } from "../../material-ui";
+import { employeeModal } from "material-ui";
 import { DatePicker } from "@mui/lab";
 import moment from "moment";
-import { connect } from "react-redux";
-import { actListTeamAPI } from "../../redux/modules/ListAllTeamReducer/action";
-import { actAddEmployeeAPI } from "../../redux/modules/AddEmployeeReducer/action";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
+import { actAddEmployeeAPI } from "redux/modules/EmployeeReducer/action";
 import {
   checkAge,
   checkEmpty,
   checkIsNumber,
   checkPhoneNumber,
   checkPositiveNumber,
-} from "../../utils/Validations";
+} from "utils/Validations";
+import queryString from 'query-string'
 
 function EmployeeModal(props) {
-  const { open, setOpenModal, listTeam, employeeEdit } = props;
-  const handleClose = () => setOpenModal(false);
+  const { open, setOpenModal } = props;
+  console.log("modal filter", open.filter);
+  const listTeam = useSelector((state) => state.teamReducer.data);
+  const employeeEdit = useSelector(
+    (state) => state.updateEmployeeReducer.userEdited
+  );
+  const dispatch = useDispatch();
+  const handleClose = () =>
+    setOpenModal({
+      ...open,
+      isOpen: false,
+    });
   const [selectedDate, setSelectedDate] = useState(null);
   const classes = employeeModal();
   const genderOptions = [
@@ -60,7 +70,7 @@ function EmployeeModal(props) {
     },
   });
   useEffect(() => {
-    props.fetchListTeam();
+    dispatch(actGetTeamAPI());
     if (props.employeeEdit) {
       setEmployee({
         fullName: employeeEdit.fullName,
@@ -114,8 +124,11 @@ function EmployeeModal(props) {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.fetchAddEmploye(employee);
-    // navigate("/", { replace: true });
+    dispatch(actAddEmployeeAPI(employee, queryString.stringify(open.filter)));
+    setOpenModal({
+      ...open,
+      isOpen: false,
+    })
     console.log("employeeInfo", employee);
   };
   const handleError = (event) => {
@@ -179,7 +192,7 @@ function EmployeeModal(props) {
   return (
     <>
       <Modal
-        open={open}
+        open={open.isOpen}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -309,20 +322,4 @@ function EmployeeModal(props) {
     </>
   );
 }
-const mapStateToProps = (state) => {
-  return {
-    listTeam: state.listAllTeamReducer.data,
-    employeeEdit: state.updateEmployeeReducer.userEdited,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchListTeam: () => {
-      dispatch(actListTeamAPI());
-    },
-    fetchAddEmploye: (employee) => {
-      dispatch(actAddEmployeeAPI(employee));
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeModal);
+export default EmployeeModal;

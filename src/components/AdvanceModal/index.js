@@ -4,10 +4,8 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import moment from "moment";
 import { useParams } from "react-router-dom";
-import { connect } from "react-redux";
-import { actAddWorkingAPI } from "../../redux/modules/AddWorkingReducer/action";
-import { actGetAdvancesAPI } from "../../redux/modules/GetAdvancesReducer/action";
-import { actAddAdvanceAPI } from "../../redux/modules/AddAdvanceReducer/action";
+import { useDispatch } from "react-redux";
+import { actAddAdvanceAPI } from "redux/modules/AdvancesReducer/action";
 
 const style = {
   position: "absolute",
@@ -32,6 +30,7 @@ const style = {
 };
 function AdvanceModal(props) {
   const { open, setOpen } = props;
+  const dispatch = useDispatch();
   const employeeID = useParams().id;
   const [advance, setAdvance] = useState({
     date: "",
@@ -57,7 +56,7 @@ function AdvanceModal(props) {
     event.preventDefault();
     setOpen(false);
     console.log("working", advance);
-    props.fetchAdvance(advance);
+    dispatch(actAddAdvanceAPI(employeeID, advance));
   };
   return (
     <>
@@ -100,11 +99,4 @@ function AdvanceModal(props) {
     </>
   );
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchAdvance: (advance_item) => {
-      dispatch(actAddAdvanceAPI(advance_item));
-    },
-  };
-};
-export default connect(null, mapDispatchToProps)(AdvanceModal);
+export default AdvanceModal;

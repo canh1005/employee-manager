@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
-import { dashBoardStyled } from "../../material-ui";
+import { dashBoardStyled } from "material-ui";
 import PersonIcon from '@mui/icons-material/Person';
 import GroupsIcon from '@mui/icons-material/Groups';
 function DashBoard() {

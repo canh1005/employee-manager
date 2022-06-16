@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Checkbox, Tooltip, Typography } from "@mui/material";
 import EmployeeModal from "../EmployeeModal";
 import { Paginations } from "components/Commons/Pagination";
 import SearchFrom from "components/Commons/Search";
 import { actSearchAPI } from "redux/modules/SearchEmployeeReducer/action";
 import queryString from "query-string";
 import DataTable from "components/Commons/DataTable";
-import { actGetTeamAPI } from "redux/modules/GetTeamReducer/action";
+import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { actDeleteEmployeeAPI } from "redux/modules/DeleteEmployeeReducer/action";
-function ListEmployee(props) {
-  const { searchList, getTeam } = props;
-  const [openModal, setOpenModal] = useState(false);
+import { actAddEmployeeAPI, actDeleteEmployeeAPI } from "redux/modules/EmployeeReducer/action";
+function ListEmployee() {
+  const searchList = useSelector((state) => state.searchReducer.data);
+  const getTeam = useSelector((state) => state.teamReducer.data);
+  const dispatch = useDispatch();
+  const [openModal, setOpenModal] = useState({
+    isOpen: false,
+    
+  });
   const [selected, setSelected] = useState([]);
   const [filter, setFilter] = useState({
     page: 1,
@@ -30,10 +29,20 @@ function ListEmployee(props) {
   });
   console.log("Checked", selected);
 
+  useEffect(() => {
+    const paramsString = queryString.stringify(filter);
+    dispatch(actSearchAPI(paramsString));
+    dispatch(actGetTeamAPI());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
+
   const navigate = useNavigate();
 
-  const handleOpenModal = () => setOpenModal(true);
-
+  const handleOpenModal = () =>
+    setOpenModal({
+      isOpen: true,
+      filter: filter,
+    });
   const handleSelect = (e) => {
     const { name } = e.target;
     const selectedIndex = selected.indexOf(name);
@@ -61,12 +70,7 @@ function ListEmployee(props) {
       setSelected([]);
     }
   };
-  useEffect(() => {
-    const paramsString = queryString.stringify(filter);
-    props.fetchListSearched(paramsString);
-    props.fetchTeam();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
+
   const handleEmployeeDetail = (employee) => {
     navigate(`${employee.no}`, { replace: true });
   };
@@ -153,7 +157,7 @@ function ListEmployee(props) {
       ids: selected,
     };
     console.log("Check", queryString.stringify(selectedObj));
-    props.fetchDelete(queryString.stringify(selectedObj))
+    dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)));
   };
   return (
     <Box>
@@ -187,23 +191,4 @@ function ListEmployee(props) {
     </Box>
   );
 }
-const mapStateToProps = (state) => {
-  return {
-    searchList: state.searchReducer.data,
-    getTeam: state.getTeamReducer.data,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchListSearched: (filter) => {
-      dispatch(actSearchAPI(filter));
-    },
-    fetchTeam: () => {
-      dispatch(actGetTeamAPI());
-    },
-    fetchDelete: (ids) => {
-      dispatch(actDeleteEmployeeAPI(ids));
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(ListEmployee);
+export default ListEmployee;

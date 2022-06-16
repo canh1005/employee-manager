@@ -1,5 +1,5 @@
-import * as ActionTypes from "./contances";
-import { api } from "../../../utils/api";
+import * as ActionTypes from "./constances";
+import { api } from "utils/api";
 
 export const actGetTeamAPI = () => {
   return (dispatch) => {

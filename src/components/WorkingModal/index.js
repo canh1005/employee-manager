@@ -4,8 +4,8 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import moment from "moment";
 import { useParams } from "react-router-dom";
-import { connect } from "react-redux";
-import { actAddWorkingAPI } from "../../redux/modules/AddWorkingReducer/action";
+import { useDispatch } from "react-redux";
+import { actAddWorkingAPI } from "redux/modules/WorkingReducer/action";
 import { checkEmpty } from "../../utils/Validations";
 
 const style = {
@@ -31,6 +31,7 @@ const style = {
 };
 function WorkingModal(props) {
   const { open, setOpen } = props;
+  const dispatch = useDispatch();
   const employeeID = useParams().id;
   const [working, setWorking] = useState({
     date: "",
@@ -73,7 +74,7 @@ function WorkingModal(props) {
       errors: {
         [name]: message,
         hourValid,
-        frmValid: hourValid ,
+        frmValid: hourValid,
       },
     });
     console.log("frmValid", working);
@@ -82,7 +83,7 @@ function WorkingModal(props) {
     event.preventDefault();
     setOpen(false);
     console.log("working", working);
-    props.fetchWorking(working);
+    dispatch(actAddWorkingAPI(employeeID, working));
   };
   return (
     <>
@@ -98,11 +99,7 @@ function WorkingModal(props) {
                 name="date"
                 onChange={handleDate}
                 value={working.date}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                  />
-                )}
+                renderInput={(params) => <TextField {...params} />}
               />
               <TextField
                 error={working.errors.hour ? true : false}
@@ -137,11 +134,4 @@ function WorkingModal(props) {
     </>
   );
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchWorking: (working) => {
-      dispatch(actAddWorkingAPI(working));
-    },
-  };
-};
-export default connect(null, mapDispatchToProps)(WorkingModal);
+export default WorkingModal;

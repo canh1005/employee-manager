@@ -1,15 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Tooltip } from "@mui/material";
-import { actGetWorkingAPI } from "redux/modules/GetWorkingReducer/action";
+import {
+  actGetWorkingAPI,
+  actDeleteWorkingAPI,
+} from "redux/modules/WorkingReducer/action";
 import moment from "moment";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import WorkingModal from "components/WorkingModal";
 import ResponsiveDialog from "components/Commons/Dialog";
 import DataTable from "components/Commons/DataTable";
-import { actDeleteWorkingAPI } from "redux/modules/DeleteWorkingReducer/action";
 import Notification from "components/Commons/Notifications/Notification";
 
 const workingColumns = [
@@ -32,7 +34,8 @@ const workingColumns = [
 ];
 
 function EmployeeWorking(props) {
-  const { workingInfo } = props;
+  const workingInfo = useSelector((state) => state.workingReducer.data);
+  const dispatch = useDispatch();
   const employeeID = useParams().id;
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
@@ -44,10 +47,12 @@ function EmployeeWorking(props) {
     message: "",
     type: "info",
   });
+
   useEffect(() => {
-    props.fetchWorkingInfo(employeeID);
+    dispatch(actGetWorkingAPI(employeeID));
   }, []);
-  const handleClick = (working_id) => {
+
+  const handleDeleteDialog = (working_id) => {
     setConfirmDialog({
       ...confirmDialog,
       isOpen: true,
@@ -63,12 +68,12 @@ function EmployeeWorking(props) {
       ...confirmDialog,
       isOpen: false,
     });
-    // props.fetchDeleteWorking(employeeID, working_id);
+    dispatch(actDeleteWorkingAPI(employeeID, working_id))
     setNotify({
       isOpen: true,
       message: "Delete successful",
-      type: "error"
-    })
+      type: "error",
+    });
   };
   const renderAdvancesInfo = () => {
     if (workingInfo) {
@@ -78,7 +83,7 @@ function EmployeeWorking(props) {
         hour: row.hour,
         option: (
           <Button>
-            <DeleteIcon onClick={() => handleClick(row.no)} />
+            <DeleteIcon onClick={() => handleDeleteDialog(row.no)} />
           </Button>
         ),
       }));
@@ -102,19 +107,4 @@ function EmployeeWorking(props) {
     </>
   );
 }
-const mapStateToProps = (state) => {
-  return {
-    workingInfo: state.getWorkingReducer.data,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchWorkingInfo: (id) => {
-      dispatch(actGetWorkingAPI(id));
-    },
-    fetchDeleteWorking: (id, working_id) => {
-      dispatch(actDeleteWorkingAPI(id, working_id));
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeWorking);
+export default (EmployeeWorking);
