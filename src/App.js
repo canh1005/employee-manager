@@ -11,25 +11,29 @@ import EmployeeInfo from "./components/EmployeeInfo";
 import EmployeeWorking from "./components/EmployeeWorking";
 import EmployeeAdvances from "./components/EmployeeAdvances";
 import EmployeeStatistic from "./components/EmployeeStatistic";
-import ListEmployee from "components/ListEmployee";
-
+import { ThemeProvider } from "@mui/material";
+import { theme } from 'material-ui'
+import HomeTemple from "pages/HomeTemple";
 function App() {
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Routes>
-        <Route path="/" element={<EmployeePage />}>
-          <Route path="/" element={<ListEmployee />} />
-          <Route path=":id" element={<EmployeeDetail />}>
-            <Route path="info" element={<EmployeeInfo />} />
-            <Route path="working" element={<EmployeeWorking />} />
-            <Route path="advances" element={<EmployeeAdvances />} />
-            <Route path="statistics" element={<EmployeeStatistic />} />
+    <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Routes>
+          <Route path="/" element={<HomeTemple />}>
+            <Route path="/" element={<EmployeePage />} />
+            <Route path=":id" element={<EmployeeDetail />}>
+              <Route path="info" element={<EmployeeInfo />} />
+              <Route path="working" element={<EmployeeWorking />} />
+              <Route path="advances" element={<EmployeeAdvances />} />
+              <Route path="statistics" element={<EmployeeStatistic />} />
+            </Route>
+            <Route path="team" element={<TeamPage />} />
           </Route>
-          <Route path="team" element={<TeamPage />} />
-        </Route>
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </LocalizationProvider>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </LocalizationProvider>
+    </ThemeProvider>
+
   );
 }
 

@@ -9,7 +9,7 @@ function DashBoard() {
   return (
     <Box className={classes.root}>
       <Box>
-        <Link to="/" className={classes.link}>
+        <Link to="/" className={classes.title}>
           <Typography variant="span">Employee Managment</Typography>
         </Link>
       </Box>

@@ -1,42 +1,63 @@
+import { createTheme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
-export const dashBoardStyled = makeStyles({
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#ff919d"
+    },
+    secondary: {
+      main: "#c484f3"
+    },
+  },
+  typography: {
+    fontFamily: 'Inter'
+  }
+})
+
+export const dashBoardStyled = makeStyles(theme => ({
   root: {
     borderRadius: "5px 0 0 5px",
   },
+  title: {
+    fontSize: "18px",
+      textDecoration: "none",
+        fontWeight: "bold",
+          display: 'inline-block',
+            margin: '10px 20px'
+  },
   link: {
     textDecoration: "none",
-    display: "flex",
-    alignItems: "center",
-    color: "white",
-    padding: "10px 20px",
-    "& span": {
+      display: "flex",
+        alignItems: "center",
+          padding: "10px 20px",
+            "& span": {
       marginLeft: 20,
     },
     "&.active": {
-      background: "red",
-      position: "relative",
-      "&::before": {
+      background: theme.palette.primary.main,
+        position: "relative",
+          "&::before": {
         content: '""',
-        position: "absolute",
-        left: 0,
-        top: 0,
-        height: "100%",
-        width: "5px",
-        background: "green",
+          position: "absolute",
+            left: 0,
+              top: 0,
+                height: "100%",
+                  width: "5px",
+                    background: "green",
       },
     },
   },
   menu: {
     display: "flex",
-    flexDirection: "column",
+      flexDirection: "column",
   },
-});
+}));
 export const appGlass = makeStyles({
   root: {
     display: "grid",
     gridTemplateColumns: "11rem auto",
-    background: "rgba(255,255,255,0.2)",
+    background: "rgba(255,255,255,0.54)",
     width: "97%",
     height: "97%",
     overflow: "hidden",
