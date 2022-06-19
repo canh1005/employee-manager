@@ -14,13 +14,14 @@ import DataTable from "components/Commons/DataTable";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { actAddEmployeeAPI, actDeleteEmployeeAPI } from "redux/modules/EmployeeReducer/action";
+import { listEmpStyled } from "material-ui";
 function ListEmployee() {
+  const classes = listEmpStyled();
   const searchList = useSelector((state) => state.searchReducer.data);
   const getTeam = useSelector((state) => state.teamReducer.data);
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState({
     isOpen: false,
-    
   });
   const [selected, setSelected] = useState([]);
   const [filter, setFilter] = useState({
@@ -160,27 +161,30 @@ function ListEmployee() {
     dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)));
   };
   return (
-    <Box>
+    <Box className={classes.root}>
       <SearchFrom onSubmit={handleKeywordChange} />
-      <Box>
-        <Tooltip title="Add new employee">
-          <Button onClick={handleOpenModal} variant="contained">
-            <PersonAddAltRoundedIcon />
-          </Button>
-        </Tooltip>
-        <Tooltip title="Delete selected employee">
-          <Typography variant="span">
-            <Button
-              onClick={handleDeleteSelected}
-              variant="contained"
-              disabled={selected.length < 2 ? true : false}
-            >
-              <DeleteRoundedIcon />
+      <Box className={classes.toolBox}>
+        <Typography variant="h4">List of employee</Typography>
+        <Box>
+          <Tooltip title="Add new employee">
+            <Button onClick={handleOpenModal} variant="contained">
+              <PersonAddAltRoundedIcon />
             </Button>
-          </Typography>
-        </Tooltip>
+          </Tooltip>
+          <Tooltip title="Delete selected employee">
+            <Typography variant="span">
+              <Button
+                onClick={handleDeleteSelected}
+                variant="contained"
+                disabled={selected.length < 2 ? true : false}
+              >
+                <DeleteRoundedIcon />
+              </Button>
+            </Typography>
+          </Tooltip>
+        </Box>
       </Box>
-      <Typography>List of employee</Typography>
+
       <EmployeeModal open={openModal} setOpenModal={setOpenModal} />
       {renderEmployeeTable()}
       <Paginations

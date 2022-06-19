@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DataTable from "components/Commons/DataTable";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";

@@ -27,7 +27,7 @@ function EmployeeModal(props) {
   console.log("modal filter", open.filter);
   const listTeam = useSelector((state) => state.teamReducer.data);
   const employeeEdit = useSelector(
-    (state) => state.updateEmployeeReducer.userEdited
+    (state) => state.employeeDetailReducer.userEdited
   );
   const dispatch = useDispatch();
   const handleClose = () =>
@@ -71,7 +71,7 @@ function EmployeeModal(props) {
   });
   useEffect(() => {
     dispatch(actGetTeamAPI());
-    if (props.employeeEdit) {
+    if (employeeEdit) {
       setEmployee({
         fullName: employeeEdit.fullName,
         age: employeeEdit.age,

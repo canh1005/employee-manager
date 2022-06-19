@@ -4,7 +4,8 @@ import { makeStyles } from "@mui/styles";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#ff919d"
+      main: "#ff919d",
+      dark: "rgb(208 118 127)"
     },
     secondary: {
       main: "#c484f3"
@@ -14,43 +15,92 @@ export const theme = createTheme({
     fontFamily: 'Inter'
   }
 })
-
+export const loaddingStyled = makeStyles(theme => ({
+  root: {
+    position: "relative",
+    width: "180px",
+    height: "180px",
+    "& span:first-child": {
+      position: "absolute",
+      left: "10px",
+      right: "10px",
+      top: "10px",
+      bottom: "10px",
+      background: `rgba(233,30,99, .05)`,
+      borderRadius: " 50%",
+      backdropFilter: "blur(10px)",
+      zIndex: 2,
+    },
+    "& span:last-child": {
+      position: "absolute",
+      left: "0",
+      top: "0",
+      width: "100%",
+      height: "100%",
+      display: "block",
+      borderRadius: " 50%",
+      zIndex: 1,
+      overflow: "hidden",
+      animation: `$rotateCircle 1s linear infinite`,
+    },
+    "& span:last-child::before": {
+      content: '""',
+      position: "absolute",
+      left: "-50%",
+      top: "-50%",
+      width: "100%",
+      height: "100%",
+      background: theme.palette.primary.main,
+    },
+  },
+  "@keyframes rotateCircle": {
+    "0%": {
+      transform: "rotate(0deg)"
+    },
+    "100%": {
+      transform: "rotate(360deg)"
+    }
+  }
+}))
 export const dashBoardStyled = makeStyles(theme => ({
   root: {
     borderRadius: "5px 0 0 5px",
   },
   title: {
     fontSize: "18px",
-      textDecoration: "none",
-        fontWeight: "bold",
-          display: 'inline-block',
-            margin: '10px 20px'
+    textDecoration: "none",
+    fontWeight: "bold",
+    display: 'inline-block',
+    margin: '40px 20px 0'
   },
   link: {
     textDecoration: "none",
-      display: "flex",
-        alignItems: "center",
-          padding: "10px 20px",
-            "& span": {
+    display: "flex",
+    alignItems: "center",
+    padding: "10px 20px",
+    position: "relative",
+    margin: "10px 0",
+    "& span": {
       marginLeft: 20,
     },
     "&.active": {
       background: theme.palette.primary.main,
-        position: "relative",
-          "&::before": {
+      borderRadius: "0 10px 10px 0",
+      "&::before": {
         content: '""',
-          position: "absolute",
-            left: 0,
-              top: 0,
-                height: "100%",
-                  width: "5px",
-                    background: "green",
+        height: "100%",
+        width: "5px",
+        background: theme.palette.primary.dark,
+        top: 0,
+        left: 0,
+        position: 'absolute',
       },
     },
   },
   menu: {
     display: "flex",
-      flexDirection: "column",
+    flexDirection: "column",
+    marginTop: "2rem",
   },
 }));
 export const appGlass = makeStyles({
@@ -62,6 +112,7 @@ export const appGlass = makeStyles({
     height: "97%",
     overflow: "hidden",
     borderRadius: 5,
+    gridGap: "10px"
   },
 });
 
@@ -118,6 +169,7 @@ export const employeeDetail = makeStyles({
     margin: "20px 0",
     overflow: "unset!important",
     position: "relative",
+    background: "rgba(255,255,255,.6)!important"
   },
   cardContent: {
     textAlign: "center",
@@ -181,17 +233,9 @@ export const employeeDetail = makeStyles({
     },
   },
   employeeTabsBox: {
-    background: "#fff",
-    padding: "10px 20px",
-    borderRadius: "5px",
   },
 });
 
-export const employeeTabs = makeStyles({
-  box: {
-    background: "#fff",
-  },
-});
 export const searchStyled = makeStyles({
   search: {
     position: "relative",
@@ -199,6 +243,7 @@ export const searchStyled = makeStyles({
     backgroundColor: "white",
     marginLeft: 0,
     width: "300px",
+    margin: "20px 0"
   },
   searchIconWrapper: {
     padding: "0 20px",
@@ -220,3 +265,82 @@ export const searchStyled = makeStyles({
     },
   },
 });
+
+export const listEmpStyled = makeStyles(theme => ({
+  root: {
+    margin: "0 20px"
+  },
+  toolBox: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "15px",
+    "& button": {
+      borderRadius: "50%",
+      width: "50px",
+      height: "55px",
+      padding: 0,
+      color: "#fff",
+    },
+    "& button:not(:last-child)": {
+      margin: "0 10px"
+    }
+  }
+}))
+
+export const dataTableStyled = makeStyles(theme => ({
+  root: {
+    background: "rgba(255, 255, 255, .6)!important",
+  },
+  tableHead: {
+    "& th": {
+      fontSize: "18px",
+      fontWeight: "bold",
+      textTransform: "capitalize",
+    }
+  }
+}))
+
+export const informationStyled = makeStyles(theme => ({
+  root: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2,1fr)",
+    justifyItems: "center",
+    "& p": {
+      width: "50%",
+      display: "flex",
+      alignItems: "center",
+      borderRadius: "10px",
+      padding: "20px",
+      color: "#fff"
+    },
+    "& p:first-child": {
+      background: theme.palette.primary.main,
+      boxShadow: `${theme.palette.primary.main} 0px 10px 20px 0px`,
+    },
+    "& p:nth-child(2)": {
+      background: theme.palette.secondary.main,
+      boxShadow: `${theme.palette.secondary.main} 0px 10px 20px 0px`,
+    },
+    "& p:nth-child(3)": {
+      background: theme.palette.primary.dark,
+      boxShadow: `${theme.palette.primary.dark} 0px 10px 20px 0px`,
+    },
+    "& p:last-child": {
+      background: theme.palette.error.light,
+      boxShadow: `${theme.palette.error.light} 0px 10px 20px 0px`,
+    },
+    "& svg": {
+      marginRight: "10px",
+      fontSize: "2rem",
+    },
+    "& span": {
+      display: "block",
+      marginBottom: "5px",
+    },
+    "& span:first-child": {
+      fontSize: "18px",
+      fontWeight: "bold"
+    }
+  }
+}))

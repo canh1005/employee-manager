@@ -9,12 +9,14 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { dataTableStyled } from "material-ui";
 
 export default function DataTable({ rows, columns }) {
+  const classes = dataTableStyled();
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className={classes.root}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
+        <TableHead className={classes.tableHead}>
           <TableRow>
             {columns.map((column, index) => {
               return <TableCell key={index}>{column.headerName}</TableCell>;

@@ -3,7 +3,6 @@ import thunk from "redux-thunk";
 import { listEmpReducer } from "../redux/modules/ListEmployeeReducer/reducer";
 import { employeeDetailReducer } from "../redux/modules/EmployeeDetailReducer/reducer";
 import { getImageReducer } from "../redux/modules/GetImageReducer/reducer";
-import { updateEmployeeReducer } from "../redux/modules/UpdateEmployeeReducer/reducer";
 import { statisticReducer } from "redux/modules/StatisticsReducer/reducer";
 import { teamReducer } from "redux/modules/TeamReducer/reducer";
 import { getEmployeeByTeamReducer } from "redux/modules/GetEmployeeByTeamReducer/reducer";
@@ -18,7 +17,6 @@ const rootReducers = combineReducers({
   listEmpReducer,
   employeeDetailReducer,
   getImageReducer,
-  updateEmployeeReducer,
   statisticReducer,
   getEmployeeByTeamReducer,
   searchReducer,
