@@ -6,30 +6,12 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { actAddAdvanceAPI } from "redux/modules/AdvancesReducer/action";
+import { modalStyled } from "material-ui";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#fff",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  ".MuiTextField-root": {
-    width: "50%",
-    margin: "0 10px",
-  },
-  ".btn-box": {
-    margin: "10px",
-    button: {
-      marginRight: "10px",
-    },
-  },
-};
+
 function AdvanceModal(props) {
   const { open, setOpen } = props;
+  const classes = modalStyled();
   const dispatch = useDispatch();
   const employeeID = useParams().id;
   const [advance, setAdvance] = useState({
@@ -60,13 +42,13 @@ function AdvanceModal(props) {
   };
   return (
     <>
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          <Typography variant="h6" component="h2">
+      <Modal open={open} onClose={handleClose} className={classes.root}>
+        <Box className={classes.box}>
+          <Typography className={classes.title} variant="h4" >
             Add advance
           </Typography>
           <form onSubmit={handleSubmit}>
-            <Box sx={{ display: "flex" }}>
+            <Box className={classes.form}>
               <DatePicker
                 label="Date"
                 name="date"
@@ -81,7 +63,7 @@ function AdvanceModal(props) {
                 onChange={handleOnChange}
               />
             </Box>
-            <Box className="btn-box">
+            <Box className={classes.buttonBox}>
               <Button
                 variant="contained"
                 color="secondary"

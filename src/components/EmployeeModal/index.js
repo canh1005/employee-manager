@@ -1,13 +1,13 @@
 import {
   Box,
   Button,
+  InputAdornment,
   MenuItem,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { employeeModal } from "material-ui";
 import { DatePicker } from "@mui/lab";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,7 @@ import {
   checkPositiveNumber,
 } from "utils/Validations";
 import queryString from 'query-string'
+import { modalStyled } from "material-ui";
 
 function EmployeeModal(props) {
   const { open, setOpenModal } = props;
@@ -36,7 +37,7 @@ function EmployeeModal(props) {
       isOpen: false,
     });
   const [selectedDate, setSelectedDate] = useState(null);
-  const classes = employeeModal();
+  const classes = modalStyled();
   const genderOptions = [
     {
       value: true,
@@ -202,103 +203,108 @@ function EmployeeModal(props) {
           <Typography variant="h3" className={classes.title}>
             {employeeEdit ? "Update Employee" : "Add new Employee"}
           </Typography>
-          <form className={classes.form} onSubmit={handleSubmit}>
-            <TextField
-              error={errors.fullName ? true : false}
-              variant="outlined"
-              type="text"
-              name="fullName"
-              label="Full Name"
-              value={employee.fullName}
-              onChange={handleChange}
-              onBlur={handleError}
-              helperText={errors.fullName}
-            />
-            <TextField
-              error={errors.address ? true : false}
-              variant="outlined"
-              type="text"
-              name="address"
-              label="Address"
-              value={employee.address}
-              onChange={handleChange}
-              onBlur={handleError}
-              helperText={errors.address}
-            />
-            <TextField
-              variant="outlined"
-              name="sex"
-              select
-              label="Sex Employee"
-              value={employee.male}
-              onChange={handleGenderChange}
-            >
-              {genderOptions.map((item) => {
-                return (
-                  <MenuItem key={item.value} value={item.value}>
-                    {item.label}
-                  </MenuItem>
-                );
-              })}
-            </TextField>
-            <TextField
-              error={errors.age ? true : false}
-              variant="outlined"
-              type="text"
-              name="age"
-              label="Age"
-              value={employee.age}
-              onChange={handleChange}
-              onBlur={handleError}
-              helperText={errors.age}
-            />
-            <DatePicker
-              label="Start date"
-              onChange={handleSelectedDate}
-              value={employeeEdit ? employee.startDay : selectedDate}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <TextField
-              error={errors.moneyPerHour ? true : false}
-              variant="outlined"
-              type="text"
-              name="moneyPerHour"
-              label="Money/hour"
-              value={employee.moneyPerHour}
-              onChange={handleChange}
-              onBlur={handleError}
-              helperText={errors.moneyPerHour}
-            />
-            <TextField
-              error={errors.phone ? true : false}
-              variant="outlined"
-              type="text"
-              name="phone"
-              label="Phone number"
-              value={employee.phone}
-              onChange={handleChange}
-              onBlur={handleError}
-              helperText={errors.phone}
-            />
-            <TextField
-              variant="outlined"
-              select
-              name="team"
-              label="Team"
-              onChange={handleTeamChange}
-            >
-              {listTeam ? (
-                listTeam.map((item) => {
+          <form onSubmit={handleSubmit}>
+            <Box className={classes.form}>
+              <TextField
+                error={errors.fullName ? true : false}
+                variant="outlined"
+                type="text"
+                name="fullName"
+                label="Full Name"
+                value={employee.fullName}
+                onChange={handleChange}
+                onBlur={handleError}
+                helperText={errors.fullName}
+              />
+              <TextField
+                error={errors.address ? true : false}
+                variant="outlined"
+                type="text"
+                name="address"
+                label="Address"
+                value={employee.address}
+                onChange={handleChange}
+                onBlur={handleError}
+                helperText={errors.address}
+              />
+              <TextField
+                variant="outlined"
+                name="sex"
+                select
+                label="Sex Employee"
+                value={employee.male}
+                onChange={handleGenderChange}
+              >
+                {genderOptions.map((item) => {
                   return (
-                    <MenuItem key={item.no} value={item.no}>
-                      {item.name}
+                    <MenuItem key={item.value} value={item.value}>
+                      {item.label}
                     </MenuItem>
                   );
-                })
-              ) : (
-                <MenuItem></MenuItem>
-              )}
-            </TextField>
+                })}
+              </TextField>
+              <TextField
+                error={errors.age ? true : false}
+                variant="outlined"
+                type="number"
+                name="age"
+                label="Age"
+                value={employee.age}
+                onChange={handleChange}
+                onBlur={handleError}
+                helperText={errors.age}
+              />
+              <DatePicker
+                label="Start date"
+                onChange={handleSelectedDate}
+                value={employeeEdit ? employee.startDay : selectedDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <TextField
+                error={errors.moneyPerHour ? true : false}
+                variant="outlined"
+                type="text"
+                name="moneyPerHour"
+                label="Money/hour"
+                value={employee.moneyPerHour}
+                onChange={handleChange}
+                onBlur={handleError}
+                helperText={errors.moneyPerHour}
+                InputProps={{
+                  endAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
+              />
+              <TextField
+                error={errors.phone ? true : false}
+                variant="outlined"
+                type="text"
+                name="phone"
+                label="Phone number"
+                value={employee.phone}
+                onChange={handleChange}
+                onBlur={handleError}
+                helperText={errors.phone}
+              />
+              <TextField
+                variant="outlined"
+                select
+                name="team"
+                label="Team"
+                onChange={handleTeamChange}
+              >
+                {listTeam ? (
+                  listTeam.map((item) => {
+                    return (
+                      <MenuItem key={item.no} value={item.no}>
+                        {item.name}
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <MenuItem></MenuItem>
+                )}
+              </TextField>
+            </Box>
             <Box className={classes.buttonBox}>
               <Button
                 onClick={handleClose}

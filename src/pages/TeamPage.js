@@ -5,6 +5,7 @@ import DataTable from "components/Commons/DataTable";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import { actGetEmployeeByTeamAPI } from "redux/modules/GetEmployeeByTeamReducer/action";
+import { teamPageStyled } from "material-ui";
 const teamTableColumns = [
   {
     field: "no",
@@ -42,8 +43,9 @@ const employeeTableColumns = [
   },
 ];
 function TeamPage(props) {
-  const teamInfo = useSelector(state=>state.teamReducer.data);
-  const employeeByTeam = useSelector(state=>state.getEmployeeByTeamReducer.data);
+  const teamInfo = useSelector(state => state.teamReducer.data);
+  const employeeByTeam = useSelector(state => state.getEmployeeByTeamReducer.data);
+  const classes = teamPageStyled();
   const dispatch = useDispatch();
   const [value, setValue] = React.useState("1");
   const handleChange = (event, newValue) => {
@@ -85,27 +87,22 @@ function TeamPage(props) {
       }));
       return (
         <>
-          <Typography>Result all employee team manager - Total {employeeByTeam.length} employees</Typography>
           <DataTable columns={employeeTableColumns} rows={employeeTableRows} />
         </>
       );
     }
   };
   return (
-    <Box>
-      <Typography>Team</Typography>
-      <Box
-        sx={{
-          flexGrow: 1,
-          bgcolor: "background.paper",
-          display: "flex",
-          height: 224,
-        }}
-      >
+    <Box className={classes.root}>
+      <Box>
+        <Typography className={classes.title} variant="h5">Team</Typography>
         {renderTeamTable()}
       </Box>
       <br />
-      {renderEmployeeTable()}
+      <Box>
+        <Typography className={classes.title} variant="h5">Result all employee team manager - Total {employeeByTeam ? employeeByTeam.length : 0} employees</Typography>
+        {renderEmployeeTable()}
+      </Box>
     </Box>
   );
 }

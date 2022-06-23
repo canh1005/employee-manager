@@ -116,34 +116,31 @@ export const appGlass = makeStyles({
   },
 });
 
-export const employeeModal = makeStyles({
+export const modalStyled = makeStyles({
   root: {},
   box: {
-    background: "#fff",
+    background: "rgba(255,255,255,.3)",
     maxWidth: "600px",
     margin: "auto",
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
+    backdropFilter: "blur(10px)",
+    border: "1px solid rgba(255,255,255,.3)",
+    borderRadius: "10px",
+    boxShadow: "rgba(255, 255, 255, 0.4) 1.95px 1.95px 2.6px",
   },
   title: {
-    background: "blue",
+    background: "transparent",
     color: "white",
     padding: "10px 20px",
     marginBottom: "20px!important",
     textAlign: "center",
   },
   form: {
-    display: "flex",
-    flexWrap: "wrap",
-
-    "& .MuiTextField-root:not(:first-child)": {
-      width: "50%",
-    },
-    "& .MuiTextField-root:first-child": {
-      width: "100%",
-    },
+    display: "grid",
+    gridTemplateColumns: "repeat(2,1fr)",
     "& .MuiTextField-root": {
       marginBottom: "20px",
       "& .MuiInputLabel-root.Mui-focused,.MuiInputLabel-root.MuiFormLabel-filled": {
@@ -153,6 +150,18 @@ export const employeeModal = makeStyles({
         margin: "0 10px",
       },
     },
+    "& .MuiFormHelperText-root.Mui-error, .MuiInputLabel-root.Mui-error": {
+      color: "#ff2424",
+    },
+    "& .MuiInputLabel-root": {
+      color: "#fff"
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#fff",
+    },
+    "& .MuiOutlinedInput-input": {
+      color: "#fff",
+    }
   },
   buttonBox: {
     marginBottom: "20px",
@@ -204,11 +213,24 @@ export const employeeDetail = makeStyles({
     position: "relative",
     marginTop: "60px",
   },
+  imgOverlay: {
+    position: 'absolute',
+    color: "#fff",
+    opacity: 0,
+    transition: "all .3s",
+    background: "rgba(0,0,0,.4)!important",
+  },
   imgButton: {
     position: "absolute!important",
     top: "-50px",
     left: "50%",
     transform: "translateX(-50%)",
+    "&:hover": {
+      
+      "& .makeStyles-imgOverlay-10": {
+        opacity: 1,
+      }
+    }
   },
   img: {
     border: "5px solid #fff",
@@ -342,5 +364,25 @@ export const informationStyled = makeStyles(theme => ({
       fontSize: "18px",
       fontWeight: "bold"
     }
+  }
+}))
+
+export const teamPageStyled = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    "& div:first-child": {
+      width: "40%",
+      marginRight: "10px",
+      "& .MuiPaper-root": {
+        height: "100vh",
+        overflow: "scroll",
+      },
+      "& table": {
+        minWidth: "0px",
+      }
+    }
+  },
+  title: {
+    margin: "20px 0!important"
   }
 }))

@@ -97,6 +97,8 @@ function EmployeeInfoDetail() {
                                     : ""
                             }
                         />
+                        <Typography variant='span' className={classes.imgOverlay}>Upload Photo</Typography>
+
                     </Button>
                 </Box>
                 <Box className={classes.employeeInfoBtn}>
