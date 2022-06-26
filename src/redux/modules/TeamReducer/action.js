@@ -1,13 +1,14 @@
 import * as ActionTypes from "./constances";
 import { api } from "utils/api";
 
+//Get
 export const actGetTeamAPI = () => {
   return (dispatch) => {
     dispatch(actGetTeamRequest());
     api
-      .get('team/get-all')
+      .get('team/getAll')
       .then((result) => {
-        dispatch(actGetTeamSuccess(result.data));
+        dispatch(actGetTeamSuccess(result.data.data));
       })
       .catch((err) => {
         dispatch(actGetTeamFailed(err));

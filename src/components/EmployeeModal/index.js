@@ -11,7 +11,6 @@ import React, { useEffect, useState } from "react";
 import { DatePicker } from "@mui/lab";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import { actAddEmployeeAPI } from "redux/modules/EmployeeReducer/action";
 import {
   checkAge,
@@ -71,7 +70,6 @@ function EmployeeModal(props) {
     },
   });
   useEffect(() => {
-    dispatch(actGetTeamAPI());
     if (employeeEdit) {
       setEmployee({
         fullName: employeeEdit.fullName,
@@ -295,7 +293,7 @@ function EmployeeModal(props) {
                 {listTeam ? (
                   listTeam.map((item) => {
                     return (
-                      <MenuItem key={item.no} value={item.no}>
+                      <MenuItem key={item.id} value={item.id}>
                         {item.name}
                       </MenuItem>
                     );

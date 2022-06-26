@@ -15,8 +15,11 @@ import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { actAddEmployeeAPI, actDeleteEmployeeAPI } from "redux/modules/EmployeeReducer/action";
 import { listEmpStyled } from "material-ui";
+import Loading from "components/Commons/Loading";
+import ResponsiveDialog from "components/Commons/Dialog"
 function ListEmployee() {
   const classes = listEmpStyled();
+  const loading = useSelector(state => state.searchReducer.loading);
   const searchList = useSelector((state) => state.searchReducer.data);
   const getTeam = useSelector((state) => state.teamReducer.data);
   const dispatch = useDispatch();
@@ -25,9 +28,13 @@ function ListEmployee() {
   });
   const [selected, setSelected] = useState([]);
   const [filter, setFilter] = useState({
-    page: 1,
+    page: 0,
     name: "",
   });
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: ""
+  })
   console.log("Checked", selected);
 
   useEffect(() => {
@@ -65,7 +72,7 @@ function ListEmployee() {
   };
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      const checkedAll = searchList.content.map((item) => item.no.toString());
+      const checkedAll = searchList.content.map((item) => item.id.toString());
       setSelected(checkedAll);
     } else {
       setSelected([]);
@@ -79,10 +86,24 @@ function ListEmployee() {
     setFilter({
       ...filter,
       name: keyword,
-      page: 1,
+      page: 0,
     });
   };
-
+  const handleDeleteOpenDialog = (employee_id) => {
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: true,
+      title: "Are you sure to delete this employee!",
+      onConfirm: () => handleDeleteConfirm(employee_id)
+    })
+  }
+  const handleDeleteConfirm = (employee_id) => {
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false,
+    })
+    console.log("employee_id", employee_id);
+  }
   const renderEmployeeTable = () => {
     const columns = [
       {
@@ -99,7 +120,7 @@ function ListEmployee() {
         ),
       },
       {
-        field: "no",
+        field: "id",
         headerName: "No#",
       },
       {
@@ -124,15 +145,15 @@ function ListEmployee() {
         checkBox: (
           <Checkbox
             onClick={handleSelect}
-            name={employee.no.toString()}
-            checked={selected.indexOf(employee.no.toString()) !== -1}
+            name={employee.id.toString()}
+            checked={selected.indexOf(employee.id.toString()) !== -1}
           />
         ),
         phone: employee.phone,
         fullName: employee.fullName,
-        no: employee.no,
+        id: employee.id,
         team: getTeam
-          ? getTeam.find((item) => item.no === employee.teamID).name
+          ? getTeam.find((item) => item.id === employee.teamID).name
           : "",
         option: (
           <>
@@ -142,7 +163,7 @@ function ListEmployee() {
               </Button>
             </Tooltip>
             <Tooltip title="Delete employee">
-              <Button>
+              <Button onClick={() => handleDeleteOpenDialog(employee.id)}>
                 <DeleteIcon />
               </Button>
             </Tooltip>
@@ -186,12 +207,13 @@ function ListEmployee() {
       </Box>
 
       <EmployeeModal open={openModal} setOpenModal={setOpenModal} />
-      {renderEmployeeTable()}
+      {loading ? <Loading /> : renderEmployeeTable()}
       <Paginations
         filter={filter}
         setPage={setFilter}
         numberOfPage={searchList ? searchList.totalPages : 1}
       />
+      <ResponsiveDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </Box>
   );
 }

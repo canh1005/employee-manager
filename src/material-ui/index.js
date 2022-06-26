@@ -18,6 +18,7 @@ export const theme = createTheme({
 export const loaddingStyled = makeStyles(theme => ({
   root: {
     position: "relative",
+    margin: "auto",
     width: "180px",
     height: "180px",
     "& span:first-child": {
@@ -226,7 +227,7 @@ export const employeeDetail = makeStyles({
     left: "50%",
     transform: "translateX(-50%)",
     "&:hover": {
-      
+
       "& .makeStyles-imgOverlay-10": {
         opacity: 1,
       }

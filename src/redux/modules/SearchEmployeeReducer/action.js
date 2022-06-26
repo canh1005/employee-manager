@@ -5,9 +5,10 @@ export const actSearchAPI = (filter) => {
   return (dispatch) => {
     dispatch(actSearchRequest());
     api
-      .get(`employee/find-page-by-name?${filter}`)
+      // .get(`employee/find-page-by-name?${filter}`)
+      .get(`employee/findByNameWithPage?${filter}`)
       .then((result) => {
-        dispatch(actSearchSuccess(result.data));
+        dispatch(actSearchSuccess(result.data.data));
       })
       .catch((err) => {
         dispatch(actSearchFailed(err));

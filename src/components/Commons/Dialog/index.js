@@ -37,6 +37,7 @@ function ResponsiveDialog({ ...props }) {
         
         <DialogActions>
           <Button
+          
             autoFocus
             onClick={() =>
               setConfirmDialog({ ...confirmDialog, isOpen: false })
