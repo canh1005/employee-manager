@@ -6,9 +6,9 @@ export const actGetWorkingAPI = (id) => {
   return (dispatch) => {
     dispatch(actGetWorkingRequest());
     api
-      .get(`working/get-all/${id}`)
+      .get(`working/getAll?employee_id=${id}`)
       .then((result) => {
-        dispatch(actGetWorkingSuccess(result.data));
+        dispatch(actGetWorkingSuccess(result.data.data));
       })
       .catch((err) => {
         dispatch(actGetWorkingFailed(err));
@@ -37,7 +37,7 @@ export const actDeleteWorkingAPI = (employee_id, working_id) => {
   return (dispatch) => {
     dispatch(actDeleteWorkingRequest());
     api
-      .delete(`working/delete/${working_id}`)
+      .delete(`working/delete?working_id=${working_id}`)
       .then((result) => {
         dispatch(actDeleteWorkingSuccess(result.data));
         dispatch(actGetWorkingAPI(employee_id));

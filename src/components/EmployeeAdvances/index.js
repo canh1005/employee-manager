@@ -12,6 +12,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import AdvanceModal from "../AdvanceModal";
 import DataTable from "components/Commons/DataTable";
 import ResponsiveDialog from "components/Commons/Dialog";
+import Loading from "components/Commons/Loading";
 
 const advancesColumns = [
   {
@@ -34,6 +35,7 @@ const advancesColumns = [
 
 function EmployeeAdvances() {
   const advancesInfo = useSelector((state) => state.advancesReducer.data);
+  const loading = useSelector(state => state.advancesReducer.loading) 
   const dispatch = useDispatch();
   const employeeID = useParams().id;
   const [openModal, setOpenModal] = useState(false);
@@ -63,12 +65,12 @@ function EmployeeAdvances() {
   };
   const renderAdvancesInfo = () => {
     if (advancesInfo) {
-      const advancesInfoRows = advancesInfo.map((row) => ({
-        no: row.no,
+      const advancesInfoRows = advancesInfo.map((row,index) => ({
+        no: index,
         date: moment(row.date).format("DD-MM-YYYY"),
         money: row.money,
         option: (
-          <Button onClick={() => handleOpenDialog(row.no)}>
+          <Button onClick={() => handleOpenDialog(row.id)}>
             <DeleteIcon />
           </Button>
         ),
@@ -83,7 +85,7 @@ function EmployeeAdvances() {
           <AddCircleOutlineIcon />
         </Button>
       </Tooltip>
-      <div style={{ height: 400, width: "100%" }}>{renderAdvancesInfo()}</div>
+      <div style={{ height: 400, width: "100%" }}>{loading ? <Loading/> : renderAdvancesInfo()}</div>
       <AdvanceModal open={openModal} setOpen={setOpenModal} />
       <ResponsiveDialog
         confirmDialog={confirmDialog}

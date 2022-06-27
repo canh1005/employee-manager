@@ -1,13 +1,13 @@
 import * as ActionTypes from "./contances";
-import { api } from "../../../utils/api";
+import { api } from "utils/api";
 
 export const actGetStatisticAPI = (id) => {
   return (dispatch) => {
     dispatch(actGetStatisticRequest());
     api
-      .get(`statistic/${id}`)
+      .get(`statistic?employee_id=${id}`)
       .then((result) => {
-        dispatch(actGetStatisticSuccess(result.data));
+        dispatch(actGetStatisticSuccess(result.data.data));
       })
       .catch((err) => {
         dispatch(actGetStatisticFailed(err));
@@ -22,12 +22,12 @@ const actGetStatisticRequest = () => {
 const actGetStatisticSuccess = (data) => {
   return {
     type: ActionTypes.GET_STATISTICS_SUCCESS,
-    data: data,
+    data
   };
 };
 const actGetStatisticFailed = (err) => {
   return {
     type: ActionTypes.GET_STATISTICS_FAILED,
-    error: err,
+    err
   };
 };

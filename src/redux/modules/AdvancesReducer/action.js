@@ -6,9 +6,9 @@ export const actGetAdvancesAPI = (employee_id) => {
   return (dispatch) => {
     dispatch(actGetAdvancesRequest());
     api
-      .get(`advance/get-all/${employee_id}`)
+      .get(`advance/getAll?employee_id=${employee_id}`)
       .then((result) => {
-        dispatch(actGetAdvancesSuccess(result.data));
+        dispatch(actGetAdvancesSuccess(result.data.data));
       })
       .catch((err) => {
         dispatch(actGetAdvancesFailed(err));
@@ -69,7 +69,7 @@ export const actDeleteAdvanceAPI = (employee_id, advance_id) => {
   return (dispatch) => {
     dispatch(actDeleteAdvanceRequest());
     api
-      .delete(`advance/delete/${advance_id}`)
+      .delete(`advance/delete?advance_id=${advance_id}`)
       .then((result) => {
         dispatch(actDeleteAdvanceSuccess(result.data));
         dispatch(actGetAdvancesAPI(employee_id));

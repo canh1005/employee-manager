@@ -37,7 +37,7 @@ function WorkingModal(props) {
   const employeeID = useParams().id;
   const [working, setWorking] = useState({
     date: "",
-    employee_id: employeeID,
+    employeeID: employeeID,
     hour: "",
     errors: {
       hour: "",

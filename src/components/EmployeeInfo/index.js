@@ -4,14 +4,15 @@ import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import moment from "moment";
 import { informationStyled } from "material-ui";
-import HomeIcon from '@mui/icons-material/Home';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import GroupIcon from '@mui/icons-material/Group';
+import HomeIcon from "@mui/icons-material/Home";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import GroupIcon from "@mui/icons-material/Group";
 
 function EmployeeInfo() {
   const classes = informationStyled();
-  const empInfo = useSelector(state => state.employeeDetailReducer.data)
+  const empInfo = useSelector((state) => state.employeeDetailReducer.data);
+  const teamInfo = useSelector((state) => state.teamReducer.data);
   return (
     <Box className={classes.root}>
       {empInfo ? (
@@ -21,7 +22,7 @@ function EmployeeInfo() {
             <Box>
               <Typography variant="span">Start Date</Typography>
               <Typography variant="span">
-                {moment(empInfo.startDate).format("DD-MM-YYYY")}
+                {moment(empInfo.startDay).format("DD-MM-YYYY")}
               </Typography>
             </Box>
           </Box>
@@ -29,7 +30,9 @@ function EmployeeInfo() {
             <GroupIcon />
             <Box>
               <Typography variant="span">Team</Typography>
-              <Typography variant="span">{empInfo.teamID}</Typography>
+              <Typography variant="span">
+                {teamInfo && teamInfo.find(item => item.id === empInfo.teamID).name}
+              </Typography>
             </Box>
           </Box>
           <Box component="p">
@@ -53,4 +56,4 @@ function EmployeeInfo() {
     </Box>
   );
 }
-export default (EmployeeInfo);
+export default EmployeeInfo;

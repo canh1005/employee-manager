@@ -5,7 +5,8 @@ import { actGetStatisticAPI } from "redux/modules/StatisticsReducer/action";
 import { Box, Typography } from "@mui/material";
 
 function EmployeeAdvances() {
-  const statisticInfo = useSelector((state) => state.StatisticsReducer.data);
+  const statisticInfo = useSelector((state) => state.statisticReducer.data);
+  const loading = useSelector((state) => state.statisticReducer.loading);
   const dispatch = useDispatch();
   const employeeID = useParams().id;
   useEffect(() => {

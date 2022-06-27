@@ -5,9 +5,9 @@ export const actGetEmployeeByTeamAPI = (team_id) => {
   return (dispatch) => {
     dispatch(actGetEmployeeByTeamRequest());
     api
-      .get(`employee/find-by-team/${team_id}?page=1`)
+      .get(`employee/getEmployeeByTeam?team_id=${team_id}&page=0`)
       .then((result) => {
-        dispatch(actGetEmployeeByTeamSuccess(result.data));
+        dispatch(actGetEmployeeByTeamSuccess(result.data.data));
       })
       .catch((err) => {
         dispatch(actGetEmployeeByTeamFailed(err));

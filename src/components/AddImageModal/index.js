@@ -1,31 +1,68 @@
-import { Box, Button, Modal, Typography } from '@mui/material'
-import { modalStyled } from 'material-ui';
-import React, { useState } from 'react'
+import { Box, Button, Modal, Typography } from "@mui/material";
+import { modalStyled } from "material-ui";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { actAddImageAPI } from "redux/modules/ImageReducer/action";
 
 function AddImageModal(props) {
   const { open, setOpen } = props;
+  const employeeID = useParams().id;
+  const dispatch = useDispatch();
   const classes = modalStyled();
   const [image, setImage] = useState({
-    profileImg: "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png"
-  })
+    profileImg:
+      "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png",
+    imgFile: "",
+  });
   const handleImageChange = (event) => {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setImage({ profileImg: reader.result })
+        setImage({
+          ...image,
+          profileImg: reader.result,
+          imgFile: event.target.files[0],
+        });
       }
-    }
+    };
     reader.readAsDataURL(event.target.files[0]);
-  }
+    console.log("img", event.target.files[0]);
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const frmData = new FormData();
+    frmData.append("file", image.imgFile);
+    frmData.append("employeeId", employeeID);
+    console.log("frmData", frmData.get("file"));
+    setOpen({ isOpen: false });
+    // dispatch(actAddImageAPI(frmData));
+  };
   return (
-    <Modal open={open.isOpen} onClose={() => setOpen({ isOpen: false })} className={classes.root}>
+    <Modal
+      open={open.isOpen}
+      onClose={() => setOpen({ isOpen: false })}
+      className={classes.root}
+    >
       <Box className={classes.box}>
         <Typography className={classes.title} variant="h4">
           Add your image
         </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "20px" }}>
-          <img src={image.profileImg} alt='' width="200px" height="200px" />
-          <input type="file" name="image-upload" accept='image/*' onChange={handleImageChange} />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginBottom: "20px",
+          }}
+        >
+          <img src={image.profileImg} alt="" width="200px" height="200px" />
+          <input
+            type="file"
+            name="image-upload"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
         </Box>
         <Box className={classes.buttonBox}>
           <Button
@@ -35,13 +72,18 @@ function AddImageModal(props) {
           >
             Cancle
           </Button>
-          <Button variant="contained" color="primary" type="submit">
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            onClick={handleSubmit}
+          >
             Submit
           </Button>
         </Box>
       </Box>
-    </Modal >
-  )
+    </Modal>
+  );
 }
 
-export default AddImageModal
+export default AddImageModal;

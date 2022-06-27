@@ -13,6 +13,7 @@ import WorkingModal from "components/WorkingModal";
 import ResponsiveDialog from "components/Commons/Dialog";
 import DataTable from "components/Commons/DataTable";
 import Notification from "components/Commons/Notifications/Notification";
+import Loading from "components/Commons/Loading";
 
 const workingColumns = [
   {
@@ -35,6 +36,7 @@ const workingColumns = [
 
 function EmployeeWorking(props) {
   const workingInfo = useSelector((state) => state.workingReducer.data);
+  const loading = useSelector((state) => state.workingReducer.loading);
   const dispatch = useDispatch();
   const employeeID = useParams().id;
   const [confirmDialog, setConfirmDialog] = useState({
@@ -77,13 +79,13 @@ function EmployeeWorking(props) {
   };
   const renderAdvancesInfo = () => {
     if (workingInfo) {
-      const workingInfoRows = workingInfo.map((row) => ({
-        no: row.no,
+      const workingInfoRows = workingInfo.map((row, index) => ({
+        no: index,
         date: moment(row.date).format("DD-MM-YYYY"),
         hour: row.hour,
         option: (
           <Button>
-            <DeleteIcon onClick={() => handleDeleteDialog(row.no)} />
+            <DeleteIcon onClick={() => handleDeleteDialog(row.id)} />
           </Button>
         ),
       }));
@@ -97,7 +99,7 @@ function EmployeeWorking(props) {
           <AddCircleOutlineIcon />
         </Button>
       </Tooltip>
-      <div style={{ height: 400, width: "100%" }}>{renderAdvancesInfo()}</div>
+      <div style={{ height: 400, width: "100%" }}>{loading? <Loading/> : renderAdvancesInfo()}</div>
       <ResponsiveDialog
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}

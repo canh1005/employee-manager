@@ -6,6 +6,7 @@ import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import { actGetEmployeeByTeamAPI } from "redux/modules/GetEmployeeByTeamReducer/action";
 import { teamPageStyled } from "material-ui";
+import Loading from "components/Commons/Loading";
 const teamTableColumns = [
   {
     field: "no",
@@ -43,8 +44,11 @@ const employeeTableColumns = [
   },
 ];
 function TeamPage(props) {
-  const teamInfo = useSelector(state => state.teamReducer.data);
-  const employeeByTeam = useSelector(state => state.getEmployeeByTeamReducer.data);
+  const teamInfo = useSelector((state) => state.teamReducer.data);
+  const employeeByTeam = useSelector(
+    (state) => state.getEmployeeByTeamReducer.data
+  );
+  const loading = useSelector((state) => state.teamReducer.loading);
   const classes = teamPageStyled();
   const dispatch = useDispatch();
   const [value, setValue] = React.useState("1");
@@ -56,17 +60,17 @@ function TeamPage(props) {
   }, []);
   const handleDetail = (teamID) => {
     console.log("teamID", teamID);
-    dispatch(actGetEmployeeByTeamAPI(teamID))
+    dispatch(actGetEmployeeByTeamAPI(teamID));
   };
   const renderTeamTable = () => {
     if (teamInfo) {
-      const teamTableRow = teamInfo.map((teamItem) => ({
-        no: teamItem.no,
+      const teamTableRow = teamInfo.map((teamItem,index) => ({
+        no: index + 1,
         name: teamItem.name,
         detail: (
           <Button
             onClick={() => {
-              handleDetail(teamItem.no);
+              handleDetail(teamItem.id);
             }}
           >
             <BadgeOutlinedIcon />
@@ -78,8 +82,8 @@ function TeamPage(props) {
   };
   const renderEmployeeTable = () => {
     if (employeeByTeam) {
-      const employeeTableRows = employeeByTeam.map((row) => ({
-        no: row.no,
+      const employeeTableRows = employeeByTeam.content.map((row,index) => ({
+        no: index + 1,
         fullName: row.fullName,
         phone: row.phone,
         address: row.address,
@@ -94,17 +98,28 @@ function TeamPage(props) {
   };
   return (
     <Box className={classes.root}>
-      <Box>
-        <Typography className={classes.title} variant="h5">Team</Typography>
-        {renderTeamTable()}
-      </Box>
-      <br />
-      <Box>
-        <Typography className={classes.title} variant="h5">Result all employee team manager - Total {employeeByTeam ? employeeByTeam.length : 0} employees</Typography>
-        {renderEmployeeTable()}
-      </Box>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <Box>
+            <Typography className={classes.title} variant="h5">
+              Team
+            </Typography>
+            {renderTeamTable()}
+          </Box>
+          <br />
+          <Box>
+            <Typography className={classes.title} variant="h5">
+              Result all employee team manager - Total{" "}
+              {employeeByTeam ? employeeByTeam.length : 0} employees
+            </Typography>
+            {renderEmployeeTable()}
+          </Box>
+        </>
+      )}
     </Box>
   );
 }
 
-export default (TeamPage);
+export default TeamPage;

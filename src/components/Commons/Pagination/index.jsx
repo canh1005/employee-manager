@@ -6,7 +6,7 @@ export function Paginations(props) {
   const handleChange = (event, value) => {
     setPage({
       ...filter,
-      page: value
+      page: value - 1
     });
   };
   const style = {

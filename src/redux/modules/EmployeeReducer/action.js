@@ -40,7 +40,7 @@ export const actDeleteEmployeeAPI = (ids, filter) => {
   return (dispatch) => {
     dispatch(actDeleteEmployeeRequest());
     api
-      .delete(`employee/delete-multi?${ids}`)
+      .delete(`employee/delete?${ids}`)
       .then(() => {
         dispatch(actSearchAPI(filter));
       })

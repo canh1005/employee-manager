@@ -6,9 +6,9 @@ export const actEmployeeDetailAPI = (id) => {
   return (dispatch) => {
     dispatch(actEmployeeDetailRequest());
     api
-      .get(`employee/find-by-id/${id}`)
+      .get(`employee/find-by-id?employee_id=${id}`)
       .then((result) => {
-        dispatch(actEmployeeDetailSuccess(result.data));
+        dispatch(actEmployeeDetailSuccess(result.data.data));
       })
       .catch((err) => {
         dispatch(actEmployeeDetailFailed(err));

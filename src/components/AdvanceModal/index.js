@@ -16,7 +16,7 @@ function AdvanceModal(props) {
   const employeeID = useParams().id;
   const [advance, setAdvance] = useState({
     date: "",
-    employee_id: employeeID,
+    employeeID: employeeID,
     money: "",
   });
   const handleClose = () => setOpen(false);

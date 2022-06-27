@@ -12,17 +12,16 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from 'react-router-dom';
 import { employeeDetail } from 'material-ui';
-import { actGetImageAPI } from 'redux/modules/GetImageReducer/action';
 import EmployeeModal from 'components/EmployeeModal';
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ResponsiveDialog from "../../Commons/Dialog";
 import AddImageModal from 'components/AddImageModal';
+import { actGetTeamAPI } from 'redux/modules/TeamReducer/action';
 
 
 function EmployeeInfoDetail() {
     const employeeInfo = useSelector(state => state.employeeDetailReducer.data);
-    const imageInfo = useSelector(state => state.getImageReducer.data);
     const dispatch = useDispatch();
     const employeeId = useParams().id;
     const navigate = useNavigate();
@@ -40,7 +39,7 @@ function EmployeeInfoDetail() {
     console.log(openAddImgModal);
     useEffect(() => {
         dispatch(actEmployeeDetailAPI(employeeId))
-        dispatch(actGetImageAPI(employeeId))
+        dispatch(actGetTeamAPI())
         navigate('info', { replace: true })
         return () => {
             dispatch(actEmployeeEdited(""))
@@ -54,7 +53,7 @@ function EmployeeInfoDetail() {
                     <Box>
                         <Box component="p">
                             <Typography variant="span">No.:</Typography>
-                            <Typography variant="span">{employeeInfo.no}</Typography>
+                            <Typography variant="span">{employeeInfo.id}</Typography>
                         </Box>
                         <Box component="p">
                             <Typography variant="span">Age:</Typography>
@@ -91,11 +90,8 @@ function EmployeeInfoDetail() {
                         <Avatar
                             className={classes.img}
                             alt={employeeInfo ? `${employeeInfo.fullName} avatar` : ""}
-                            src={
-                                imageInfo && imageInfo.status !== 400
-                                    ? imageInfo.config.baseURL + imageInfo.config.url
-                                    : ""
-                            }
+                            
+                            src={employeeInfo ? employeeInfo.imgName : ""}
                         />
                         <Typography variant='span' className={classes.imgOverlay}>Upload Photo</Typography>
 

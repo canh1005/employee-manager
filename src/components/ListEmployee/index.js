@@ -80,7 +80,7 @@ function ListEmployee() {
   };
 
   const handleEmployeeDetail = (employee) => {
-    navigate(`${employee.no}`, { replace: true });
+    navigate(`${employee.id}`, { replace: true });
   };
   const handleKeywordChange = (keyword) => {
     setFilter({
