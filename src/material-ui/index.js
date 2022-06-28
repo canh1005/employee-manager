@@ -374,16 +374,23 @@ export const teamPageStyled = makeStyles((theme) => ({
     "& div:first-child": {
       width: "40%",
       marginRight: "10px",
-      "& .MuiPaper-root": {
-        height: "100vh",
-        overflow: "scroll",
-      },
+      // "& .MuiPaper-root": {
+      //   height: "100vh",
+      //   overflow: "scroll",
+      // },
       "& table": {
         minWidth: "0px",
       }
+    },
+    "& form":{
+      display: "flex",
+      justifyContent: "flex-end",
     }
   },
   title: {
-    margin: "20px 0!important"
-  }
+    margin: "20px 0!important",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
 }))

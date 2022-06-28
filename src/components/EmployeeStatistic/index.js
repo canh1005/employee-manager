@@ -10,7 +10,7 @@ function EmployeeAdvances() {
   const dispatch = useDispatch();
   const employeeID = useParams().id;
   useEffect(() => {
-    dispatch(actGetStatisticAPI(employeeID));
+    // dispatch(actGetStatisticAPI(employeeID));
   }, []);
   const renderStatisticInfo = () => {
     if (statisticInfo) {

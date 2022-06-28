@@ -3,6 +3,7 @@ import Pagination from "@mui/material/Pagination";
 
 export function Paginations(props) {
   const { numberOfPage, setPage, filter } = props;
+  console.log("filter", filter);
   const handleChange = (event, value) => {
     setPage({
       ...filter,

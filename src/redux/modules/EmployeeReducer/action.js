@@ -1,6 +1,7 @@
 import * as ActionTypes from "./constances";
 import { api } from "utils/api";
 import { actSearchAPI } from "../SearchEmployeeReducer/action";
+import { useNavigate } from "react-router-dom";
 
 //Add
 export const actAddEmployeeAPI = (employee, filter) => {
@@ -42,7 +43,12 @@ export const actDeleteEmployeeAPI = (ids, filter) => {
     api
       .delete(`employee/delete?${ids}`)
       .then(() => {
-        dispatch(actSearchAPI(filter));
+        if (filter) {
+          dispatch(actSearchAPI(filter));
+        } else {
+          let navigate = useNavigate();
+          navigate("/", { replace: true });
+        }
       })
       .catch((err) => {
         dispatch(actDeleteEmployeeFailed(err));
@@ -57,6 +63,31 @@ const actDeleteEmployeeRequest = () => {
 const actDeleteEmployeeFailed = (err) => {
   return {
     type: ActionTypes.DELETE_EMPLOYEE_FAILED,
+    err,
+  };
+};
+
+export const actUpdateEmployeeAPI = (employee, filter) => {
+  return (dispatch) => {
+    dispatch(actUpdateEmployeeRequest());
+    api
+      .Update(`employee/update?${employee}`)
+      .then(() => {
+          dispatch(actSearchAPI(filter));
+      })
+      .catch((err) => {
+        dispatch(actUpdateEmployeeFailed(err.response));
+      });
+  };
+};
+const actUpdateEmployeeRequest = () => {
+  return {
+    type: ActionTypes.UPDATE_EMPLOYEE_REQUEST,
+  };
+};
+const actUpdateEmployeeFailed = (err) => {
+  return {
+    type: ActionTypes.UPDATE_EMPLOYEE_FAILED,
     err,
   };
 };

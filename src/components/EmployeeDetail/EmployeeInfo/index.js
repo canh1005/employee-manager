@@ -1,121 +1,140 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { actEmployeeDetailAPI, actEmployeeEdited } from 'redux/modules/EmployeeDetailReducer/action';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
-    Avatar,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Input,
-    Typography,
+  actEmployeeDetailAPI,
+  actEmployeeEdited,
+} from "redux/modules/EmployeeDetailReducer/action";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Input,
+  Typography,
 } from "@mui/material";
-import { useNavigate, useParams } from 'react-router-dom';
-import { employeeDetail } from 'material-ui';
-import EmployeeModal from 'components/EmployeeModal';
+import { useNavigate, useParams } from "react-router-dom";
+import { employeeDetail } from "material-ui";
+import EmployeeModal from "components/EmployeeModal";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import ResponsiveDialog from "../../Commons/Dialog";
-import AddImageModal from 'components/AddImageModal';
-import { actGetTeamAPI } from 'redux/modules/TeamReducer/action';
-
+import AddImageModal from "components/AddImageModal";
+import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
+import { actDeleteEmployeeAPI } from "redux/modules/EmployeeReducer/action";
 
 function EmployeeInfoDetail() {
-    const employeeInfo = useSelector(state => state.employeeDetailReducer.data);
-    const dispatch = useDispatch();
-    const employeeId = useParams().id;
-    const navigate = useNavigate();
-    const classes = employeeDetail();
-    const [confirmDialog, setConfirmDialog] = React.useState({
-        isOpen: false,
-        title: ""
-    });
-    const [openEditModel, setOpenEditModel] = useState({
-        isOpen: false,
-    });
-    const [openAddImgModal, setOpenAddImgModal] = useState({
-        isOpen: false,
-    });
-    console.log(openAddImgModal);
-    useEffect(() => {
-        dispatch(actEmployeeDetailAPI(employeeId))
-        dispatch(actGetTeamAPI())
-        navigate('info', { replace: true })
-        return () => {
-            dispatch(actEmployeeEdited(""))
-        }
-    }, [])
-    const renderEmployeeInfo = () => {
-        if (employeeInfo) {
-            return (
-                <CardContent className={classes.cardContent}>
-                    <Typography variant="h5">{employeeInfo.fullName}</Typography>
-                    <Box>
-                        <Box component="p">
-                            <Typography variant="span">No.:</Typography>
-                            <Typography variant="span">{employeeInfo.id}</Typography>
-                        </Box>
-                        <Box component="p">
-                            <Typography variant="span">Age:</Typography>
-                            <Typography variant="span">{employeeInfo.age}</Typography>
-                        </Box>
-                        <Box component="p">
-                            <Typography variant="span">Gender:</Typography>
-                            <Typography variant="span">
-                                {employeeInfo.male ? "Male" : "Female"}
-                            </Typography>
-                        </Box>
-                    </Box>
-                </CardContent>
-            );
-        }
+  const employeeInfo = useSelector((state) => state.employeeDetailReducer.data);
+  const dispatch = useDispatch();
+  const employeeId = useParams().id;
+  const navigate = useNavigate();
+  const classes = employeeDetail();
+  const [confirmDialog, setConfirmDialog] = React.useState({
+    isOpen: false,
+    title: "",
+  });
+  const [openEditModel, setOpenEditModel] = useState({
+    isOpen: false,
+  });
+  const [openAddImgModal, setOpenAddImgModal] = useState({
+    isOpen: false,
+  });
+  console.log(openAddImgModal);
+  useEffect(() => {
+    dispatch(actEmployeeDetailAPI(employeeId));
+    dispatch(actGetTeamAPI());
+    navigate("info", { replace: true });
+    return () => {
+      dispatch(actEmployeeEdited(""));
     };
-    const handleEditModel = () => {
-        setOpenEditModel({
-            isOpen: true,
-        })
-        dispatch(actEmployeeEdited(employeeInfo))
+  }, []);
+  const renderEmployeeInfo = () => {
+    if (employeeInfo) {
+      return (
+        <CardContent className={classes.cardContent}>
+          <Typography variant="h5">{employeeInfo.fullName}</Typography>
+          <Box>
+            <Box component="p">
+              <Typography variant="span">No.:</Typography>
+              <Typography variant="span">{employeeInfo.id}</Typography>
+            </Box>
+            <Box component="p">
+              <Typography variant="span">Age:</Typography>
+              <Typography variant="span">{employeeInfo.age}</Typography>
+            </Box>
+            <Box component="p">
+              <Typography variant="span">Gender:</Typography>
+              <Typography variant="span">
+                {employeeInfo.male ? "Male" : "Female"}
+              </Typography>
+            </Box>
+          </Box>
+        </CardContent>
+      );
     }
-    const handleDeleteConfirm = () => {
-        setConfirmDialog({
-            isOpen: true,
-            title: "Are you sure to delete this employee?",
-        })
-    }
-    return (
-        <>
-            <Card className={classes.card}>
-                <Box className={classes.imgBox}>
-                    <Button className={classes.imgButton} component='label' onClick={() => setOpenAddImgModal({ isOpen: true })}>
-                        <Avatar
-                            className={classes.img}
-                            alt={employeeInfo ? `${employeeInfo.fullName} avatar` : ""}
-                            
-                            src={employeeInfo ? employeeInfo.imgName : ""}
-                        />
-                        <Typography variant='span' className={classes.imgOverlay}>Upload Photo</Typography>
-
-                    </Button>
-                </Box>
-                <Box className={classes.employeeInfoBtn}>
-                    <Button variant="contained" onClick={handleEditModel} color="primary">
-                        <ModeEditIcon />
-                    </Button>
-                    <Button variant="contained" onClick={handleDeleteConfirm} color="error">
-                        <DeleteIcon />
-                    </Button>
-                </Box>
-                {renderEmployeeInfo()}
-            </Card>
-            <EmployeeModal open={openEditModel} setOpenModal={setOpenEditModel} />
-            <ResponsiveDialog
-                confirmDialog={confirmDialog}
-                setConfirmDialog={setConfirmDialog}
+  };
+  const handleEditModel = () => {
+    setOpenEditModel({
+      isOpen: true,
+    });
+    dispatch(actEmployeeEdited(employeeInfo));
+  };
+  const handleDeleteDialog = () => {
+    setConfirmDialog({
+      isOpen: true,
+      title: "Are you sure to delete this employee?",
+      onConfirm: () => handleDelete(employeeId),
+    });
+  };
+  const handleDelete = () => {
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false,
+    });
+    dispatch(actDeleteEmployeeAPI(`ids=${employeeId}`));
+    navigate("/", { replace: true });
+  };
+  return (
+    <>
+      <Card className={classes.card}>
+        <Box className={classes.imgBox}>
+          <Button
+            className={classes.imgButton}
+            component="label"
+            onClick={() => setOpenAddImgModal({ isOpen: true })}
+          >
+            <Avatar
+              className={classes.img}
+              alt={employeeInfo ? `${employeeInfo.fullName} avatar` : ""}
+              src={employeeInfo ? employeeInfo.imgName : ""}
             />
-            <AddImageModal open={openAddImgModal} setOpen={setOpenAddImgModal} />
-        </>
-
-    )
+            <Typography variant="span" className={classes.imgOverlay}>
+              Upload Photo
+            </Typography>
+          </Button>
+        </Box>
+        <Box className={classes.employeeInfoBtn}>
+          <Button variant="contained" onClick={handleEditModel} color="primary">
+            <ModeEditIcon />
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleDeleteDialog}
+            color="error"
+          >
+            <DeleteIcon />
+          </Button>
+        </Box>
+        {renderEmployeeInfo()}
+      </Card>
+      <EmployeeModal open={openEditModel} setOpenModal={setOpenEditModel} />
+      <ResponsiveDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
+      <AddImageModal open={openAddImgModal} setOpen={setOpenAddImgModal} />
+    </>
+  );
 }
 
-export default EmployeeInfoDetail
+export default EmployeeInfoDetail;

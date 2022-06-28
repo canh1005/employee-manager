@@ -24,6 +24,11 @@ export const employeeReducer = (state = initialState, action) => {
     case ActionTypes.DELETE_EMPLOYEE_FAILED:
       state.error = action.err;
       return { ...state };
+    case ActionTypes.UPDATE_EMPLOYEE_REQUEST:
+      return { ...state };
+    case ActionTypes.UPDATE_EMPLOYEE_FAILED:
+      state.error = action.err;
+      return { ...state };
     default:
       return { ...state };
   }

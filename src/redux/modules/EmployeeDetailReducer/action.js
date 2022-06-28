@@ -34,13 +34,14 @@ const actEmployeeDetailFailed = (err) => {
 };
 
 //Update
-export const actUpdateEmployee = (userID, user) => {
+export const actUpdateEmployee = (employee, employeeID) => {
   return (dispatch) => {
     dispatch(actUpdateEmployeeRequest());
     api
-      .put(`employee/update/${userID}`, user)
+      .put(`employee/update`, employee)
       .then((result) => {
         dispatch(actUpdateEmployeeSuccess(result.data));
+        dispatch(actEmployeeDetailAPI(employeeID))
       })
       .catch((err) => {
         dispatch(actUpdateEmployeeFailed(err));

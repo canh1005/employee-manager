@@ -22,6 +22,31 @@ export const teamReducer = (state = initialState, action) => {
       state.data = null;
       state.error = action.err;
       return { ...state };
+    case ActionTypes.GET_TEAM_PAGE_REQUEST:
+      state.loading = true;
+      state.data = null;
+      return { ...state };
+    case ActionTypes.GET_TEAM_PAGE_SUCCESS:
+      state.loading = false;
+      state.data = action.data;
+      state.error = null;
+      return { ...state };
+    case ActionTypes.GET_TEAM_PAGE_FAILED:
+      state.loading = false;
+      state.data = null;
+      state.error = action.err;
+      return { ...state };
+    case ActionTypes.ADD_TEAM_REQUEST:
+      state.data = null;
+      return { ...state };
+    case ActionTypes.ADD_TEAM_FAILED:
+      state.data = null;
+      state.error = action.err;
+      return { ...state };
+    case ActionTypes.CLEAR_TEAM_DATA:
+      state.data = null;
+      state.error = null;
+      return { ...state };
     default:
       return { ...state };
   }

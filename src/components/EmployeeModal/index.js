@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { DatePicker } from "@mui/lab";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { actAddEmployeeAPI } from "redux/modules/EmployeeReducer/action";
+import { actAddEmployeeAPI, actUpdateEmployeeAPI } from "redux/modules/EmployeeReducer/action";
 import {
   checkAge,
   checkEmpty,
@@ -19,12 +19,15 @@ import {
   checkPhoneNumber,
   checkPositiveNumber,
 } from "utils/Validations";
-import queryString from 'query-string'
+import queryString from "query-string";
 import { modalStyled } from "material-ui";
+import { actUpdateEmployee } from "redux/modules/EmployeeDetailReducer/action";
+import { useParams } from "react-router-dom";
 
 function EmployeeModal(props) {
   const { open, setOpenModal } = props;
   console.log("modal filter", open.filter);
+  const employeeID = useParams().id;
   const listTeam = useSelector((state) => state.teamReducer.data);
   const employeeEdit = useSelector(
     (state) => state.employeeDetailReducer.userEdited
@@ -72,6 +75,7 @@ function EmployeeModal(props) {
   useEffect(() => {
     if (employeeEdit) {
       setEmployee({
+        id: employeeID,
         fullName: employeeEdit.fullName,
         age: employeeEdit.age,
         address: employeeEdit.address,
@@ -81,7 +85,8 @@ function EmployeeModal(props) {
         male: employeeEdit.male,
         teamID: employeeEdit.teamID,
       });
-    } else {
+    }
+    return () => {
       setEmployee({
         fullName: "",
         age: "",
@@ -92,7 +97,8 @@ function EmployeeModal(props) {
         male: true,
         teamID: 1,
       });
-    }
+      console.log("Component unmount!");
+    };
   }, [employeeEdit]);
   const handleGenderChange = (event) => {
     setEmployee({
@@ -123,11 +129,15 @@ function EmployeeModal(props) {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(actAddEmployeeAPI(employee, queryString.stringify(open.filter)));
+    if(employeeEdit){
+      dispatch(actUpdateEmployee(employee, employeeID))
+    }else{
+      dispatch(actAddEmployeeAPI(employee, queryString.stringify(open.filter)));
+    }
     setOpenModal({
       ...open,
       isOpen: false,
-    })
+    });
     console.log("employeeInfo", employee);
   };
   const handleError = (event) => {
@@ -269,7 +279,9 @@ function EmployeeModal(props) {
                 onBlur={handleError}
                 helperText={errors.moneyPerHour}
                 InputProps={{
-                  endAdornment: <InputAdornment position="start">$</InputAdornment>,
+                  endAdornment: (
+                    <InputAdornment position="start">$</InputAdornment>
+                  ),
                 }}
               />
               <TextField
@@ -290,7 +302,7 @@ function EmployeeModal(props) {
                 label="Team"
                 onChange={handleTeamChange}
               >
-                {listTeam ? (
+                {listTeam && listTeam.length > 0 ? (
                   listTeam.map((item) => {
                     return (
                       <MenuItem key={item.id} value={item.id}>

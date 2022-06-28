@@ -42,6 +42,9 @@ function ListEmployee() {
     dispatch(actSearchAPI(paramsString));
     dispatch(actGetTeamAPI());
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    return ()=>{
+      console.log("Component unmount!");
+    }
   }, [filter]);
 
   const navigate = useNavigate();
@@ -89,7 +92,7 @@ function ListEmployee() {
       page: 0,
     });
   };
-  const handleDeleteOpenDialog = (employee_id) => {
+  const handleDeleteDialog = (employee_id) => {
     setConfirmDialog({
       ...confirmDialog,
       isOpen: true,
@@ -103,6 +106,7 @@ function ListEmployee() {
       isOpen: false,
     })
     console.log("employee_id", employee_id);
+    dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter)))
   }
   const renderEmployeeTable = () => {
     const columns = [
@@ -152,7 +156,7 @@ function ListEmployee() {
         phone: employee.phone,
         fullName: employee.fullName,
         id: employee.id,
-        team: getTeam
+        team: getTeam && getTeam.length > 0
           ? getTeam.find((item) => item.id === employee.teamID).name
           : "",
         option: (
@@ -163,7 +167,7 @@ function ListEmployee() {
               </Button>
             </Tooltip>
             <Tooltip title="Delete employee">
-              <Button onClick={() => handleDeleteOpenDialog(employee.id)}>
+              <Button onClick={() => handleDeleteDialog(employee.id)}>
                 <DeleteIcon />
               </Button>
             </Tooltip>
