@@ -37,10 +37,11 @@ export const teamReducer = (state = initialState, action) => {
       state.error = action.err;
       return { ...state };
     case ActionTypes.ADD_TEAM_REQUEST:
-      state.data = null;
+      return { ...state };
+    case ActionTypes.ADD_TEAM_SUCCESS:
+      state.error = action.data;
       return { ...state };
     case ActionTypes.ADD_TEAM_FAILED:
-      state.data = null;
       state.error = action.err;
       return { ...state };
     case ActionTypes.CLEAR_TEAM_DATA:

@@ -12,6 +12,10 @@ import { actGetEmployeeByTeamAPI } from "redux/modules/GetEmployeeByTeamReducer/
 import { teamPageStyled } from "material-ui";
 import Loading from "components/Commons/Loading";
 import { Paginations } from "components/Commons/Pagination";
+import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
+import Notification from "components/Commons/Notifications/Notification";
+import { actAddTeam } from "redux/modules/TeamReducer/addTeamReducer/action";
+
 const teamTableColumns = [
   {
     field: "no",
@@ -49,29 +53,61 @@ const employeeTableColumns = [
   },
 ];
 function TeamPage() {
+  //Get data form store and declare a dispatch action
   const teamInfo = useSelector((state) => state.teamReducer.data);
   const employeeByTeam = useSelector(
     (state) => state.getEmployeeByTeamReducer.data
   );
+  const error = useSelector((state) => state.teamReducer.error);
+  // const error = useSelector((state) => state.addTeamReducer.error);
   const loading = useSelector((state) => state.teamReducer.loading);
-  const classes = teamPageStyled();
   const dispatch = useDispatch();
+
+  //Custom style for team page
+  const classes = teamPageStyled();
+
   const [team, setTeam] = useState({
     name: "",
   });
   const [teamFilter, setTeamFilter] = useState({
     page: 0,
   });
-  console.log("team", team);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    type: "info",
+    message: "",
+  });
+
   useEffect(() => {
     dispatch(actGetTeamPageAPI(teamFilter.page));
     // return () => {
     //   dispatch(actClearTeamData());
     // };
   }, [teamFilter]);
+  useEffect(() => {
+    if (error) {
+      if (error.status === 400) {
+        setNotify({
+          ...notify,
+          isOpen: true,
+          type: "error",
+          message: `${error && error.data ? error.data.message : ""}`,
+        });
+      } else {
+        setNotify({
+          ...notify,
+          isOpen: true,
+          type: "success",
+          message: "Add team success",
+        });
+      }
+    }
+  }, [error]);
+
   const handleDetail = (teamID) => {
     dispatch(actGetEmployeeByTeamAPI(teamID));
   };
+
   const renderTeamTable = () => {
     if (teamInfo && teamInfo.content) {
       const teamTableRow = teamInfo.content.map((teamItem, index) => ({
@@ -106,11 +142,13 @@ function TeamPage() {
       );
     }
   };
+  //Handle add new team
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("teamSubmit", team);
     dispatch(actAddTeamAPI(team, teamFilter.page));
   };
+
   return (
     <Box className={classes.root}>
       <Box>
@@ -124,8 +162,12 @@ function TeamPage() {
               onChange={(event) => setTeam({ name: event.target.value })}
             />
             <Tooltip title="Add new team">
-              <Button variant="contained" color="primary">
-                Add
+              <Button
+                variant="contained"
+                sx={{ borderRadius: "50%", color: "#fff" }}
+                color="primary"
+              >
+                <PersonAddAltRoundedIcon />
               </Button>
             </Tooltip>
           </form>
@@ -146,6 +188,7 @@ function TeamPage() {
         </Typography>
         {renderEmployeeTable()}
       </Box>
+      <Notification notify={notify} setNotify={setNotify} />
     </Box>
   );
 }

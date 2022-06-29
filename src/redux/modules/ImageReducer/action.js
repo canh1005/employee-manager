@@ -1,13 +1,15 @@
 import * as ActionTypes from "./contances";
 import { api } from "../../../utils/api";
+import { actEmployeeDetailAPI } from "../EmployeeDetailReducer/action";
 
-export const actAddImageAPI = (frmData) => {
+export const actAddImageAPI = (frmData, employeeID) => {
   return (dispatch) => {
     dispatch(actAddImageRequest());
     api
       .post(`image/upload`,frmData)
       .then((result) => {
         dispatch(actAddImageSuccess(result));
+        dispatch(actEmployeeDetailAPI(employeeID))
       })
       .catch((err) => {
         dispatch(actAddImageFailed(err));

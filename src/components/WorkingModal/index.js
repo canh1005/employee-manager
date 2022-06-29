@@ -4,36 +4,18 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import moment from "moment";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actAddWorkingAPI } from "redux/modules/WorkingReducer/action";
 import { checkEmpty } from "../../utils/Validations";
 import { modalStyled } from "material-ui";
 
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: 400,
-//   bgcolor: "#fff",
-//   border: "2px solid #000",
-//   boxShadow: 24,
-//   p: 4,
-//   ".MuiTextField-root": {
-//     width: "50%",
-//     margin: "0 10px",
-//   },
-//   ".btn-box": {
-//     margin: "10px",
-//     button: {
-//       marginRight: "10px",
-//     },
-//   },
-// };
 function WorkingModal(props) {
+  //Get data form store and declare a dispatch action
+  const employeeInfo = useSelector((state) => state.employeeDetailReducer.data);
+  const dispatch = useDispatch();
+  console.log("employeeInfo", employeeInfo);
   const { open, setOpen } = props;
   const classes = modalStyled();
-  const dispatch = useDispatch();
   const employeeID = useParams().id;
   const [working, setWorking] = useState({
     date: "",
@@ -45,6 +27,7 @@ function WorkingModal(props) {
       frmValid: false,
     },
   });
+  console.log("working", working);
   const handleClose = () => setOpen(false);
   const handleDate = (event) => {
     let formatDate = moment(event).format("YYYY-MM-DD");
@@ -68,6 +51,11 @@ function WorkingModal(props) {
       case "hour":
         hourValid = message !== "" ? false : true;
         break;
+      case "date":
+        if (value < employeeInfo.startDay) {
+          message = "date must be after employee start day";
+        }
+        break;
       default:
         break;
     }
@@ -80,6 +68,9 @@ function WorkingModal(props) {
       },
     });
     console.log("frmValid", working);
+  };
+  const handleDisableDays = (date) => {
+    return (date.getDay() === 0 || date.getDay() === 6) || moment(date).format("YYYY-MM-DD") < moment(employeeInfo.startDay).format("YYYY-MM-DD")
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -101,6 +92,7 @@ function WorkingModal(props) {
                 name="date"
                 onChange={handleDate}
                 value={working.date}
+                shouldDisableDate={handleDisableDays}
                 renderInput={(params) => <TextField {...params} />}
               />
               <TextField

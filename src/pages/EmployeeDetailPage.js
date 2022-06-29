@@ -1,16 +1,15 @@
-import { Box } from '@mui/material'
-import EmployeeInfoDetail from 'components/EmployeeDetail/EmployeeInfo'
-import EmployeeTabs from 'components/EmployeeDetail/EmployeeTabs'
-import React from 'react'
+import { Box, Container } from "@mui/material";
+import EmployeeInfoDetail from "components/EmployeeDetail/EmployeeInfo";
+import EmployeeTabs from "components/EmployeeDetail/EmployeeTabs";
+import React from "react";
 
 function EmployeeDetailPage() {
-
-    return (
-        <Box sx={{margin: "0 20px"}}>
-            <EmployeeInfoDetail />
-            <EmployeeTabs/>
-        </Box>
-    )
+  return (
+    <Container>
+      <EmployeeInfoDetail />
+      <EmployeeTabs />
+    </Container>
+  );
 }
 
-export default EmployeeDetailPage
+export default EmployeeDetailPage;

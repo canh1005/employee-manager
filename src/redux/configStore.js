@@ -10,6 +10,7 @@ import { searchReducer } from "redux/modules/SearchEmployeeReducer/reducer";
 import { workingReducer } from "redux/modules/WorkingReducer/reducer";
 import { advancesReducer } from "redux/modules/AdvancesReducer/reducer";
 import { employeeReducer } from "redux/modules/EmployeeReducer/reducer";
+import { addTeamReducer } from "redux/modules/TeamReducer/addTeamReducer/reducer";
 
 
 
@@ -24,6 +25,7 @@ const rootReducers = combineReducers({
   teamReducer,
   employeeReducer,
   imageReducer,
+  addTeamReducer,
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export const store = createStore(

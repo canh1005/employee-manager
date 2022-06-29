@@ -1,11 +1,11 @@
 import * as ActionTypes from "./contances";
 import { api } from "utils/api";
 
-export const actGetStatisticAPI = (id) => {
+export const actGetStatisticAPI = (id, year_month) => {
   return (dispatch) => {
     dispatch(actGetStatisticRequest());
     api
-      .get(`statistic?employee_id=${id}`)
+      .get(`statistic?employee_id=${id}&year_month=${year_month}`)
       .then((result) => {
         dispatch(actGetStatisticSuccess(result.data.data));
       })

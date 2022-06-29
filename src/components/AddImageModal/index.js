@@ -36,7 +36,7 @@ function AddImageModal(props) {
     frmData.append("employeeId", employeeID);
     console.log("frmData", frmData.get("file"));
     setOpen({ isOpen: false });
-    // dispatch(actAddImageAPI(frmData));
+    dispatch(actAddImageAPI(frmData,employeeID));
   };
   return (
     <Modal

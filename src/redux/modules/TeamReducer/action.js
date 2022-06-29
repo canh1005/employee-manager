@@ -11,7 +11,7 @@ export const actGetTeamAPI = () => {
         dispatch(actGetTeamSuccess(result.data.data));
       })
       .catch((err) => {
-        dispatch(actGetTeamFailed(err));
+        dispatch(actGetTeamFailed(err.response));
       });
   };
 };
@@ -70,10 +70,11 @@ export const actAddTeamAPI = (teamInfo, page) => {
     api
       .post("team/create", teamInfo)
       .then((result) => {
-        dispatch(actGetTeamAPI(page));
+        dispatch(actGetTeamPageAPI(page));
+        dispatch(actAddTeamSuccess(result.status))
       })
       .catch((err) => {
-        dispatch(actAddTeamFailed(err));
+        dispatch(actAddTeamFailed(err.response));
       });
   };
 };
@@ -85,7 +86,7 @@ const actAddTeamRequest = () => {
 const actAddTeamSuccess = (data) => {
   return {
     type: ActionTypes.ADD_TEAM_SUCCESS,
-    data,
+    data
   };
 };
 const actAddTeamFailed = (err) => {
