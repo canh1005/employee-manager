@@ -70,7 +70,7 @@ function EmployeeAdvances() {
         date: moment(row.date).format("DD-MM-YYYY"),
         money: row.money,
         option: (
-          <Button onClick={() => handleOpenDialog(row.id)}>
+          <Button key={index} onClick={() => handleOpenDialog(row.id)}>
             <DeleteIcon />
           </Button>
         ),

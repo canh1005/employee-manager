@@ -75,33 +75,62 @@ function EmployeeAdvances(props) {
   const working = useSelector((state) => state.workingReducer.data);
 
   const [data, setData] = useState({
-    labels: `${working ? [working.map((item) => moment(item.date).format("DD"))] : ""}`,
+    labels: [],
     datasets: [
       {
-        label: "Employee working hours",
-        data: `${working ? working.map((item) => item.hour) : ""}`,
+        label: "Employee working hours in month",
+        data: "",
+        backgroundColor:["rgba(255, 99, 132, 0.2)"],
+        borderColor:["rgb(255, 99, 132)"],
+        borderWidth: 1
       },
     ],
+    //output: ['3','5']
   });
-  console.log("data",data.labels);
+  
 
   const employeeID = useParams().id;
   moment().format("YYYY-MM-DD");
-  console.log("moment", moment("2022-05").format("YYYY-MM"));
-  const [month, setMonth] = useState({
-    value: moment().format("YYYY-MM"),
-  });
-  console.log("month", moment().months());
-
+  const [month, setMonth] = useState(moment().format("YYYY-MM"));
+  console.log("MonthSelected: ",month);
   useEffect(() => {
-    dispatch(actGetStatisticAPI(employeeID, month.value));
+    console.log("useffectMonth: ",month);
+    dispatch(actGetStatisticAPI(employeeID, month));
     dispatch(actGetWorkingAPI(employeeID));
-  }, [month]);
-
-  const handleChange = (event) => {
-    setMonth({
-      value: event.target.value,
+    setData({
+      ...data,
+      labels:
+        working &&
+        working
+          .filter((item) => {
+            console.log("item", item);
+            return (
+              moment(item.date).month() + 1 ===
+              Number(moment(month).format("M"))
+            );
+          })
+          .map((el) => moment(el.date).format("DD-MM")),
+      datasets: [
+        {
+          label: "Employee working hours in month",
+          data:
+            working &&
+            working
+              .filter(
+                (item) =>
+                  moment(item.date).month() + 1 ===
+                  Number(moment(month).format("M"))
+              )
+              .map((el) => el.hour),
+        },
+      ],
     });
+  }, [month]);
+  useEffect(() => {
+    console.log("DataUseeffect: ",data);
+  }, [data]);
+  const handleChange = (event) => {
+    setMonth(event.target.value);
     console.log("change", month);
   };
   const renderStatisticInfo = () => {
@@ -109,11 +138,11 @@ function EmployeeAdvances(props) {
       return (
         <Box>
           <Typography>
-            Number of working day:{statisticInfo.numberOfWorkingDay}
+            Number of working day: {statisticInfo.numberOfWorkingDay}
           </Typography>
-          <Typography>Total get:{statisticInfo.totalGet}</Typography>
-          <Typography>Total advances:{statisticInfo.totalAdvances}</Typography>
-          <Typography>Summary:{statisticInfo.summary}</Typography>
+          <Typography>Total get: {statisticInfo.totalGet}</Typography>
+          <Typography>Total advances: {statisticInfo.totalAdvances}</Typography>
+          <Typography>Summary: {statisticInfo.totalSalary}</Typography>
         </Box>
       );
     }
@@ -125,7 +154,7 @@ function EmployeeAdvances(props) {
           <InputLabel id="month-select">Month</InputLabel>
           <Select
             labelId="month-select"
-            value={month.value}
+            value={month}
             label="Month"
             onChange={handleChange}
           >

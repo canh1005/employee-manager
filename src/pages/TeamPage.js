@@ -62,6 +62,7 @@ function TeamPage() {
   // const error = useSelector((state) => state.addTeamReducer.error);
   const loading = useSelector((state) => state.teamReducer.loading);
   const dispatch = useDispatch();
+  const [openInput, setOpenInput] = useState(false);
 
   //Custom style for team page
   const classes = teamPageStyled();
@@ -148,7 +149,13 @@ function TeamPage() {
     console.log("teamSubmit", team);
     dispatch(actAddTeamAPI(team, teamFilter.page));
   };
-
+  const handleAddTeam = () => {
+    if (!openInput) {
+      setOpenInput(true);
+    } else {
+      dispatch(actAddTeamAPI(team, teamFilter.page));
+    }
+  };
   return (
     <Box className={classes.root}>
       <Box>
@@ -160,12 +167,14 @@ function TeamPage() {
               name="teamName"
               type="text"
               onChange={(event) => setTeam({ name: event.target.value })}
+              sx={{ opacity: `${openInput ? 1 : 0}` }}
             />
             <Tooltip title="Add new team">
               <Button
                 variant="contained"
                 sx={{ borderRadius: "50%", color: "#fff" }}
                 color="primary"
+                onClick={handleAddTeam}
               >
                 <PersonAddAltRoundedIcon />
               </Button>

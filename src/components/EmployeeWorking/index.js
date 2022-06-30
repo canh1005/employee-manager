@@ -34,15 +34,22 @@ const workingColumns = [
   },
 ];
 
-function EmployeeWorking(props) {
+function EmployeeWorking() {
+  //Get data form store and declare a dispatch
   const workingInfo = useSelector((state) => state.workingReducer.data);
   const loading = useSelector((state) => state.workingReducer.loading);
+  const error = useSelector((state) => state.workingReducer.error);
+  console.log("wError: ",error);
+
   const dispatch = useDispatch();
+
   const employeeID = useParams().id;
+
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: "",
   });
+
   const [openModal, setOpenModal] = useState(false);
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -53,6 +60,25 @@ function EmployeeWorking(props) {
   useEffect(() => {
     dispatch(actGetWorkingAPI(employeeID));
   }, []);
+  useEffect(() => {
+    if (error) {
+      if (error.status === 400) {
+        setNotify({
+          ...notify,
+          isOpen: true,
+          type: "error",
+          message: error && error.data && error.data.message,
+        });
+      } else {
+        setNotify({
+          ...notify,
+          isOpen: true,
+          type: "success",
+          message: "Add working success!",
+        });
+      }
+    }
+  }, [error]);
 
   const handleDeleteDialog = (working_id) => {
     setConfirmDialog({
@@ -70,11 +96,11 @@ function EmployeeWorking(props) {
       ...confirmDialog,
       isOpen: false,
     });
-    dispatch(actDeleteWorkingAPI(employeeID, working_id))
+    dispatch(actDeleteWorkingAPI(employeeID, working_id));
     setNotify({
       isOpen: true,
       message: "Delete successful",
-      type: "error",
+      type: "success",
     });
   };
   const renderAdvancesInfo = () => {
@@ -99,7 +125,9 @@ function EmployeeWorking(props) {
           <AddCircleOutlineIcon />
         </Button>
       </Tooltip>
-      <div style={{ height: 400, width: "100%" }}>{loading? <Loading/> : renderAdvancesInfo()}</div>
+      <div style={{ height: 400, width: "100%" }}>
+        {loading ? <Loading /> : renderAdvancesInfo()}
+      </div>
       <ResponsiveDialog
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
@@ -109,4 +137,4 @@ function EmployeeWorking(props) {
     </>
   );
 }
-export default (EmployeeWorking);
+export default EmployeeWorking;

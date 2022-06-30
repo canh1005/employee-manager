@@ -62,6 +62,7 @@ function AddImageModal(props) {
             name="image-upload"
             accept="image/*"
             onChange={handleImageChange}
+            style={{width: "170px"}}
           />
         </Box>
         <Box className={classes.buttonBox}>

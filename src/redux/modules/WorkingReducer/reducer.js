@@ -1,3 +1,4 @@
+import { act } from "react-dom/test-utils";
 import * as ActionTypes from "./constances";
 
 let initialState = {
@@ -10,7 +11,6 @@ export const workingReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.GET_WORKING_REQUEST:
       state.loading = true;
-      state.data = null;
       return { ...state };
     case ActionTypes.GET_WORKING_SUCCESS:
       state.loading = false;
@@ -35,10 +35,9 @@ export const workingReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.ADD_WORKING_SUCCESS:
       state.data = action.data;
-      state.error = null;
+      state.error = "Add success!"
       return { ...state };
     case ActionTypes.ADD_WORKING_FAILED:
-      state.data = null;
       state.error = action.err;
       return { ...state };
     default:

@@ -11,7 +11,10 @@ import React, { useEffect, useState } from "react";
 import { DatePicker } from "@mui/lab";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { actAddEmployeeAPI, actUpdateEmployeeAPI } from "redux/modules/EmployeeReducer/action";
+import {
+  actAddEmployeeAPI,
+  actUpdateEmployeeAPI,
+} from "redux/modules/EmployeeReducer/action";
 import {
   checkAge,
   checkEmpty,
@@ -38,7 +41,7 @@ function EmployeeModal(props) {
       ...open,
       isOpen: false,
     });
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(moment());
   const classes = modalStyled();
   const genderOptions = [
     {
@@ -129,9 +132,9 @@ function EmployeeModal(props) {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(employeeEdit){
-      dispatch(actUpdateEmployee(employee, employeeID))
-    }else{
+    if (employeeEdit) {
+      dispatch(actUpdateEmployee(employee, employeeID));
+    } else {
       dispatch(actAddEmployeeAPI(employee, queryString.stringify(open.filter)));
     }
     setOpenModal({
@@ -301,18 +304,17 @@ function EmployeeModal(props) {
                 name="team"
                 label="Team"
                 onChange={handleTeamChange}
+                defaultValue={employeeEdit ? employeeEdit.teamID : 1}
               >
-                {listTeam && listTeam.length > 0 ? (
+                {listTeam &&
+                  listTeam.length > 0 &&
                   listTeam.map((item) => {
                     return (
                       <MenuItem key={item.id} value={item.id}>
                         {item.name}
                       </MenuItem>
                     );
-                  })
-                ) : (
-                  <MenuItem></MenuItem>
-                )}
+                  })}
               </TextField>
             </Box>
             <Box className={classes.buttonBox}>

@@ -53,7 +53,7 @@ function AdvanceModal(props) {
                 label="Date"
                 name="date"
                 onChange={handleDate}
-                value={advance.date}
+                value={moment()}
                 renderInput={(params) => <TextField {...params} />}
               />
               <TextField

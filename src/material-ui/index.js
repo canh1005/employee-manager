@@ -5,17 +5,17 @@ export const theme = createTheme({
   palette: {
     primary: {
       main: "#ff919d",
-      dark: "rgb(208 118 127)"
+      dark: "rgb(208 118 127)",
     },
     secondary: {
-      main: "#c484f3"
+      main: "#c484f3",
     },
   },
   typography: {
-    fontFamily: 'Inter'
-  }
-})
-export const loaddingStyled = makeStyles(theme => ({
+    fontFamily: "Inter",
+  },
+});
+export const loaddingStyled = makeStyles((theme) => ({
   root: {
     position: "relative",
     margin: "auto",
@@ -56,14 +56,14 @@ export const loaddingStyled = makeStyles(theme => ({
   },
   "@keyframes rotateCircle": {
     "0%": {
-      transform: "rotate(0deg)"
+      transform: "rotate(0deg)",
     },
     "100%": {
-      transform: "rotate(360deg)"
-    }
-  }
-}))
-export const dashBoardStyled = makeStyles(theme => ({
+      transform: "rotate(360deg)",
+    },
+  },
+}));
+export const dashBoardStyled = makeStyles((theme) => ({
   root: {
     borderRadius: "5px 0 0 5px",
   },
@@ -71,8 +71,8 @@ export const dashBoardStyled = makeStyles(theme => ({
     fontSize: "18px",
     textDecoration: "none",
     fontWeight: "bold",
-    display: 'inline-block',
-    margin: '40px 20px 0'
+    display: "inline-block",
+    margin: "40px 20px 0",
   },
   link: {
     textDecoration: "none",
@@ -94,7 +94,7 @@ export const dashBoardStyled = makeStyles(theme => ({
         background: theme.palette.primary.dark,
         top: 0,
         left: 0,
-        position: 'absolute',
+        position: "absolute",
       },
     },
   },
@@ -113,7 +113,7 @@ export const appGlass = makeStyles({
     height: "97%",
     overflow: "hidden",
     borderRadius: 5,
-    gridGap: "10px"
+    gridGap: "10px",
   },
 });
 
@@ -155,14 +155,14 @@ export const modalStyled = makeStyles({
       color: "#ff2424",
     },
     "& .MuiInputLabel-root": {
-      color: "#fff"
+      color: "#fff",
     },
     "& .MuiOutlinedInput-notchedOutline": {
       borderColor: "#fff",
     },
     "& .MuiOutlinedInput-input": {
       color: "#fff",
-    }
+    },
   },
   buttonBox: {
     marginBottom: "20px",
@@ -179,7 +179,7 @@ export const employeeDetail = makeStyles({
     margin: "20px 0",
     overflow: "unset!important",
     position: "relative",
-    background: "rgba(255,255,255,.6)!important"
+    background: "rgba(255,255,255,.6)!important",
   },
   cardContent: {
     textAlign: "center",
@@ -215,7 +215,7 @@ export const employeeDetail = makeStyles({
     marginTop: "60px",
   },
   imgOverlay: {
-    position: 'absolute',
+    position: "absolute",
     color: "#fff",
     opacity: 0,
     transition: "all .3s",
@@ -227,11 +227,10 @@ export const employeeDetail = makeStyles({
     left: "50%",
     transform: "translateX(-50%)",
     "&:hover": {
-
       "& .makeStyles-imgOverlay-10": {
         opacity: 1,
-      }
-    }
+      },
+    },
   },
   img: {
     border: "5px solid #fff",
@@ -255,8 +254,7 @@ export const employeeDetail = makeStyles({
       padding: "10px 20px",
     },
   },
-  employeeTabsBox: {
-  },
+  employeeTabsBox: {},
 });
 
 export const searchStyled = makeStyles({
@@ -266,7 +264,7 @@ export const searchStyled = makeStyles({
     backgroundColor: "white",
     marginLeft: 0,
     width: "300px",
-    margin: "20px 0"
+    margin: "20px 0",
   },
   searchIconWrapper: {
     padding: "0 20px",
@@ -289,9 +287,9 @@ export const searchStyled = makeStyles({
   },
 });
 
-export const listEmpStyled = makeStyles(theme => ({
+export const listEmpStyled = makeStyles((theme) => ({
   root: {
-    margin: "0 20px"
+    margin: "0 20px",
   },
   toolBox: {
     display: "flex",
@@ -306,12 +304,12 @@ export const listEmpStyled = makeStyles(theme => ({
       color: "#fff",
     },
     "& button:not(:last-child)": {
-      margin: "0 10px"
-    }
-  }
-}))
+      margin: "0 10px",
+    },
+  },
+}));
 
-export const dataTableStyled = makeStyles(theme => ({
+export const dataTableStyled = makeStyles((theme) => ({
   root: {
     background: "rgba(255, 255, 255, .6)!important",
   },
@@ -320,11 +318,11 @@ export const dataTableStyled = makeStyles(theme => ({
       fontSize: "18px",
       fontWeight: "bold",
       textTransform: "capitalize",
-    }
-  }
-}))
+    },
+  },
+}));
 
-export const informationStyled = makeStyles(theme => ({
+export const informationStyled = makeStyles((theme) => ({
   root: {
     display: "grid",
     gridTemplateColumns: "repeat(2,1fr)",
@@ -335,7 +333,7 @@ export const informationStyled = makeStyles(theme => ({
       alignItems: "center",
       borderRadius: "10px",
       padding: "20px",
-      color: "#fff"
+      color: "#fff",
     },
     "& p:first-child": {
       background: theme.palette.primary.main,
@@ -363,29 +361,26 @@ export const informationStyled = makeStyles(theme => ({
     },
     "& span:first-child": {
       fontSize: "18px",
-      fontWeight: "bold"
-    }
-  }
-}))
+      fontWeight: "bold",
+    },
+  },
+}));
 
 export const teamPageStyled = makeStyles((theme) => ({
   root: {
     display: "flex",
+    justifyContent: "space-around",
     "& div:first-child": {
       width: "40%",
       marginRight: "10px",
-      // "& .MuiPaper-root": {
-      //   height: "100vh",
-      //   overflow: "scroll",
-      // },
       "& table": {
         minWidth: "0px",
-      }
+      },
     },
-    "& form":{
+    "& form": {
       display: "flex",
       justifyContent: "flex-end",
-    }
+    },
   },
   title: {
     margin: "20px 0!important",
@@ -393,4 +388,4 @@ export const teamPageStyled = makeStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
   },
-}))
+}));

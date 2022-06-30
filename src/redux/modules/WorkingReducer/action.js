@@ -43,7 +43,7 @@ export const actDeleteWorkingAPI = (employee_id, working_id) => {
         dispatch(actGetWorkingAPI(employee_id));
       })
       .catch((err) => {
-        dispatch(actDeleteWorkingFailed(err));
+        dispatch(actDeleteWorkingFailed(err.response));
       });
   };
 };
@@ -75,7 +75,7 @@ export const actAddWorkingAPI = (employee_id, working) => {
         dispatch(actGetWorkingAPI(employee_id));
       })
       .catch((err) => {
-        dispatch(actAddWorkingFailed(err));
+        dispatch(actAddWorkingFailed(err.response));
       });
   };
 };
@@ -87,12 +87,12 @@ const actAddWorkingRequest = () => {
 const actAddWorkingSuccess = (data) => {
   return {
     type: ActionTypes.ADD_WORKING_SUCCESS,
-    data: data,
+    data
   };
 };
 const actAddWorkingFailed = (err) => {
   return {
     type: ActionTypes.ADD_WORKING_FAILED,
-    error: err,
+    err
   };
 };
