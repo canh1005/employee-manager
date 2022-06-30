@@ -80,21 +80,21 @@ function EmployeeAdvances(props) {
       {
         label: "Employee working hours in month",
         data: "",
-        backgroundColor:["rgba(255, 99, 132, 0.2)"],
-        borderColor:["rgb(255, 99, 132)"],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+        borderColor: ["rgb(255, 99, 132)"],
         borderWidth: 1
       },
     ],
     //output: ['3','5']
   });
-  
+
 
   const employeeID = useParams().id;
   moment().format("YYYY-MM-DD");
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
-  console.log("MonthSelected: ",month);
+
   useEffect(() => {
-    console.log("useffectMonth: ",month);
+    console.log("useffectMonth: ", month);
     dispatch(actGetStatisticAPI(employeeID, month));
     dispatch(actGetWorkingAPI(employeeID));
     setData({
@@ -126,13 +126,12 @@ function EmployeeAdvances(props) {
       ],
     });
   }, [month]);
-  useEffect(() => {
-    console.log("DataUseeffect: ",data);
-  }, [data]);
+
   const handleChange = (event) => {
     setMonth(event.target.value);
     console.log("change", month);
   };
+
   const renderStatisticInfo = () => {
     if (statisticInfo) {
       return (

@@ -103,7 +103,7 @@ function EmployeeWorking() {
       type: "success",
     });
   };
-  const renderAdvancesInfo = () => {
+  const renderWorkingInfo = () => {
     if (workingInfo) {
       const workingInfoRows = workingInfo.map((row, index) => ({
         no: index,
@@ -126,7 +126,7 @@ function EmployeeWorking() {
         </Button>
       </Tooltip>
       <div style={{ height: 400, width: "100%" }}>
-        {loading ? <Loading /> : renderAdvancesInfo()}
+        {loading ? <Loading /> : renderWorkingInfo()}
       </div>
       <ResponsiveDialog
         confirmDialog={confirmDialog}

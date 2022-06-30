@@ -27,6 +27,7 @@ function WorkingModal(props) {
     hour: "",
     errors: {
       hour: "",
+      date: "",
       hourValid: false,
       frmValid: false,
     },
@@ -54,10 +55,11 @@ function WorkingModal(props) {
     let { hourValid } = working.errors;
     switch (name) {
       case "hour":
+        if (value > 24) message = "Working hour must be under 24 hours"
         hourValid = message !== "" ? false : true;
         break;
       case "date":
-        if (value < employeeInfo.startDay) {
+        if (moment(value).format("YYYY-MM-DD") < moment(employeeInfo.startDay).format("YYYY-MM-DD")) {
           message = "date must be after employee start day";
         }
         break;
@@ -82,7 +84,7 @@ function WorkingModal(props) {
     setOpen(false);
     console.log("working", working);
     dispatch(actAddWorkingAPI(employeeID, working));
-    
+
   };
   return (
     <>
@@ -99,13 +101,13 @@ function WorkingModal(props) {
                 onChange={handleDate}
                 value={working.date}
                 shouldDisableDate={handleDisableDays}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => <TextField error={working.errors.hour ? true : false} onBlur={handleErrors} helperText={working.errors.date} {...params} />}
               />
               <TextField
                 error={working.errors.hour ? true : false}
                 label="Hour"
                 name="hour"
-                type="text"
+                type="number"
                 onChange={handleOnChange}
                 onBlur={handleErrors}
                 helperText={working.errors.hour}

@@ -368,19 +368,28 @@ export const informationStyled = makeStyles((theme) => ({
 
 export const teamPageStyled = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    justifyContent: "space-around",
-    "& div:first-child": {
-      width: "40%",
-      marginRight: "10px",
-      "& table": {
-        minWidth: "0px",
-      },
-    },
+    // "& div:first-child": {
+    //   width: "40%",
+    //   marginRight: "10px",
+    //   "& table": {
+    //     minWidth: "0px",
+    //   },
+    // },
+    
     "& form": {
       display: "flex",
       justifyContent: "flex-end",
     },
+  },
+  header : {
+    display: "grid",
+    gridTemplateColumns: "repeat(2,1fr)",
+    gridGap: "10px",
+  },
+  bodyContent:{
+    display: "grid",
+    gridTemplateColumns: "repeat(2,1fr)",
+    gridGap: "10px",
   },
   title: {
     margin: "20px 0!important",

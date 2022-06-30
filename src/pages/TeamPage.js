@@ -81,9 +81,9 @@ function TeamPage() {
 
   useEffect(() => {
     dispatch(actGetTeamPageAPI(teamFilter.page));
-    // return () => {
-    //   dispatch(actClearTeamData());
-    // };
+    return () => {
+      dispatch(actClearTeamData());
+    };
   }, [teamFilter]);
   useEffect(() => {
     if (error) {
@@ -136,11 +136,7 @@ function TeamPage() {
         address: row.address,
         male: row.male ? "Male" : "Female",
       }));
-      return (
-        <>
-          <DataTable columns={employeeTableColumns} rows={employeeTableRows} />
-        </>
-      );
+      return <DataTable columns={employeeTableColumns} rows={employeeTableRows} />
     }
   };
   //Handle add new team
@@ -158,7 +154,7 @@ function TeamPage() {
   };
   return (
     <Box className={classes.root}>
-      <Box>
+      <Box className={classes.header}>
         <Typography className={classes.title} variant="h5">
           Team
           <form onSubmit={handleSubmit}>
@@ -181,20 +177,21 @@ function TeamPage() {
             </Tooltip>
           </form>
         </Typography>
-
-        {loading ? <Loading /> : <>{renderTeamTable()}</>}
-
-        <Paginations
-          filter={teamFilter}
-          setPage={setTeamFilter}
-          numberOfPage={teamInfo ? teamInfo.totalPages : 1}
-        />
-      </Box>
-      <Box>
         <Typography className={classes.title} variant="h5">
           Result all employee team manager - Total{" "}
           {employeeByTeam ? employeeByTeam.content.length : 0} employees
         </Typography>
+
+      </Box>
+      <Box className={classes.bodyContent}>
+        <Box>
+          {loading ? <Loading /> : <>{renderTeamTable()}</>}
+          <Paginations
+            filter={teamFilter}
+            setPage={setTeamFilter}
+            numberOfPage={teamInfo ? teamInfo.totalPages : 1}
+          />
+        </Box>
         {renderEmployeeTable()}
       </Box>
       <Notification notify={notify} setNotify={setNotify} />
