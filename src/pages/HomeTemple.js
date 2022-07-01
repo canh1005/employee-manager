@@ -3,6 +3,7 @@ import { appGlass } from "material-ui";
 import { Box } from '@mui/material';
 import Dashboard from 'components/Commons/Dashboard';
 import { Outlet } from 'react-router-dom';
+import ListEmployee from 'components/ListEmployee';
 
 
 function HomeTemple() {

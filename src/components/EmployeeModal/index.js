@@ -35,13 +35,13 @@ function EmployeeModal(props) {
   const employeeEdit = useSelector(
     (state) => state.employeeDetailReducer.userEdited
   );
+  console.log("employeeEdit", employeeEdit);
   const dispatch = useDispatch();
   const handleClose = () =>
     setOpenModal({
       ...open,
       isOpen: false,
     });
-  const [selectedDate, setSelectedDate] = useState(moment());
   const classes = modalStyled();
   const genderOptions = [
     {
@@ -56,7 +56,7 @@ function EmployeeModal(props) {
     address: "",
     moneyPerHour: "",
     phone: "",
-    startDay: "",
+    startDay: moment().format("YYYY-MM-DD"),
     male: true,
     teamID: 1,
   });
@@ -96,7 +96,7 @@ function EmployeeModal(props) {
         address: "",
         moneyPerHour: "",
         phone: "",
-        startDay: "",
+        startDay: moment().format("YYYY-MM-DD"),
         male: true,
         teamID: 1,
       });
@@ -123,7 +123,6 @@ function EmployeeModal(props) {
     });
   };
   const handleSelectedDate = (event) => {
-    setSelectedDate(event);
     let formatStartDay = moment(event).format("YYYY-MM-DD");
     setEmployee({
       ...employee,
@@ -268,7 +267,7 @@ function EmployeeModal(props) {
               <DatePicker
                 label="Start date"
                 onChange={handleSelectedDate}
-                value={employeeEdit ? employee.startDay : selectedDate}
+                value={employeeEdit ? employee.startDay : moment().format("YYYY-MM-DD")}
                 renderInput={(params) => <TextField {...params} />}
               />
               <TextField

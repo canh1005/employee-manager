@@ -14,7 +14,7 @@ export const actAddEmployeeAPI = (employee, filter) => {
         dispatch(actSearchAPI(filter));
       })
       .catch((err) => {
-        dispatch(actAddEmployeeFailed(err));
+        dispatch(actAddEmployeeFailed(err.response));
       });
   };
 };
@@ -23,10 +23,9 @@ const actAddEmployeeRequest = () => {
     type: ActionTypes.ADD_EMPLOYEE_REQUEST,
   };
 };
-const actAddEmployeeSuccess = (data) => {
+const actAddEmployeeSuccess = () => {
   return {
     type: ActionTypes.ADD_EMPLOYEE_SUCCESS,
-    data,
   };
 };
 const actAddEmployeeFailed = (err) => {
@@ -43,21 +42,28 @@ export const actDeleteEmployeeAPI = (ids, filter) => {
     api
       .delete(`employee/delete?${ids}`)
       .then(() => {
+        dispatch(actDeleteEmployeeSuccess());
         if (filter) {
           dispatch(actSearchAPI(filter));
         } else {
           let navigate = useNavigate();
           navigate("/", { replace: true });
+          dispatch(actSearchAPI(`page=0&name=""`));
         }
       })
       .catch((err) => {
-        dispatch(actDeleteEmployeeFailed(err));
+        dispatch(actDeleteEmployeeFailed(err.response));
       });
   };
 };
 const actDeleteEmployeeRequest = () => {
   return {
     type: ActionTypes.DELETE_EMPLOYEE_REQUEST,
+  };
+};
+const actDeleteEmployeeSuccess = () => {
+  return {
+    type: ActionTypes.DELETE_EMPLOYEE_SUCCESS,
   };
 };
 const actDeleteEmployeeFailed = (err) => {
@@ -73,7 +79,7 @@ export const actUpdateEmployeeAPI = (employee, filter) => {
     api
       .Update(`employee/update?${employee}`)
       .then(() => {
-          dispatch(actSearchAPI(filter));
+        dispatch(actSearchAPI(filter));
       })
       .catch((err) => {
         dispatch(actUpdateEmployeeFailed(err.response));
@@ -89,5 +95,10 @@ const actUpdateEmployeeFailed = (err) => {
   return {
     type: ActionTypes.UPDATE_EMPLOYEE_FAILED,
     err,
+  };
+};
+export const actClearData = () => {
+  return {
+    type: ActionTypes.CLEAR_DATA,
   };
 };

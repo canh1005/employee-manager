@@ -13,7 +13,7 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.ADD_EMPLOYEE_SUCCESS:
       state.data = action.data;
-      state.error = null;
+      state.error = "Add success";
       return { ...state };
     case ActionTypes.ADD_EMPLOYEE_FAILED:
       state.data = null;
@@ -29,6 +29,9 @@ export const employeeReducer = (state = initialState, action) => {
     case ActionTypes.UPDATE_EMPLOYEE_FAILED:
       state.error = action.err;
       return { ...state };
+    case ActionTypes.CLEAR_DATA:
+      state.data = null;
+      state.error = null;
     default:
       return { ...state };
   }

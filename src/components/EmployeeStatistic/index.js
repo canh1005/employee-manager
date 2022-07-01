@@ -14,7 +14,10 @@ import Loading from "components/Commons/Loading";
 import moment from "moment";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-import { actGetWorkingAPI } from "redux/modules/WorkingReducer/action";
+import {
+  actClearData,
+  actGetWorkingAPI,
+} from "redux/modules/WorkingReducer/action";
 
 const months = [
   {
@@ -82,12 +85,11 @@ function EmployeeAdvances(props) {
         data: "",
         backgroundColor: ["rgba(255, 99, 132, 0.2)"],
         borderColor: ["rgb(255, 99, 132)"],
-        borderWidth: 1
+        borderWidth: 1,
       },
     ],
     //output: ['3','5']
   });
-
 
   const employeeID = useParams().id;
   moment().format("YYYY-MM-DD");
@@ -101,20 +103,20 @@ function EmployeeAdvances(props) {
       ...data,
       labels:
         working &&
+        working.length > 0 &&
         working
-          .filter((item) => {
-            console.log("item", item);
-            return (
+          .filter(
+            (item) =>
               moment(item.date).month() + 1 ===
               Number(moment(month).format("M"))
-            );
-          })
+          )
           .map((el) => moment(el.date).format("DD-MM")),
       datasets: [
         {
           label: "Employee working hours in month",
           data:
             working &&
+            working.length > 0 &&
             working
               .filter(
                 (item) =>
@@ -122,9 +124,27 @@ function EmployeeAdvances(props) {
                   Number(moment(month).format("M"))
               )
               .map((el) => el.hour),
+          backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+          borderColor: ["rgb(255, 99, 132)"],
+          borderWidth: 1,
         },
       ],
     });
+    return () => {
+      dispatch(actClearData());
+      setData({
+        labels: [],
+        datasets: [
+          {
+            label: "",
+            data: "",
+            backgroundColor: [""],
+            borderColor: [""],
+            borderWidth: 1,
+          },
+        ],
+      });
+    };
   }, [month]);
 
   const handleChange = (event) => {

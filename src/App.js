@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useRoutes } from "react-router-dom";
 import EmployeePage from "./pages/EmployeePage";
 import PageNotFound from "./pages/PageNotFound";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -11,14 +11,46 @@ import EmployeeWorking from "./components/EmployeeWorking";
 import EmployeeAdvances from "./components/EmployeeAdvances";
 import EmployeeStatistic from "./components/EmployeeStatistic";
 import { ThemeProvider } from "@mui/material";
-import { theme } from 'material-ui'
+import { theme } from "material-ui";
 import HomeTemple from "pages/HomeTemple";
 import EmployeeDetailPage from "pages/EmployeeDetailPage";
+export const routes = [
+  {
+    path: "/",
+    element: <HomeTemple />,
+    children: [
+      {
+        path: "/",
+        element: <EmployeePage />,
+      },
+      {
+        path: ":id",
+        element: <EmployeeDetailPage />,
+        children: [
+          {
+            path: "info",
+            element: <EmployeeInfo />,
+          },
+          {
+            path: "working",
+            element: <EmployeeWorking />,
+          },
+        ],
+      },
+      {
+        path: "team",
+        element: <TeamPage />,
+      },
+    ],
+  },
+];
 function App() {
+  let element = useRoutes(routes);
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Routes>
+        {element}
+        {/* <Routes>
           <Route path="/" element={<HomeTemple />}>
             <Route path="/" element={<EmployeePage />} />
             <Route path=":id" element={<EmployeeDetailPage />}>
@@ -30,10 +62,9 @@ function App() {
             <Route path="team" element={<TeamPage />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
-        </Routes>
+        </Routes> */}
       </LocalizationProvider>
     </ThemeProvider>
-
   );
 }
 

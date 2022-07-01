@@ -22,10 +22,12 @@ import ResponsiveDialog from "../../Commons/Dialog";
 import AddImageModal from "components/AddImageModal";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import { actDeleteEmployeeAPI } from "redux/modules/EmployeeReducer/action";
+import Loading from "components/Commons/Loading";
 
 function EmployeeInfoDetail() {
   const employeeInfo = useSelector((state) => state.employeeDetailReducer.data);
   const dispatch = useDispatch();
+
   const employeeId = useParams().id;
   const navigate = useNavigate();
   const classes = employeeDetail();
@@ -45,7 +47,7 @@ function EmployeeInfoDetail() {
     dispatch(actGetTeamAPI());
     navigate("info", { replace: true });
     return () => {
-      dispatch(actEmployeeEdited(""));
+      dispatch(actEmployeeEdited(null));
     };
   }, []);
   const renderEmployeeInfo = () => {

@@ -1,4 +1,3 @@
-import { act } from "react-dom/test-utils";
 import * as ActionTypes from "./constances";
 
 let initialState = {
@@ -22,6 +21,19 @@ export const workingReducer = (state = initialState, action) => {
       state.data = null;
       state.error = action.err;
       return { ...state };
+      case ActionTypes.GET_WORKING_PAGE_REQUEST:
+      state.loading = true;
+      return { ...state };
+    case ActionTypes.GET_WORKING_PAGE_SUCCESS:
+      state.loading = false;
+      state.data = action.data;
+      state.error = null;
+      return { ...state };
+    case ActionTypes.GET_WORKING_PAGE_FAILED:
+      state.loading = false;
+      state.data = null;
+      state.error = action.err;
+      return { ...state };
     case ActionTypes.DELETE_WORKING_REQUEST:
       return { ...state };
     case ActionTypes.DELETE_WORKING_SUCCESS:
@@ -35,11 +47,14 @@ export const workingReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.ADD_WORKING_SUCCESS:
       state.data = action.data;
-      state.error = "Add success!"
+      state.error = "Add success!";
       return { ...state };
     case ActionTypes.ADD_WORKING_FAILED:
       state.error = action.err;
       return { ...state };
+    case ActionTypes.CLEAR_DATA:
+      state.data = null;
+      state.error = null;
     default:
       return { ...state };
   }

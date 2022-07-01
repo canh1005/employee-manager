@@ -4,16 +4,18 @@ import { useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Tooltip } from "@mui/material";
 import {
-  actGetWorkingAPI,
   actDeleteWorkingAPI,
+  actClearData,
+  actGetWorkingPageAPI,
 } from "redux/modules/WorkingReducer/action";
 import moment from "moment";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import WorkingModal from "components/WorkingModal";
 import ResponsiveDialog from "components/Commons/Dialog";
 import DataTable from "components/Commons/DataTable";
-import Notification from "components/Commons/Notifications/Notification";
 import Loading from "components/Commons/Loading";
+import { Paginations } from "components/Commons/Pagination";
+import queryString from "query-string";
 
 const workingColumns = [
   {
@@ -38,8 +40,6 @@ function EmployeeWorking() {
   //Get data form store and declare a dispatch
   const workingInfo = useSelector((state) => state.workingReducer.data);
   const loading = useSelector((state) => state.workingReducer.loading);
-  const error = useSelector((state) => state.workingReducer.error);
-  console.log("wError: ",error);
 
   const dispatch = useDispatch();
 
@@ -48,6 +48,10 @@ function EmployeeWorking() {
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: "",
+  });
+  const [filter, setFilter] = useState({
+    page: 0,
+    employee_id: employeeID,
   });
 
   const [openModal, setOpenModal] = useState(false);
@@ -58,27 +62,11 @@ function EmployeeWorking() {
   });
 
   useEffect(() => {
-    dispatch(actGetWorkingAPI(employeeID));
-  }, []);
-  useEffect(() => {
-    if (error) {
-      if (error.status === 400) {
-        setNotify({
-          ...notify,
-          isOpen: true,
-          type: "error",
-          message: error && error.data && error.data.message,
-        });
-      } else {
-        setNotify({
-          ...notify,
-          isOpen: true,
-          type: "success",
-          message: "Add working success!",
-        });
-      }
-    }
-  }, [error]);
+    dispatch(actGetWorkingPageAPI(queryString.stringify(filter)));
+    return () => {
+      dispatch(actClearData());
+    };
+  }, [filter]);
 
   const handleDeleteDialog = (working_id) => {
     setConfirmDialog({
@@ -96,7 +84,7 @@ function EmployeeWorking() {
       ...confirmDialog,
       isOpen: false,
     });
-    dispatch(actDeleteWorkingAPI(employeeID, working_id));
+    dispatch(actDeleteWorkingAPI(queryString.stringify(filter), working_id));
     setNotify({
       isOpen: true,
       message: "Delete successful",
@@ -104,8 +92,8 @@ function EmployeeWorking() {
     });
   };
   const renderWorkingInfo = () => {
-    if (workingInfo) {
-      const workingInfoRows = workingInfo.map((row, index) => ({
+    if (workingInfo && workingInfo.content) {
+      const workingInfoRows = workingInfo.content.map((row, index) => ({
         no: index,
         date: moment(row.date).format("DD-MM-YYYY"),
         hour: row.hour,
@@ -132,8 +120,16 @@ function EmployeeWorking() {
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
       />
-      <WorkingModal open={openModal} setOpen={setOpenModal} />
-      <Notification notify={notify} setNotify={setNotify} />
+      {openModal && (
+        <WorkingModal open={openModal} setOpen={setOpenModal} filter={filter} />
+      )}
+      {workingInfo && (
+        <Paginations
+          filter={filter}
+          setPage={setFilter}
+          numberOfPage={workingInfo && workingInfo.totalPages}
+        />
+      )}
     </>
   );
 }

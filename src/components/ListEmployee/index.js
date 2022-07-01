@@ -13,16 +13,25 @@ import queryString from "query-string";
 import DataTable from "components/Commons/DataTable";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { actAddEmployeeAPI, actDeleteEmployeeAPI } from "redux/modules/EmployeeReducer/action";
+import {
+  actAddEmployeeAPI,
+  actClearData,
+  actDeleteEmployeeAPI,
+} from "redux/modules/EmployeeReducer/action";
 import { listEmpStyled } from "material-ui";
 import Loading from "components/Commons/Loading";
-import ResponsiveDialog from "components/Commons/Dialog"
+import ResponsiveDialog from "components/Commons/Dialog";
+import Notification from "components/Commons/Notifications/Notification";
 function ListEmployee() {
+  //Style of list employee
   const classes = listEmpStyled();
-  const loading = useSelector(state => state.searchReducer.loading);
+  //Get data form store and declare a dispatch action
+  const loading = useSelector((state) => state.searchReducer.loading);
   const searchList = useSelector((state) => state.searchReducer.data);
   const getTeam = useSelector((state) => state.teamReducer.data);
   const dispatch = useDispatch();
+  const error = useSelector((state) => state.employeeReducer.error);
+
   const [openModal, setOpenModal] = useState({
     isOpen: false,
   });
@@ -33,19 +42,43 @@ function ListEmployee() {
   });
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
-    title: ""
-  })
+    title: "",
+  });
   console.log("Checked", selected);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    type: "info",
+    message: "",
+  });
 
   useEffect(() => {
     const paramsString = queryString.stringify(filter);
     dispatch(actSearchAPI(paramsString));
     dispatch(actGetTeamAPI());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    return ()=>{
+    return () => {
       console.log("Component unmount!");
-    }
+      dispatch(actClearData());
+    };
   }, [filter]);
+  useEffect(() => {
+    if (error) {
+      if (error.status === 400) {
+        setNotify({
+          isOpen: true,
+          type: "error",
+          message: error.data && error.data.message,
+        });
+      } else {
+        setNotify({
+          isOpen: true,
+          type: "success",
+          message: "Add employee success",
+        });
+      }
+    }
+    
+  }, [error]);
 
   const navigate = useNavigate();
 
@@ -97,17 +130,19 @@ function ListEmployee() {
       ...confirmDialog,
       isOpen: true,
       title: "Are you sure to delete this employee!",
-      onConfirm: () => handleDeleteConfirm(employee_id)
-    })
-  }
+      onConfirm: () => handleDeleteConfirm(employee_id),
+    });
+  };
   const handleDeleteConfirm = (employee_id) => {
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false,
-    })
+    });
     console.log("employee_id", employee_id);
-    dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter)))
-  }
+    dispatch(
+      actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter))
+    );
+  };
   const renderEmployeeTable = () => {
     const columns = [
       {
@@ -156,9 +191,10 @@ function ListEmployee() {
         phone: employee.phone,
         fullName: employee.fullName,
         id: employee.id,
-        team: getTeam && getTeam.length > 0
-          ? getTeam.find((item) => item.id === employee.teamID).name
-          : "",
+        team:
+          getTeam && getTeam.length > 0
+            ? getTeam.find((item) => item.id === employee.teamID).name
+            : "",
         option: (
           <>
             <Tooltip title="Employee information">
@@ -217,7 +253,11 @@ function ListEmployee() {
         setPage={setFilter}
         numberOfPage={searchList ? searchList.totalPages : 1}
       />
-      <ResponsiveDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <ResponsiveDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
+      <Notification notify={notify} setNotify={setNotify} />
     </Box>
   );
 }

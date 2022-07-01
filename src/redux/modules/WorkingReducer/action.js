@@ -2,11 +2,11 @@ import * as ActionTypes from "./constances";
 import { api } from "../../../utils/api";
 
 //GET working
-export const actGetWorkingAPI = (id) => {
+export const actGetWorkingAPI = (employee_id) => {
   return (dispatch) => {
     dispatch(actGetWorkingRequest());
     api
-      .get(`working/getAll?employee_id=${id}`)
+      .get(`working/getAll?employee_id=${employee_id}`)
       .then((result) => {
         dispatch(actGetWorkingSuccess(result.data.data));
       })
@@ -32,15 +32,45 @@ const actGetWorkingFailed = (err) => {
     err,
   };
 };
+export const actGetWorkingPageAPI = (filter) => {
+  return (dispatch) => {
+    dispatch(actGetWorkingPageRequest());
+    api
+      .get(`working/getPage?${filter}`)
+      .then((result) => {
+        dispatch(actGetWorkingPageSuccess(result.data.data));
+      })
+      .catch((err) => {
+        dispatch(actGetWorkingPageFailed(err));
+      });
+  };
+};
+const actGetWorkingPageRequest = () => {
+  return {
+    type: ActionTypes.GET_WORKING_PAGE_REQUEST,
+  };
+};
+const actGetWorkingPageSuccess = (data) => {
+  return {
+    type: ActionTypes.GET_WORKING_PAGE_SUCCESS,
+    data,
+  };
+};
+const actGetWorkingPageFailed = (err) => {
+  return {
+    type: ActionTypes.GET_WORKING_PAGE_FAILED,
+    err,
+  };
+};
 //DELETE working
-export const actDeleteWorkingAPI = (employee_id, working_id) => {
+export const actDeleteWorkingAPI = (filter, working_id) => {
   return (dispatch) => {
     dispatch(actDeleteWorkingRequest());
     api
       .delete(`working/delete?working_id=${working_id}`)
       .then((result) => {
         dispatch(actDeleteWorkingSuccess(result.data));
-        dispatch(actGetWorkingAPI(employee_id));
+        dispatch(actGetWorkingPageAPI(filter));
       })
       .catch((err) => {
         dispatch(actDeleteWorkingFailed(err.response));
@@ -65,14 +95,14 @@ const actDeleteWorkingFailed = (err) => {
   };
 };
 //ADD working
-export const actAddWorkingAPI = (employee_id, working) => {
+export const actAddWorkingAPI = (filter, working) => {
   return (dispatch) => {
     dispatch(actAddWorkingRequest());
     api
       .post(`working/create`, working)
       .then((result) => {
         dispatch(actAddWorkingSuccess(result.data));
-        dispatch(actGetWorkingAPI(employee_id));
+        dispatch(actGetWorkingPageAPI(filter));
       })
       .catch((err) => {
         dispatch(actAddWorkingFailed(err.response));
@@ -87,12 +117,17 @@ const actAddWorkingRequest = () => {
 const actAddWorkingSuccess = (data) => {
   return {
     type: ActionTypes.ADD_WORKING_SUCCESS,
-    data
+    data,
   };
 };
 const actAddWorkingFailed = (err) => {
   return {
     type: ActionTypes.ADD_WORKING_FAILED,
-    err
+    err,
   };
+};
+export const actClearData = () => {
+  return{
+    type: ActionTypes.CLEAR_DATA
+  }
 };
