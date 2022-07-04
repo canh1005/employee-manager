@@ -14,30 +14,25 @@ export const workingReducer = (state = initialState, action) => {
     case ActionTypes.GET_WORKING_SUCCESS:
       state.loading = false;
       state.data = action.data;
-      state.error = null;
       return { ...state };
     case ActionTypes.GET_WORKING_FAILED:
       state.loading = false;
-      state.data = null;
       state.error = action.err;
       return { ...state };
-      case ActionTypes.GET_WORKING_PAGE_REQUEST:
+    case ActionTypes.GET_WORKING_PAGE_REQUEST:
       state.loading = true;
       return { ...state };
     case ActionTypes.GET_WORKING_PAGE_SUCCESS:
       state.loading = false;
       state.data = action.data;
-      state.error = null;
       return { ...state };
     case ActionTypes.GET_WORKING_PAGE_FAILED:
       state.loading = false;
-      state.data = null;
       state.error = action.err;
       return { ...state };
     case ActionTypes.DELETE_WORKING_REQUEST:
       return { ...state };
     case ActionTypes.DELETE_WORKING_SUCCESS:
-      state.data = action.data;
       state.error = null;
       return { ...state };
     case ActionTypes.DELETE_WORKING_FAILED:
@@ -46,8 +41,7 @@ export const workingReducer = (state = initialState, action) => {
     case ActionTypes.ADD_WORKING_REQUEST:
       return { ...state };
     case ActionTypes.ADD_WORKING_SUCCESS:
-      state.data = action.data;
-      state.error = "Add success!";
+      state.error = { status: 200 };
       return { ...state };
     case ActionTypes.ADD_WORKING_FAILED:
       state.error = action.err;

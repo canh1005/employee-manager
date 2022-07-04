@@ -23,13 +23,13 @@ const actEmployeeDetailRequest = () => {
 const actEmployeeDetailSuccess = (data) => {
   return {
     type: ActionTypes.EMPLOYEE_DETAIL_SUCCESS,
-    data
+    data,
   };
 };
 const actEmployeeDetailFailed = (err) => {
   return {
     type: ActionTypes.EMPLOYEE_DETAIL_FAILED,
-    err
+    err,
   };
 };
 
@@ -41,7 +41,7 @@ export const actUpdateEmployee = (employee, employeeID) => {
       .put(`employee/update`, employee)
       .then((result) => {
         dispatch(actUpdateEmployeeSuccess(result.data));
-        dispatch(actEmployeeDetailAPI(employeeID))
+        dispatch(actEmployeeDetailAPI(employeeID));
       })
       .catch((err) => {
         dispatch(actUpdateEmployeeFailed(err));
@@ -56,13 +56,13 @@ const actUpdateEmployeeRequest = () => {
 const actUpdateEmployeeSuccess = (data) => {
   return {
     type: ActionTypes.UPDATE_EMPLOYEE_SUCCESS,
-    data
+    data,
   };
 };
 const actUpdateEmployeeFailed = (err) => {
   return {
     type: ActionTypes.UPDATE_EMPLOYEE_FAILED,
-    err
+    err,
   };
 };
 export const actEmployeeEdited = (employeeEdited) => {
@@ -72,3 +72,8 @@ export const actEmployeeEdited = (employeeEdited) => {
   };
 };
 
+export const actEmployeeDetailClear = () => {
+  return{
+    type: ActionTypes.EMPLOYEE_DETAIL_CLEAR,
+  }
+};

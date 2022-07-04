@@ -17,7 +17,6 @@ function WorkingModal(props) {
   const error = useSelector((state) => state.workingReducer.error);
 
   const dispatch = useDispatch();
-  console.log("employeeInfo", employeeInfo);
 
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -40,6 +39,7 @@ function WorkingModal(props) {
   });
 
   useEffect(() => {
+    console.log("working modal mount!");
     if (error) {
       switch (error.status) {
         case 400:
@@ -60,6 +60,9 @@ function WorkingModal(props) {
           break;
       }
     }
+    return () => {
+      console.log("working modal unmount!");
+    };
   }, [error]);
 
   console.log("working", working);
@@ -106,7 +109,6 @@ function WorkingModal(props) {
         frmValid: hourValid,
       },
     });
-    console.log("frmValid", working);
   };
   const handleDisableDays = (date) => {
     return (
@@ -176,7 +178,7 @@ function WorkingModal(props) {
           </form>
         </Box>
       </Modal>
-      <Notification notify={notify} setNotify={setNotify}/>
+      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 }

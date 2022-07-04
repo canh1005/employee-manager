@@ -33,6 +33,10 @@ export const employeeDetailReducer = (state = initialState, action) => {
     case ActionTypes.EMPLOYEE_EDITED:
       state.userEdited = action.payload;
       return { ...state };
+    case ActionTypes.EMPLOYEE_DETAIL_CLEAR:
+      state.data = null;
+      state.error = null;
+      return { ...state };
     default:
       return { ...state };
   }

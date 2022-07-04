@@ -30,7 +30,14 @@ export const employeeReducer = (state = initialState, action) => {
     //Delete employee
     case ActionTypes.DELETE_EMPLOYEE_REQUEST:
       return { ...state };
+    case ActionTypes.DELETE_EMPLOYEE_SUCCESS:
+      console.log("delete Success");
+      state.loading = false;
+      state.data = state.data.filter(item => item.id !== action.payload)
+      state.error = { status: 200 };
+      return { ...state };
     case ActionTypes.DELETE_EMPLOYEE_FAILED:
+      console.log("delete Error");
       state.error = action.err;
       return { ...state };
     //Clear data

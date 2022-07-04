@@ -36,22 +36,37 @@ const actAddEmployeeFailed = (err) => {
 };
 
 //DELETE employee
-export const actDeleteEmployeeAPI = (ids, filter) => {
+export const actDeleteEmployeeAPI = (ids) => {
   return (dispatch) => {
     dispatch(actDeleteEmployeeRequest());
     api
       .delete(`employee/delete?${ids}`)
-      .then(() => {
-        if (filter) {
-          dispatch(actSearchAPI(filter));
-        } else {
-          let navigate = useNavigate();
-          navigate("/", { replace: true });
-          dispatch(actSearchAPI(`page=0&name=""`));
-        }
+      .then((result) => {
+        dispatch(actDeleteEmployeeSuccess(result.data));
+        // if (filter) {
+        //   dispatch(actSearchAPI(filter));
+        // } else {
+        //   let navigate = useNavigate();
+        //   navigate("/", { replace: true });
+        //   dispatch(actSearchAPI(`page=0&name=""`));
+        // }
       })
       .catch((err) => {
         dispatch(actDeleteEmployeeFailed(err.response));
+      });
+  };
+};
+export const actDeleteEmployeeSingleAPI = (id) => {
+  return (dispatch) => {
+    dispatch(actDeleteEmployeeRequest());
+    api
+      .delete(`employee/delete-by-id?employee_id=${id}`)
+      .then((result) => {
+        console.log("Delete success");
+        dispatch(actDeleteEmployeeSuccess(result.data.data))
+      })
+      .catch((error) => {
+        dispatch(actDeleteEmployeeFailed(error.response))
       });
   };
 };
@@ -60,9 +75,10 @@ const actDeleteEmployeeRequest = () => {
     type: ActionTypes.DELETE_EMPLOYEE_REQUEST,
   };
 };
-const actDeleteEmployeeSuccess = () => {
+const actDeleteEmployeeSuccess = (data) => {
   return {
     type: ActionTypes.DELETE_EMPLOYEE_SUCCESS,
+    payload: data,
   };
 };
 const actDeleteEmployeeFailed = (err) => {
@@ -94,16 +110,15 @@ const actSearchRequest = () => {
 const actSearchSuccess = (data) => {
   return {
     type: ActionTypes.SEARCH_SUCCESS,
-    data
+    data,
   };
 };
 const actSearchFailed = (err) => {
   return {
     type: ActionTypes.SEARCH_FAILED,
-    err
+    err,
   };
 };
-
 
 //Clear employee data
 export const actClearData = () => {

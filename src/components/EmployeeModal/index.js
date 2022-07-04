@@ -29,13 +29,11 @@ import { useParams } from "react-router-dom";
 
 function EmployeeModal(props) {
   const { open, setOpenModal } = props;
-  console.log("modal filter", open.filter);
   const employeeID = useParams().id;
   const listTeam = useSelector((state) => state.teamReducer.data);
   const employeeEdit = useSelector(
     (state) => state.employeeDetailReducer.userEdited
   );
-  console.log("employeeEdit", employeeEdit);
   const dispatch = useDispatch();
   const handleClose = () =>
     setOpenModal({

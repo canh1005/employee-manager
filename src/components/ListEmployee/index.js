@@ -22,6 +22,7 @@ import { listEmpStyled } from "material-ui";
 import Loading from "components/Commons/Loading";
 import ResponsiveDialog from "components/Commons/Dialog";
 import Notification from "components/Commons/Notifications/Notification";
+import { actDeleteEmployeeSingleAPI } from "redux/modules/EmployeeReducer/action";
 function ListEmployee() {
   //Style of list employee
   const classes = listEmpStyled();
@@ -62,7 +63,6 @@ function ListEmployee() {
       console.log("list employee unmount!");
       dispatch(actClearData());
     };
-
   }, [filter]);
 
   useEffect(() => {
@@ -81,9 +81,7 @@ function ListEmployee() {
         });
       }
     }
-
   }, [error]);
-
 
   const handleOpenModal = () =>
     setOpenModal({
@@ -146,9 +144,8 @@ function ListEmployee() {
       isOpen: false,
     });
     console.log("employee_id", employee_id);
-    dispatch(
-      actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter))
-    );
+    // dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter)));
+    dispatch(actDeleteEmployeeSingleAPI(employee_id));
   };
 
   const renderEmployeeTable = () => {
@@ -227,7 +224,8 @@ function ListEmployee() {
       ids: selected,
     };
     console.log("Check", queryString.stringify(selectedObj));
-    dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)), queryString.stringify(filter));
+    // dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)), queryString.stringify(filter));
+    dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)));
   };
 
   return (

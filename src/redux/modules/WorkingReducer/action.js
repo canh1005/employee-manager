@@ -94,6 +94,7 @@ const actDeleteWorkingFailed = (err) => {
     err,
   };
 };
+
 //ADD working
 export const actAddWorkingAPI = (filter, working) => {
   return (dispatch) => {
@@ -127,7 +128,7 @@ const actAddWorkingFailed = (err) => {
   };
 };
 export const actClearData = () => {
-  return{
-    type: ActionTypes.CLEAR_DATA
-  }
+  return {
+    type: ActionTypes.CLEAR_DATA,
+  };
 };

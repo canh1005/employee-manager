@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Pagination from "@mui/material/Pagination";
 
 export function Paginations(props) {
   const { numberOfPage, setPage, filter } = props;
-  console.log("filter", filter);
+  useEffect(() => {
+    console.log("page mount!");
+    return () => {
+      console.log("page unmount!");
+    };
+  }, []);
   const handleChange = (event, value) => {
     setPage({
       ...filter,

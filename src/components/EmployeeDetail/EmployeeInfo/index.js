@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   actEmployeeDetailAPI,
+  actEmployeeDetailClear,
   actEmployeeEdited,
 } from "redux/modules/EmployeeDetailReducer/action";
 import {
@@ -41,13 +42,14 @@ function EmployeeInfoDetail() {
   const [openAddImgModal, setOpenAddImgModal] = useState({
     isOpen: false,
   });
-  console.log(openAddImgModal);
+  
   useEffect(() => {
     dispatch(actEmployeeDetailAPI(employeeId));
     dispatch(actGetTeamAPI());
     navigate("info", { replace: true });
     return () => {
       dispatch(actEmployeeEdited(null));
+      dispatch(actEmployeeDetailClear());
     };
   }, []);
   const renderEmployeeInfo = () => {

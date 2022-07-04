@@ -72,6 +72,9 @@ function TeamPage() {
   const [teamFilter, setTeamFilter] = useState({
     page: 0,
   });
+  const [employeeByTeamFilter, setEmployeeByTeamFilter] = useState({
+    page: 0,
+  });
   const [notify, setNotify] = useState({
     isOpen: false,
     type: "info",
@@ -136,7 +139,9 @@ function TeamPage() {
         address: row.address,
         male: row.male ? "Male" : "Female",
       }));
-      return <DataTable columns={employeeTableColumns} rows={employeeTableRows} />
+      return (
+        <DataTable columns={employeeTableColumns} rows={employeeTableRows} />
+      );
     }
   };
   //Handle add new team
@@ -191,7 +196,18 @@ function TeamPage() {
             numberOfPage={teamInfo ? teamInfo.totalPages : 1}
           />
         </Box>
-        {renderEmployeeTable()}
+        <Box>
+          {renderEmployeeTable()}
+          {employeeByTeam && employeeByTeam.content.length > 0 ? (
+            <Paginations
+              filter={employeeByTeamFilter}
+              setPage={setEmployeeByTeamFilter}
+              numberOfPage={employeeByTeam ? employeeByTeam.totalPages : 1}
+            />
+          ) : (
+            ""
+          )}
+        </Box>
       </Box>
       <Notification notify={notify} setNotify={setNotify} />
     </Box>
