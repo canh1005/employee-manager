@@ -14,7 +14,6 @@ import Loading from "components/Commons/Loading";
 import { Paginations } from "components/Commons/Pagination";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import Notification from "components/Commons/Notifications/Notification";
-import { actAddTeam } from "redux/modules/TeamReducer/addTeamReducer/action";
 
 const teamTableColumns = [
   {
@@ -81,6 +80,7 @@ function TeamPage() {
 
   useEffect(() => {
     dispatch(actGetTeamPageAPI(teamFilter.page));
+    console.log("Team mount!");
     return () => {
       dispatch(actClearTeamData());
     };
@@ -92,7 +92,7 @@ function TeamPage() {
           ...notify,
           isOpen: true,
           type: "error",
-          message: `${error && error.data ? error.data.message : ""}`,
+          message: error && error.data && error.data.message,
         });
       } else {
         setNotify({
@@ -181,7 +181,6 @@ function TeamPage() {
           Result all employee team manager - Total{" "}
           {employeeByTeam ? employeeByTeam.content.length : 0} employees
         </Typography>
-
       </Box>
       <Box className={classes.bodyContent}>
         <Box>

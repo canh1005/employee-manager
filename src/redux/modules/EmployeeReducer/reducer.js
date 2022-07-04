@@ -8,27 +8,32 @@ let initialState = {
 
 export const employeeReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.ADD_EMPLOYEE_REQUEST:
-      state.data = null;
+    //Get list employee
+    case ActionTypes.SEARCH_REQUEST:
+      state.loading = true;
       return { ...state };
-    case ActionTypes.ADD_EMPLOYEE_SUCCESS:
+    case ActionTypes.SEARCH_SUCCESS:
       state.data = action.data;
-      state.error = "Add success";
       return { ...state };
-    case ActionTypes.ADD_EMPLOYEE_FAILED:
-      state.data = null;
+    case ActionTypes.SEARCH_FAILED:
       state.error = action.err;
       return { ...state };
+    //Add employee
+    case ActionTypes.ADD_EMPLOYEE_REQUEST:
+      return { ...state };
+    case ActionTypes.ADD_EMPLOYEE_SUCCESS:
+      state.error = { status: 200 };
+      return { ...state };
+    case ActionTypes.ADD_EMPLOYEE_FAILED:
+      state.error = action.err;
+      return { ...state };
+    //Delete employee
     case ActionTypes.DELETE_EMPLOYEE_REQUEST:
       return { ...state };
     case ActionTypes.DELETE_EMPLOYEE_FAILED:
       state.error = action.err;
       return { ...state };
-    case ActionTypes.UPDATE_EMPLOYEE_REQUEST:
-      return { ...state };
-    case ActionTypes.UPDATE_EMPLOYEE_FAILED:
-      state.error = action.err;
-      return { ...state };
+    //Clear data
     case ActionTypes.CLEAR_DATA:
       state.data = null;
       state.error = null;

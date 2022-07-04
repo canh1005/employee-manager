@@ -1,7 +1,7 @@
 import * as ActionTypes from "./constances";
 import { api } from "utils/api";
 
-//Get
+//Get All team
 export const actGetTeamAPI = () => {
   return (dispatch) => {
     dispatch(actGetTeamRequest());
@@ -32,7 +32,7 @@ const actGetTeamFailed = (err) => {
     err
   };
 };
-//GetPage
+//Get team page
 export const actGetTeamPageAPI = (page) => {
   return (dispatch) => {
     dispatch(actGetTeamPageRequest());
@@ -63,7 +63,7 @@ const actGetTeamPageFailed = (err) => {
     err,
   };
 };
-//Add
+//Add team
 export const actAddTeamAPI = (teamInfo, page) => {
   return (dispatch) => {
     dispatch(actAddTeamRequest());

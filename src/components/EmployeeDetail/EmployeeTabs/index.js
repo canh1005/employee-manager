@@ -1,9 +1,8 @@
-import { Box } from '@mui/material'
-import NavBar from 'components/Commons/NavBar';
+import { Box  } from '@mui/material'
 import { dashBoardStyled } from 'material-ui';
 import { employeeDetail } from 'material-ui';
 import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 
 function EmployeeTabs() {
     const classes = employeeDetail();
@@ -11,10 +10,10 @@ function EmployeeTabs() {
     return (
         <Box>
             <Box className={classes.employeeTabs}>
-                <NavBar to="info" className={`${classesNavbar.link} active`}>Information</NavBar>
-                <NavBar to="working">Working</NavBar>
-                <Link to="advances">Advances</Link>
-                <Link to="statistics">Statistics</Link>
+                <NavLink to="info" style={({ isActive }) => { return { color: isActive ? "red" : "" } }} >Information</NavLink>
+                <NavLink to="working">Working</NavLink>
+                <NavLink to="advances">Advances</NavLink>
+                <NavLink to="statistics">Statistics</NavLink>
             </Box>
             <Box className={classes.employeeTabsBox}>
                 <Outlet />

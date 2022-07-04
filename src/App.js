@@ -14,36 +14,37 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "material-ui";
 import HomeTemple from "pages/HomeTemple";
 import EmployeeDetailPage from "pages/EmployeeDetailPage";
-export const routes = [
-  {
-    path: "/",
-    element: <HomeTemple />,
-    children: [
-      {
-        path: "/",
-        element: <EmployeePage />,
-      },
-      {
-        path: ":id",
-        element: <EmployeeDetailPage />,
-        children: [
-          {
-            path: "info",
-            element: <EmployeeInfo />,
-          },
-          {
-            path: "working",
-            element: <EmployeeWorking />,
-          },
-        ],
-      },
-      {
-        path: "team",
-        element: <TeamPage />,
-      },
-    ],
-  },
-];
+import { routes } from "./utils/routes";
+// const routess = [
+//   {
+//     path: "/",
+//     element: <HomeTemple />,
+//     children: [
+//       {
+//         path: "/",
+//         element: <EmployeePage />,
+//       },
+//       {
+//         path: ":id",
+//         element: <EmployeeDetailPage />,
+//         children: [
+//           {
+//             path: "info",
+//             element: <EmployeeInfo />,
+//           },
+//           {
+//             path: "working",
+//             element: <EmployeeWorking />,
+//           },
+//         ],
+//       },
+//       {
+//         path: "team",
+//         element: <TeamPage />,
+//       },
+//     ],
+//   },
+// ];
 function App() {
   let element = useRoutes(routes);
   return (

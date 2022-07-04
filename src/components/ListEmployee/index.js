@@ -14,9 +14,9 @@ import DataTable from "components/Commons/DataTable";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import {
-  actAddEmployeeAPI,
   actClearData,
   actDeleteEmployeeAPI,
+  actListPageEmployeeAPI,
 } from "redux/modules/EmployeeReducer/action";
 import { listEmpStyled } from "material-ui";
 import Loading from "components/Commons/Loading";
@@ -32,6 +32,8 @@ function ListEmployee() {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.employeeReducer.error);
 
+  const navigate = useNavigate();
+
   const [openModal, setOpenModal] = useState({
     isOpen: false,
   });
@@ -44,7 +46,6 @@ function ListEmployee() {
     isOpen: false,
     title: "",
   });
-  console.log("Checked", selected);
   const [notify, setNotify] = useState({
     isOpen: false,
     type: "info",
@@ -53,14 +54,17 @@ function ListEmployee() {
 
   useEffect(() => {
     const paramsString = queryString.stringify(filter);
-    dispatch(actSearchAPI(paramsString));
+    dispatch(actListPageEmployeeAPI(paramsString));
     dispatch(actGetTeamAPI());
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log("list employee mount!");
     return () => {
-      console.log("Component unmount!");
+      console.log("list employee unmount!");
       dispatch(actClearData());
     };
+
   }, [filter]);
+
   useEffect(() => {
     if (error) {
       if (error.status === 400) {
@@ -69,7 +73,7 @@ function ListEmployee() {
           type: "error",
           message: error.data && error.data.message,
         });
-      } else {
+      } else if (error.status === 200) {
         setNotify({
           isOpen: true,
           type: "success",
@@ -77,21 +81,20 @@ function ListEmployee() {
         });
       }
     }
-    
+
   }, [error]);
 
-  const navigate = useNavigate();
 
   const handleOpenModal = () =>
     setOpenModal({
       isOpen: true,
       filter: filter,
     });
+
   const handleSelect = (e) => {
     const { name } = e.target;
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
-
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
@@ -106,6 +109,7 @@ function ListEmployee() {
     }
     setSelected(newSelected);
   };
+
   const handleSelectAll = (e) => {
     if (e.target.checked) {
       const checkedAll = searchList.content.map((item) => item.id.toString());
@@ -118,6 +122,7 @@ function ListEmployee() {
   const handleEmployeeDetail = (employee) => {
     navigate(`${employee.id}`, { replace: true });
   };
+
   const handleKeywordChange = (keyword) => {
     setFilter({
       ...filter,
@@ -125,6 +130,7 @@ function ListEmployee() {
       page: 0,
     });
   };
+
   const handleDeleteDialog = (employee_id) => {
     setConfirmDialog({
       ...confirmDialog,
@@ -133,6 +139,7 @@ function ListEmployee() {
       onConfirm: () => handleDeleteConfirm(employee_id),
     });
   };
+
   const handleDeleteConfirm = (employee_id) => {
     setConfirmDialog({
       ...confirmDialog,
@@ -143,6 +150,7 @@ function ListEmployee() {
       actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter))
     );
   };
+
   const renderEmployeeTable = () => {
     const columns = [
       {
@@ -180,7 +188,7 @@ function ListEmployee() {
       },
     ];
     if (searchList) {
-      const rows = searchList.content.map((employee) => ({
+      const rows = searchList.content.map((employee, index) => ({
         checkBox: (
           <Checkbox
             onClick={handleSelect}
@@ -190,7 +198,7 @@ function ListEmployee() {
         ),
         phone: employee.phone,
         fullName: employee.fullName,
-        id: employee.id,
+        id: index + 1,
         team:
           getTeam && getTeam.length > 0
             ? getTeam.find((item) => item.id === employee.teamID).name
@@ -210,17 +218,18 @@ function ListEmployee() {
           </>
         ),
       }));
-
       return <DataTable columns={columns} rows={rows} />;
     }
   };
+
   const handleDeleteSelected = () => {
     let selectedObj = {
       ids: selected,
     };
     console.log("Check", queryString.stringify(selectedObj));
-    dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)));
+    dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)), queryString.stringify(filter));
   };
+
   return (
     <Box className={classes.root}>
       <SearchFrom onSubmit={handleKeywordChange} />

@@ -42,7 +42,6 @@ export const actDeleteEmployeeAPI = (ids, filter) => {
     api
       .delete(`employee/delete?${ids}`)
       .then(() => {
-        dispatch(actDeleteEmployeeSuccess());
         if (filter) {
           dispatch(actSearchAPI(filter));
         } else {
@@ -73,30 +72,40 @@ const actDeleteEmployeeFailed = (err) => {
   };
 };
 
-export const actUpdateEmployeeAPI = (employee, filter) => {
+//Get list employee
+export const actListPageEmployeeAPI = (filter) => {
   return (dispatch) => {
-    dispatch(actUpdateEmployeeRequest());
+    dispatch(actSearchRequest());
     api
-      .Update(`employee/update?${employee}`)
-      .then(() => {
-        dispatch(actSearchAPI(filter));
+      .get(`employee/findByNameWithPage?${filter}`)
+      .then((result) => {
+        dispatch(actSearchSuccess(result.data.data));
       })
       .catch((err) => {
-        dispatch(actUpdateEmployeeFailed(err.response));
+        dispatch(actSearchFailed(err.response));
       });
   };
 };
-const actUpdateEmployeeRequest = () => {
+const actSearchRequest = () => {
   return {
-    type: ActionTypes.UPDATE_EMPLOYEE_REQUEST,
+    type: ActionTypes.SEARCH_REQUEST,
   };
 };
-const actUpdateEmployeeFailed = (err) => {
+const actSearchSuccess = (data) => {
   return {
-    type: ActionTypes.UPDATE_EMPLOYEE_FAILED,
-    err,
+    type: ActionTypes.SEARCH_SUCCESS,
+    data
   };
 };
+const actSearchFailed = (err) => {
+  return {
+    type: ActionTypes.SEARCH_FAILED,
+    err
+  };
+};
+
+
+//Clear employee data
 export const actClearData = () => {
   return {
     type: ActionTypes.CLEAR_DATA,

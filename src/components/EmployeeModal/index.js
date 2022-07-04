@@ -76,6 +76,7 @@ function EmployeeModal(props) {
     },
   });
   useEffect(() => {
+    console.log("employee modal mount!");
     if (employeeEdit) {
       setEmployee({
         id: employeeID,
@@ -100,7 +101,7 @@ function EmployeeModal(props) {
         male: true,
         teamID: 1,
       });
-      console.log("Component unmount!");
+      console.log("employee modal unmount!");
     };
   }, [employeeEdit]);
   const handleGenderChange = (event) => {

@@ -68,7 +68,7 @@ const actUpdateEmployeeFailed = (err) => {
 export const actEmployeeEdited = (employeeEdited) => {
   return {
     type: ActionTypes.EMPLOYEE_EDITED,
-    data: employeeEdited,
+    payload: employeeEdited,
   };
 };
 

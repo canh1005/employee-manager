@@ -1,45 +1,50 @@
-import { Box, Menu, MenuItem, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Box,  Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import { Link , useLocation  } from "react-router-dom";
 import { dashBoardStyled } from "material-ui";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupsIcon from "@mui/icons-material/Groups";
-import NavBar from "../NavBar";
+import { useDispatch } from "react-redux";
+import { actActiveLink } from "redux/modules/DashBoardReducer/action";
 
 const pages = [
-  { icon: <PersonIcon />, name: "Employee", path: "/" },
-  { icon: <GroupsIcon />, name: "Team", path: "/team" },
+  { icon: <PersonIcon />, name: "Employee", path: "" },
+  { icon: <GroupsIcon />, name: "Team", path: "team" },
 ];
 function DashBoard() {
-  const classes = dashBoardStyled();
+  const dispatch = useDispatch();
+  let localLink = localStorage.getItem('indexLink');
   let location = useLocation();
+  const classes = dashBoardStyled();
+  useEffect(() => {
+    if(location.pathname === "/"){
+      dispatch(actActiveLink(Number(0)))
+    }
+  }, [])
+  
+  
+  const handleActive = (index) => {
+    dispatch(actActiveLink(index))
+  }
   return (
     <Box className={classes.root}>
-      <Link to="/" className={classes.title}>
+      <Link to="" className={classes.title} onClick={()=>dispatch(actActiveLink(0))}>
         <Typography variant="span">Employee Managment</Typography>
       </Link>
       <Box className={classes.menu}>
-        {/* {pages.map((page, index) => {
-          console.log(index);
+        {pages.map((page, index) => {
           return (
-            <NavBar
+            <Link
               key={index}
               to={page.path}
-              exact={index !== 0 ? true : false}
+              onClick={() => handleActive(index)}
+              className={Number(localLink) === index ? `${classes.link} active` : `${classes.link}`}
             >
               {page.icon}
               <Typography variant="span">{page.name}</Typography>
-            </NavBar>
+            </Link>
           );
-        })} */}
-        <NavBar to={""} className={location !== "/" ? "": `${classes.link} acitve`}>
-          <PersonIcon />
-          <Typography variant="span">Employee</Typography>
-        </NavBar>
-        <NavBar to={"team"} >
-          <GroupsIcon />
-          <Typography variant="span">Team</Typography>
-        </NavBar>
+        })}
       </Box>
     </Box>
   );
