@@ -78,7 +78,16 @@ function EmployeeAdvances(props) {
   const working = useSelector((state) => state.workingReducer.data);
 
   const [data, setData] = useState({
-    labels: [],
+    labels: 
+        working &&
+        working.length > 0 &&
+        working
+          .filter(
+            (item) =>
+              moment(item.date).month() + 1 ===
+              Number(moment(month).format("M"))
+          )
+          .map((el) => moment(el.date).format("DD-MM")),
     datasets: [
       {
         label: "Employee working hours in month",
@@ -88,7 +97,6 @@ function EmployeeAdvances(props) {
         borderWidth: 1,
       },
     ],
-    //output: ['3','5']
   });
 
   const employeeID = useParams().id;
@@ -131,6 +139,7 @@ function EmployeeAdvances(props) {
       ],
     });
     return () => {
+      console.log("component unmount!", data.labels);
       dispatch(actClearData());
       setData({
         labels: [],
@@ -177,8 +186,9 @@ function EmployeeAdvances(props) {
             label="Month"
             onChange={handleChange}
           >
-            {months.map((monthItem) => (
+            {months.map((monthItem,index) => (
               <MenuItem
+                key={index}
                 disabled={
                   moment().months() + 1 < monthItem.value ? true : false
                 }

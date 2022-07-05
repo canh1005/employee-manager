@@ -23,7 +23,7 @@ export const employeeReducer = (state = initialState, action) => {
     case ActionTypes.ADD_EMPLOYEE_REQUEST:
       return { ...state };
     case ActionTypes.ADD_EMPLOYEE_SUCCESS:
-      state.error = { status: 200 };
+      state.error = { status: 200, message: "Add employee success!" };
       return { ...state };
     case ActionTypes.ADD_EMPLOYEE_FAILED:
       state.error = action.err;
@@ -35,7 +35,7 @@ export const employeeReducer = (state = initialState, action) => {
       // console.log("delete Success", state.data.content.filter(item => !queryString.parse(action.payload).ids.includes(JSON.stringify(item.id))));
       state.loading = false;
       state.data.content = state.data.content.filter(item => !queryString.parse(action.payload).ids.includes(JSON.stringify(item.id)));
-      state.error = { status: 200, message: "Delete Success!" };
+      state.error = { status: 200, message: "Delete employee success!" };
       return { ...state };
     case ActionTypes.DELETE_EMPLOYEE_FAILED:
       state.error = action.err;

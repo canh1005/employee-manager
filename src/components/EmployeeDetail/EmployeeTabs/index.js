@@ -1,25 +1,40 @@
-import { Box  } from '@mui/material'
-import { dashBoardStyled } from 'material-ui';
-import { employeeDetail } from 'material-ui';
-import React from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Box } from "@mui/material";
+import { dashBoardStyled } from "material-ui";
+import { employeeDetail } from "material-ui";
+import React from "react";
+import { Link, NavLink, Outlet } from "react-router-dom";
+
+const tabs = [
+  { name: "Infomation", path: "info" },
+  { name: "Working", path: "working" },
+  { name: "Advances", path: "advances" },
+  { name: "Statistics", path: "statistics" },
+];
 
 function EmployeeTabs() {
-    const classes = employeeDetail();
-    const classesNavbar = dashBoardStyled();
-    return (
-        <Box>
-            <Box className={classes.employeeTabs}>
-                <NavLink to="info" style={({ isActive }) => { return { color: isActive ? "red" : "" } }} >Information</NavLink>
-                <NavLink to="working">Working</NavLink>
-                <NavLink to="advances">Advances</NavLink>
-                <NavLink to="statistics">Statistics</NavLink>
-            </Box>
-            <Box className={classes.employeeTabsBox}>
-                <Outlet />
-            </Box>
-        </Box>
-    )
+  const classes = employeeDetail();
+  return (
+    <Box>
+      <Box className={classes.employeeTabs}>
+        {tabs.map((tab, index) => {
+          return (
+            <NavLink
+              key={index}
+              to={tab.path}
+              style={({ isActive }) => {
+                return { color: isActive ? "red" : "" };
+              }}
+            >
+              {tab.name}
+            </NavLink>
+          );
+        })}
+      </Box>
+      <Box className={classes.employeeTabsBox}>
+        <Outlet />
+      </Box>
+    </Box>
+  );
 }
 
-export default EmployeeTabs
+export default EmployeeTabs;

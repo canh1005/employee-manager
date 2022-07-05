@@ -8,7 +8,6 @@ import { Box, Button, Checkbox, Tooltip, Typography } from "@mui/material";
 import EmployeeModal from "../EmployeeModal";
 import { Paginations } from "components/Commons/Pagination";
 import SearchFrom from "components/Commons/Search";
-import { actSearchAPI } from "redux/modules/SearchEmployeeReducer/action";
 import queryString from "query-string";
 import DataTable from "components/Commons/DataTable";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
@@ -22,7 +21,6 @@ import { listEmpStyled } from "material-ui";
 import Loading from "components/Commons/Loading";
 import ResponsiveDialog from "components/Commons/Dialog";
 import Notification from "components/Commons/Notifications/Notification";
-// import { actDeleteEmployeeSingleAPI } from "redux/modules/EmployeeReducer/action";
 function ListEmployee() {
   //Style of list employee
   const classes = listEmpStyled();
@@ -77,7 +75,7 @@ function ListEmployee() {
         setNotify({
           isOpen: true,
           type: "success",
-          message: "Add employee success",
+          message: error && error.message,
         });
       }
     }
@@ -107,7 +105,7 @@ function ListEmployee() {
     }
     setSelected(newSelected);
   };
-
+  
   const handleSelectAll = (e) => {
     if (e.target.checked) {
       const checkedAll = searchList.content.map((item) => item.id.toString());
@@ -116,7 +114,7 @@ function ListEmployee() {
       setSelected([]);
     }
   };
-
+  //Handle open employee detail
   const handleEmployeeDetail = (employee) => {
     navigate(`${employee.id}`, { replace: true });
   };
@@ -145,7 +143,14 @@ function ListEmployee() {
     });
     console.log("employee_id", employee_id);
     // dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter)));
-    dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`));
+    if(selected && selected.length > 0){
+      let selectedObj = {
+        ids: selected,
+      }
+      dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)));
+    }else{
+      dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`));
+    }
   };
 
   const renderEmployeeTable = () => {

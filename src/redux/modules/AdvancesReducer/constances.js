@@ -10,3 +10,5 @@ export const DELETE_ADVANCE_FAILED = '/delete_advance_failed';
 export const ADD_ADVANCE_REQUEST = '/add_advance_request';
 export const ADD_ADVANCE_SUCCESS = '/add_advance_success';
 export const ADD_ADVANCE_FAILED = '/add_advance_failed';
+//CLEAR advances data
+export const CLEAR_ADVANCE_DATA = "/clear_advance_data";

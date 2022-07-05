@@ -15,10 +15,11 @@ function AdvanceModal(props) {
   const dispatch = useDispatch();
   const employeeID = useParams().id;
   const [advance, setAdvance] = useState({
-    date: "",
+    date: moment().format("YYYY-MM-DD"),
     employeeID: employeeID,
     money: "",
   });
+  
   const handleClose = () => setOpen(false);
   const handleDate = (event) => {
     let formatDate = moment(event).format("YYYY-MM-DD");
@@ -38,7 +39,7 @@ function AdvanceModal(props) {
     event.preventDefault();
     setOpen(false);
     console.log("working", advance);
-    dispatch(actAddAdvanceAPI(employeeID, advance));
+    dispatch(actAddAdvanceAPI(advance));
   };
   return (
     <>
@@ -53,7 +54,7 @@ function AdvanceModal(props) {
                 label="Date"
                 name="date"
                 onChange={handleDate}
-                value={moment()}
+                value={advance.date}
                 renderInput={(params) => <TextField {...params} />}
               />
               <TextField

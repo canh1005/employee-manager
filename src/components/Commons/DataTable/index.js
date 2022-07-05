@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
+  Box,
   Paper,
   Table,
   TableBody,
@@ -8,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { dataTableStyled } from "material-ui";
 
@@ -24,15 +26,23 @@ export default function DataTable({ rows, columns }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => {
-            return (
-              <TableRow key={index}>
-                {columns.map((column, index) => {
-                  return <TableCell key={index}>{row[column.field]}</TableCell>;
-                })}
-              </TableRow>
-            );
-          })}
+          {rows && rows.length > 0 ? (
+            rows.map((row, index) => {
+              return (
+                <TableRow key={index}>
+                  {columns.map((column, index) => {
+                    return (
+                      <TableCell key={index}>{row[column.field]}</TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })
+          ) : (
+            <Box sx={{textAlign: "center"}}>
+              <Typography>No data found!</Typography>
+            </Box>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

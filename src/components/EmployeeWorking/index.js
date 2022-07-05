@@ -49,6 +49,7 @@ function EmployeeWorking() {
     isOpen: false,
     title: "",
   });
+
   const [filter, setFilter] = useState({
     page: 0,
     employee_id: employeeID,
@@ -63,8 +64,11 @@ function EmployeeWorking() {
 
   useEffect(() => {
     dispatch(actGetWorkingPageAPI(queryString.stringify(filter)));
+    console.log("working mount");
+
     return () => {
       dispatch(actClearData());
+      console.log("working unmount");
     };
   }, [filter]);
 

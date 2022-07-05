@@ -87,6 +87,16 @@ function EmployeeModal(props) {
         male: employeeEdit.male,
         teamID: employeeEdit.teamID,
       });
+      setErrors({
+        frmSubmit: {
+          fullNameValid: true,
+          ageValid: true,
+          addressValid: true,
+          moneyPerHourValid: true,
+          phoneValid: true,
+          frmValid: true,
+        },
+      });
     }
     return () => {
       setEmployee({
@@ -98,6 +108,16 @@ function EmployeeModal(props) {
         startDay: moment().format("YYYY-MM-DD"),
         male: true,
         teamID: 1,
+      });
+      setErrors({
+        frmSubmit: {
+          fullNameValid: false,
+          ageValid: false,
+          addressValid: false,
+          moneyPerHourValid: false,
+          phoneValid: false,
+          frmValid: false,
+        },
       });
       console.log("employee modal unmount!");
     };
@@ -266,7 +286,11 @@ function EmployeeModal(props) {
               <DatePicker
                 label="Start date"
                 onChange={handleSelectedDate}
-                value={employeeEdit ? employee.startDay : moment().format("YYYY-MM-DD")}
+                value={
+                  employeeEdit
+                    ? employee.startDay
+                    : moment().format("YYYY-MM-DD")
+                }
                 renderInput={(params) => <TextField {...params} />}
               />
               <TextField

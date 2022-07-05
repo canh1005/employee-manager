@@ -22,15 +22,28 @@ export const advancesReducer = (state = initialState, action) => {
     case ActionTypes.ADD_ADVANCE_REQUEST:
       return { ...state };
     case ActionTypes.ADD_ADVANCE_SUCCESS:
-      state.data = action.data;
+      state.data.content = [...state.data.content, action.data];
+      state.error = { status: 200, message: "Add advances success!" };
       return { ...state };
     case ActionTypes.ADD_ADVANCE_FAILED:
       state.error = action.err;
       return { ...state };
     case ActionTypes.DELETE_ADVANCE_REQUEST:
       return { ...state };
+    case ActionTypes.DELETE_ADVANCE_SUCCESS:
+      state.loading = false;
+      console.log("action data", action.data);
+      state.data.content = state.data.content.filter(
+        (item) => item.id !== action.data
+      );
+      state.error = { status: 200, message: "Delete advances success!" };
+      return { ...state };
     case ActionTypes.DELETE_ADVANCE_FAILED:
       state.error = action.err;
+      return { ...state };
+    case ActionTypes.DELETE_ADVANCE_FAILED:
+      state.data = null
+      state.error = null;
       return { ...state };
     default:
       return { ...state };

@@ -2,11 +2,11 @@ import * as ActionTypes from "./constances";
 import { api } from "../../../utils/api";
 
 //GET
-export const actGetAdvancesAPI = (employee_id) => {
+export const actGetAdvancesAPI = (employee_id, page) => {
   return (dispatch) => {
     dispatch(actGetAdvancesRequest());
     api
-      .get(`advance/getAll?employee_id=${employee_id}`)
+      .get(`advance/getPage?employee_id=${employee_id}&page=${page}`)
       .then((result) => {
         dispatch(actGetAdvancesSuccess(result.data.data));
       })
@@ -33,17 +33,16 @@ const actGetAdvancesFailed = (err) => {
   };
 };
 //ADD
-export const actAddAdvanceAPI = (employee_id, advance_item) => {
+export const actAddAdvanceAPI = (advance_item) => {
   return (dispatch) => {
     dispatch(actAddAdvanceRequest());
     api
       .post(`advance/create`, advance_item)
       .then((result) => {
         dispatch(actAddAdvanceSuccess(result.data));
-        dispatch(actGetAdvancesAPI(employee_id));
       })
       .catch((err) => {
-        dispatch(actAddAdvanceFailed(err));
+        dispatch(actAddAdvanceFailed(err.response));
       });
   };
 };
@@ -55,27 +54,26 @@ const actAddAdvanceRequest = () => {
 const actAddAdvanceSuccess = (data) => {
   return {
     type: ActionTypes.ADD_ADVANCE_SUCCESS,
-    data: data,
+    data,
   };
 };
 const actAddAdvanceFailed = (err) => {
   return {
     type: ActionTypes.ADD_ADVANCE_FAILED,
-    error: err,
+    err,
   };
 };
 //DELETE
-export const actDeleteAdvanceAPI = (employee_id, advance_id) => {
+export const actDeleteAdvanceAPI = (advance_id) => {
   return (dispatch) => {
     dispatch(actDeleteAdvanceRequest());
     api
       .delete(`advance/delete?advance_id=${advance_id}`)
       .then((result) => {
-        dispatch(actDeleteAdvanceSuccess(result.data));
-        dispatch(actGetAdvancesAPI(employee_id));
+        dispatch(actDeleteAdvanceSuccess(advance_id));
       })
       .catch((err) => {
-        dispatch(actDeleteAdvanceFailed(err));
+        dispatch(actDeleteAdvanceFailed(err.response));
       });
   };
 };
@@ -95,4 +93,9 @@ const actDeleteAdvanceFailed = (err) => {
     type: ActionTypes.DELETE_ADVANCE_FAILED,
     err,
   };
+};
+export const actClearAdvances = () => {
+  return{
+    type: ActionTypes.CLEAR_ADVANCE_DATA,
+  }
 };
