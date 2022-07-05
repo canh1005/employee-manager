@@ -42,34 +42,28 @@ export const actDeleteEmployeeAPI = (ids) => {
     api
       .delete(`employee/delete?${ids}`)
       .then((result) => {
-        dispatch(actDeleteEmployeeSuccess(result.data));
-        // if (filter) {
-        //   dispatch(actSearchAPI(filter));
-        // } else {
-        //   let navigate = useNavigate();
-        //   navigate("/", { replace: true });
-        //   dispatch(actSearchAPI(`page=0&name=""`));
-        // }
+        dispatch(actDeleteEmployeeSuccess(ids));
+        
       })
       .catch((err) => {
         dispatch(actDeleteEmployeeFailed(err.response));
       });
   };
 };
-export const actDeleteEmployeeSingleAPI = (id) => {
-  return (dispatch) => {
-    dispatch(actDeleteEmployeeRequest());
-    api
-      .delete(`employee/delete-by-id?employee_id=${id}`)
-      .then((result) => {
-        console.log("Delete success");
-        dispatch(actDeleteEmployeeSuccess(result.data.data))
-      })
-      .catch((error) => {
-        dispatch(actDeleteEmployeeFailed(error.response))
-      });
-  };
-};
+// export const actDeleteEmployeeSingleAPI = (id) => {
+//   return (dispatch) => {
+//     dispatch(actDeleteEmployeeRequest());
+//     api
+//       .delete(`employee/delete-by-id?employee_id=${id}`)
+//       .then((result) => {
+//         console.log("Delete success");
+//         dispatch(actDeleteEmployeeSuccess(id))
+//       })
+//       .catch((error) => {
+//         dispatch(actDeleteEmployeeFailed(error.response))
+//       });
+//   };
+// };
 const actDeleteEmployeeRequest = () => {
   return {
     type: ActionTypes.DELETE_EMPLOYEE_REQUEST,

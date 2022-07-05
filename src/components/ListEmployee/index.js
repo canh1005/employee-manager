@@ -22,7 +22,7 @@ import { listEmpStyled } from "material-ui";
 import Loading from "components/Commons/Loading";
 import ResponsiveDialog from "components/Commons/Dialog";
 import Notification from "components/Commons/Notifications/Notification";
-import { actDeleteEmployeeSingleAPI } from "redux/modules/EmployeeReducer/action";
+// import { actDeleteEmployeeSingleAPI } from "redux/modules/EmployeeReducer/action";
 function ListEmployee() {
   //Style of list employee
   const classes = listEmpStyled();
@@ -145,7 +145,7 @@ function ListEmployee() {
     });
     console.log("employee_id", employee_id);
     // dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter)));
-    dispatch(actDeleteEmployeeSingleAPI(employee_id));
+    dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`));
   };
 
   const renderEmployeeTable = () => {

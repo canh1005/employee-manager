@@ -1,4 +1,5 @@
 import * as ActionTypes from "./constances";
+import queryString from 'query-string'
 
 let initialState = {
   loading: false,
@@ -31,13 +32,12 @@ export const employeeReducer = (state = initialState, action) => {
     case ActionTypes.DELETE_EMPLOYEE_REQUEST:
       return { ...state };
     case ActionTypes.DELETE_EMPLOYEE_SUCCESS:
-      console.log("delete Success");
+      // console.log("delete Success", state.data.content.filter(item => !queryString.parse(action.payload).ids.includes(JSON.stringify(item.id))));
       state.loading = false;
-      state.data = state.data.filter(item => item.id !== action.payload)
-      state.error = { status: 200 };
+      state.data.content = state.data.content.filter(item => !queryString.parse(action.payload).ids.includes(JSON.stringify(item.id)));
+      state.error = { status: 200, message: "Delete Success!" };
       return { ...state };
     case ActionTypes.DELETE_EMPLOYEE_FAILED:
-      console.log("delete Error");
       state.error = action.err;
       return { ...state };
     //Clear data

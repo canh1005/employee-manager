@@ -8,6 +8,7 @@ let initialState = {
 
 export const workingReducer = (state = initialState, action) => {
   switch (action.type) {
+    //Get working
     case ActionTypes.GET_WORKING_REQUEST:
       state.loading = true;
       return { ...state };
@@ -30,6 +31,7 @@ export const workingReducer = (state = initialState, action) => {
       state.loading = false;
       state.error = action.err;
       return { ...state };
+    //Delete working
     case ActionTypes.DELETE_WORKING_REQUEST:
       return { ...state };
     case ActionTypes.DELETE_WORKING_SUCCESS:
@@ -38,6 +40,7 @@ export const workingReducer = (state = initialState, action) => {
     case ActionTypes.DELETE_WORKING_FAILED:
       state.error = action.err;
       return { ...state };
+    //Add working 
     case ActionTypes.ADD_WORKING_REQUEST:
       return { ...state };
     case ActionTypes.ADD_WORKING_SUCCESS:
