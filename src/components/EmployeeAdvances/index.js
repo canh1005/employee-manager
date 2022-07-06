@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
+  actClearAdvances,
   actDeleteAdvanceAPI,
   actGetAdvancesAPI,
 } from "redux/modules/AdvancesReducer/action";
@@ -59,7 +60,7 @@ function EmployeeAdvances() {
   });
 
   useEffect(() => {
-    dispatch(actGetAdvancesAPI(employeeID,filter.page));
+    dispatch(actGetAdvancesAPI(employeeID, filter.page));
     console.log("advances mount!");
     if (error) {
       switch (error.status) {
@@ -82,22 +83,26 @@ function EmployeeAdvances() {
           break;
       }
     }
+    return () => {
+      dispatch(actClearAdvances())
+    }
   }, [error]);
 
-  const handleOpenDialog = (advances_id) => {
+  const handleOpenDialog = (date) => {
     setConfirmDialog({
       ...confirmDialog,
       isOpen: true,
       title: "Are you sure to delete this advances?",
-      onConfirm: () => handleDelete(advances_id),
+      onConfirm: () => handleDelete(date),
     });
   };
-  const handleDelete = (advances_id) => {
+  const handleDelete = (date) => {
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false,
     });
-    dispatch(actDeleteAdvanceAPI(advances_id));
+    console.log("advanceDate",date);
+    dispatch(actDeleteAdvanceAPI(moment(date).format("YYYY-MM-DD"),employeeID));
   };
   const renderAdvancesInfo = () => {
     if (advancesInfo) {
@@ -106,7 +111,7 @@ function EmployeeAdvances() {
         date: moment(row.date).format("DD-MM-YYYY"),
         money: row.money,
         option: (
-          <Button key={index} onClick={() => handleOpenDialog(row.id)}>
+          <Button key={index} onClick={() => handleOpenDialog(row.date)}>
             <DeleteIcon />
           </Button>
         ),
@@ -134,7 +139,7 @@ function EmployeeAdvances() {
         setPage={setFilter}
         numberOfPage={advancesInfo ? advancesInfo.totalPages : 1}
       />
-      <Notification notify={notify} setNotify={setNotify}/>
+      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 }

@@ -64,13 +64,13 @@ const actAddAdvanceFailed = (err) => {
   };
 };
 //DELETE
-export const actDeleteAdvanceAPI = (advance_id) => {
+export const actDeleteAdvanceAPI = (date, employee_id) => {
   return (dispatch) => {
     dispatch(actDeleteAdvanceRequest());
     api
-      .delete(`advance/delete?advance_id=${advance_id}`)
+      .delete(`advance/delete?date=${date}&employee_id=${employee_id}`)
       .then((result) => {
-        dispatch(actDeleteAdvanceSuccess(advance_id));
+        dispatch(actDeleteAdvanceSuccess(date));
       })
       .catch((err) => {
         dispatch(actDeleteAdvanceFailed(err.response));
