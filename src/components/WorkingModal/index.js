@@ -14,7 +14,6 @@ import Notification from "components/Commons/Notifications/Notification";
 function WorkingModal(props) {
   //Get data form store and declare a dispatch action
   const employeeInfo = useSelector((state) => state.employeeDetailReducer.data);
-  const error = useSelector((state) => state.workingReducer.error);
 
   const dispatch = useDispatch();
 
@@ -38,32 +37,6 @@ function WorkingModal(props) {
     },
   });
 
-  useEffect(() => {
-    console.log("working modal mount!");
-    if (error) {
-      switch (error.status) {
-        case 400:
-          setNotify({
-            ...notify,
-            isOpen: true,
-            type: "error",
-            message: error && error.data && error.data.message,
-          });
-          break;
-        default:
-          setNotify({
-            ...notify,
-            isOpen: true,
-            type: "success",
-            message: "Add working success!",
-          });
-          break;
-      }
-    }
-    return () => {
-      console.log("working modal unmount!");
-    };
-  }, [error]);
 
   console.log("working", working);
   const handleClose = () => setOpen(false);
@@ -178,7 +151,6 @@ function WorkingModal(props) {
           </form>
         </Box>
       </Modal>
-      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 }

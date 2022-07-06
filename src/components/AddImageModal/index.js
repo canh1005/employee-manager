@@ -1,6 +1,6 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { modalStyled } from "material-ui";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { actAddImageAPI } from "redux/modules/ImageReducer/action";
@@ -9,12 +9,16 @@ function AddImageModal(props) {
   const { open, setOpen } = props;
   const employeeID = useParams().id;
   const dispatch = useDispatch();
+  const imgRef = useRef(null);
   const classes = modalStyled();
   const [image, setImage] = useState({
     profileImg:
       "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png",
     imgFile: "",
   });
+  const handleImgClick=()=>{
+    imgRef.current.click();
+  }
   const handleImageChange = (event) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -56,13 +60,14 @@ function AddImageModal(props) {
             marginBottom: "20px",
           }}
         >
-          <img src={image.profileImg} alt="" width="200px" height="200px" />
+          <img src={image.profileImg} alt="" width="200px" height="200px" onClick={handleImgClick}/>
           <input
             type="file"
             name="image-upload"
             accept="image/*"
             onChange={handleImageChange}
             style={{width: "170px"}}
+            ref={imgRef}
           />
         </Box>
         <Box className={classes.buttonBox}>

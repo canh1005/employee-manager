@@ -220,7 +220,7 @@ function ListEmployee() {
           </>
         ),
       }));
-      return <DataTable columns={columns} rows={rows} />;
+      return <DataTable columns={columns} rows={rows} size={searchList.size} rowsPerPage={searchList.numberOfElements} lastPage={searchList.last} />;
     }
   };
 

@@ -47,18 +47,18 @@ export const actGetWorkingPageAPI = (filter) => {
 };
 const actGetWorkingPageRequest = () => {
   return {
-    type: ActionTypes.GET_WORKING_PAGE_REQUEST,
+    type: ActionTypes.GET_WORKING_REQUEST,
   };
 };
 const actGetWorkingPageSuccess = (data) => {
   return {
-    type: ActionTypes.GET_WORKING_PAGE_SUCCESS,
+    type: ActionTypes.GET_WORKING_SUCCESS,
     data,
   };
 };
 const actGetWorkingPageFailed = (err) => {
   return {
-    type: ActionTypes.GET_WORKING_PAGE_FAILED,
+    type: ActionTypes.GET_WORKING_FAILED,
     err,
   };
 };

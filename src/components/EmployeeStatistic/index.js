@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useResolvedPath } from "react-router-dom";
 import { actGetStatisticAPI } from "redux/modules/StatisticsReducer/action";
 import {
   Box,
@@ -18,7 +18,7 @@ import {
   actClearData,
   actGetWorkingAPI,
 } from "redux/modules/WorkingReducer/action";
-
+import { useLocation } from "react-router-dom";
 const months = [
   {
     value: 1,
@@ -77,21 +77,15 @@ function EmployeeAdvances(props) {
   const dispatch = useDispatch();
   const working = useSelector((state) => state.workingReducer.data);
 
+  let location = useLocation();
+  
+  const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [data, setData] = useState({
-    labels: 
-        working &&
-        working.length > 0 &&
-        working
-          .filter(
-            (item) =>
-              moment(item.date).month() + 1 ===
-              Number(moment(month).format("M"))
-          )
-          .map((el) => moment(el.date).format("DD-MM")),
+    labels: [],
     datasets: [
       {
         label: "Employee working hours in month",
-        data: "",
+        data: [],
         backgroundColor: ["rgba(255, 99, 132, 0.2)"],
         borderColor: ["rgb(255, 99, 132)"],
         borderWidth: 1,
@@ -101,10 +95,9 @@ function EmployeeAdvances(props) {
 
   const employeeID = useParams().id;
   moment().format("YYYY-MM-DD");
-  const [month, setMonth] = useState(moment().format("YYYY-MM"));
 
   useEffect(() => {
-    console.log("useffectMonth: ", month);
+    console.log("statistic mount! ");
     dispatch(actGetStatisticAPI(employeeID, month));
     dispatch(actGetWorkingAPI(employeeID));
     setData({
@@ -139,22 +132,9 @@ function EmployeeAdvances(props) {
       ],
     });
     return () => {
-      console.log("component unmount!", data.labels);
-      dispatch(actClearData());
-      setData({
-        labels: [],
-        datasets: [
-          {
-            label: "",
-            data: "",
-            backgroundColor: [""],
-            borderColor: [""],
-            borderWidth: 1,
-          },
-        ],
-      });
+      console.log("statistic unmount!", data.labels);
     };
-  }, [month]);
+  }, [month, working && working.length > 0]);
 
   const handleChange = (event) => {
     setMonth(event.target.value);
@@ -186,7 +166,7 @@ function EmployeeAdvances(props) {
             label="Month"
             onChange={handleChange}
           >
-            {months.map((monthItem,index) => (
+            {months.map((monthItem, index) => (
               <MenuItem
                 key={index}
                 disabled={

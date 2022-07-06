@@ -127,7 +127,15 @@ function TeamPage() {
           </Button>
         ),
       }));
-      return <DataTable columns={teamTableColumns} rows={teamTableRow} />;
+      return (
+        <DataTable
+          columns={teamTableColumns}
+          rows={teamTableRow}
+          size={teamInfo.size}
+          rowsPerPage={teamInfo.numberOfElements}
+          lastPage={teamInfo.last}
+        />
+      );
     }
   };
   const renderEmployeeTable = () => {
@@ -140,7 +148,13 @@ function TeamPage() {
         male: row.male ? "Male" : "Female",
       }));
       return (
-        <DataTable columns={employeeTableColumns} rows={employeeTableRows} />
+        <DataTable
+          columns={employeeTableColumns}
+          rows={employeeTableRows}
+          size={employeeByTeam.size}
+          rowsPerPage={employeeByTeam.numberOfElements}
+          lastPage={employeeByTeam.last}
+        />
       );
     }
   };
@@ -198,15 +212,12 @@ function TeamPage() {
         </Box>
         <Box>
           {renderEmployeeTable()}
-          {employeeByTeam && employeeByTeam.content.length > 0 ? (
-            <Paginations
-              filter={employeeByTeamFilter}
-              setPage={setEmployeeByTeamFilter}
-              numberOfPage={employeeByTeam ? employeeByTeam.totalPages : 1}
-            />
-          ) : (
-            ""
-          )}
+
+          <Paginations
+            filter={employeeByTeamFilter}
+            setPage={setEmployeeByTeamFilter}
+            numberOfPage={employeeByTeam ? employeeByTeam.totalPages : 1}
+          />
         </Box>
       </Box>
       <Notification notify={notify} setNotify={setNotify} />

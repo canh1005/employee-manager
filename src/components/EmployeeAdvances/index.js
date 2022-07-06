@@ -107,7 +107,7 @@ function EmployeeAdvances() {
   const renderAdvancesInfo = () => {
     if (advancesInfo) {
       const advancesInfoRows = advancesInfo.content.map((row, index) => ({
-        no: index,
+        no: index + 1,
         date: moment(row.date).format("DD-MM-YYYY"),
         money: row.money,
         option: (
@@ -126,7 +126,7 @@ function EmployeeAdvances() {
           <AddCircleOutlineIcon />
         </Button>
       </Tooltip>
-      <div style={{ height: 400, width: "100%" }}>
+      <div style={{ width: "100%" }}>
         {loading ? <Loading /> : renderAdvancesInfo()}
       </div>
       <AdvanceModal open={openModal} setOpen={setOpenModal} />

@@ -118,7 +118,6 @@ export const appGlass = makeStyles({
 });
 
 export const modalStyled = makeStyles({
-  root: {},
   box: {
     background: "rgba(255,255,255,.3)",
     maxWidth: "600px",
@@ -131,6 +130,9 @@ export const modalStyled = makeStyles({
     border: "1px solid rgba(255,255,255,.3)",
     borderRadius: "10px",
     boxShadow: "rgba(255, 255, 255, 0.4) 1.95px 1.95px 2.6px",
+    "& img:hover":{
+      cursor: "pointer",
+    }
   },
   title: {
     background: "transparent",

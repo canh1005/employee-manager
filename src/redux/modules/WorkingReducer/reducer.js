@@ -20,17 +20,7 @@ export const workingReducer = (state = initialState, action) => {
       state.loading = false;
       state.error = action.err;
       return { ...state };
-    case ActionTypes.GET_WORKING_PAGE_REQUEST:
-      state.loading = true;
-      return { ...state };
-    case ActionTypes.GET_WORKING_PAGE_SUCCESS:
-      state.loading = false;
-      state.data = action.data;
-      return { ...state };
-    case ActionTypes.GET_WORKING_PAGE_FAILED:
-      state.loading = false;
-      state.error = action.err;
-      return { ...state };
+    
     //Delete working
     case ActionTypes.DELETE_WORKING_REQUEST:
       return { ...state };

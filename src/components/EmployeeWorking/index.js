@@ -16,6 +16,7 @@ import DataTable from "components/Commons/DataTable";
 import Loading from "components/Commons/Loading";
 import { Paginations } from "components/Commons/Pagination";
 import queryString from "query-string";
+import Notification from "components/Commons/Notifications/Notification";
 
 const workingColumns = [
   {
@@ -40,6 +41,7 @@ function EmployeeWorking() {
   //Get data form store and declare a dispatch
   const workingInfo = useSelector((state) => state.workingReducer.data);
   const loading = useSelector((state) => state.workingReducer.loading);
+  const error = useSelector((state) => state.workingReducer.error);
 
   const dispatch = useDispatch();
 
@@ -67,10 +69,35 @@ function EmployeeWorking() {
     console.log("working mount");
 
     return () => {
-      dispatch(actClearData());
       console.log("working unmount");
     };
   }, [filter]);
+  useEffect(() => {
+    console.log("working modal mount!");
+    if (error) {
+      switch (error.status) {
+        case 400:
+          setNotify({
+            ...notify,
+            isOpen: true,
+            type: "error",
+            message: error && error.data && error.data.message,
+          });
+          break;
+        default:
+          setNotify({
+            ...notify,
+            isOpen: true,
+            type: "success",
+            message: "Add working success!",
+          });
+          break;
+      }
+    }
+    return () => {
+      console.log("working modal unmount!");
+    };
+  }, [error]);
 
   const handleDeleteDialog = (working_id) => {
     setConfirmDialog({
@@ -98,7 +125,7 @@ function EmployeeWorking() {
   const renderWorkingInfo = () => {
     if (workingInfo && workingInfo.content) {
       const workingInfoRows = workingInfo.content.map((row, index) => ({
-        no: index,
+        no: index + 1,
         date: moment(row.date).format("DD-MM-YYYY"),
         hour: row.hour,
         option: (
@@ -107,7 +134,7 @@ function EmployeeWorking() {
           </Button>
         ),
       }));
-      return <DataTable rows={workingInfoRows} columns={workingColumns} />;
+      return <DataTable rows={workingInfoRows} columns={workingColumns} size={workingInfo.size} rowsPerPage={workingInfo.numberOfElements} lastPage={workingInfo.last}/>;
     }
   };
   return (
@@ -117,7 +144,7 @@ function EmployeeWorking() {
           <AddCircleOutlineIcon />
         </Button>
       </Tooltip>
-      <div style={{ height: 400, width: "100%" }}>
+      <div style={{ width: "100%" }}>
         {loading ? <Loading /> : renderWorkingInfo()}
       </div>
       <ResponsiveDialog
@@ -134,6 +161,8 @@ function EmployeeWorking() {
           numberOfPage={workingInfo && workingInfo.totalPages}
         />
       )}
+      <Notification notify={notify} setNotify={setNotify} />
+
     </>
   );
 }
