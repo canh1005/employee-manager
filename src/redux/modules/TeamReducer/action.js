@@ -1,5 +1,6 @@
 import * as ActionTypes from "./constances";
 import { api } from "utils/api";
+import { actGetEmployeeByTeamAPI } from "../GetEmployeeByTeamReducer/action";
 
 //Get All team
 export const actGetTeamAPI = () => {
@@ -40,6 +41,8 @@ export const actGetTeamPageAPI = (page) => {
       .get(`team/getPage?page=${page}`)
       .then((result) => {
         dispatch(actGetTeamPageSuccess(result.data.data));
+        dispatch(actGetEmployeeByTeamAPI(result.data.data.content[0].id));
+        dispatch(actSelectedTeamData(result.data.data.content[0]))
       })
       .catch((err) => {
         dispatch(actGetTeamPageFailed(err));
@@ -99,5 +102,11 @@ const actAddTeamFailed = (err) => {
 export const actClearTeamData = () => {
   return{
     type: ActionTypes.CLEAR_TEAM_DATA
+  }
+};
+export const actSelectedTeamData = (data) => {
+  return{
+    type: ActionTypes.SELECTED_TEAM_DATA,
+    payload: data,
   }
 };

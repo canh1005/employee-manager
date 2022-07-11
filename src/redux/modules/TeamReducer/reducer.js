@@ -4,6 +4,7 @@ let initialState = {
   loading: false,
   data: null,
   error: null,
+  selectedTeam: null,
 };
 
 export const teamReducer = (state = initialState, action) => {
@@ -27,6 +28,10 @@ export const teamReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.ADD_TEAM_FAILED:
       state.error = action.err;
+      return { ...state };
+    //Seleted Team
+    case ActionTypes.SELECTED_TEAM_DATA:
+      state.selectedTeam = action.payload;
       return { ...state };
     //Clear team data
     case ActionTypes.CLEAR_TEAM_DATA:

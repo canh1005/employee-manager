@@ -22,12 +22,12 @@ const actGetEmployeeByTeamRequest = () => {
 const actGetEmployeeByTeamSuccess = (data) => {
   return {
     type: ActionTypes.GET_EMPLOYEE_BY_TEAM_SUCCESS,
-    data: data,
+    data
   };
 };
 const actGetEmployeeByTeamFailed = (err) => {
   return {
     type: ActionTypes.GET_EMPLOYEE_BY_TEAM_FAILED,
-    error: err,
+    err
   };
 };

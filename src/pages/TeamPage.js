@@ -1,14 +1,15 @@
 import { Box, Button, TextField, Tooltip, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "components/Commons/DataTable";
 import {
   actAddTeamAPI,
   actClearTeamData,
   actGetTeamPageAPI,
+  actSelectedTeamData,
 } from "redux/modules/TeamReducer/action";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import { actGetEmployeeByTeamAPI } from "redux/modules/GetEmployeeByTeamReducer/action";
+import { actGetEmployeeByTeamAPI, actGetEmployeeByTeamFirstLoad } from "redux/modules/GetEmployeeByTeamReducer/action";
 import { teamPageStyled } from "material-ui";
 import Loading from "components/Commons/Loading";
 import { Paginations } from "components/Commons/Pagination";
@@ -58,8 +59,8 @@ function TeamPage() {
     (state) => state.getEmployeeByTeamReducer.data
   );
   const error = useSelector((state) => state.teamReducer.error);
-  // const error = useSelector((state) => state.addTeamReducer.error);
   const loading = useSelector((state) => state.teamReducer.loading);
+  const selectedTeam = useSelector((state) => state.teamReducer.selectedTeam);
   const dispatch = useDispatch();
   const [openInput, setOpenInput] = useState(false);
 
@@ -108,8 +109,9 @@ function TeamPage() {
     }
   }, [error]);
 
-  const handleDetail = (teamID) => {
-    dispatch(actGetEmployeeByTeamAPI(teamID));
+  const handleDetail = (team) => {
+    dispatch(actGetEmployeeByTeamAPI(team.id));
+    dispatch(actSelectedTeamData(team))
   };
 
   const renderTeamTable = () => {
@@ -120,7 +122,7 @@ function TeamPage() {
         detail: (
           <Button
             onClick={() => {
-              handleDetail(teamItem.id);
+              handleDetail(teamItem);
             }}
           >
             <BadgeOutlinedIcon />
@@ -197,7 +199,7 @@ function TeamPage() {
           </form>
         </Typography>
         <Typography className={classes.title} variant="h5">
-          Result all employee team manager - Total{" "}
+          Result all employee {selectedTeam && selectedTeam.name} team - Total{" "}
           {employeeByTeam ? employeeByTeam.content.length : 0} employees
         </Typography>
       </Box>
