@@ -40,11 +40,11 @@ export const actUpdateEmployee = (employee, employeeID) => {
     api
       .put(`employee/update`, employee)
       .then((result) => {
-        dispatch(actUpdateEmployeeSuccess(result.data));
+        dispatch(actUpdateEmployeeSuccess(result.data.data));
         dispatch(actEmployeeDetailAPI(employeeID));
       })
       .catch((err) => {
-        dispatch(actUpdateEmployeeFailed(err));
+        dispatch(actUpdateEmployeeFailed(err.response));
       });
   };
 };

@@ -33,13 +33,14 @@ const actGetAdvancesFailed = (err) => {
   };
 };
 //ADD
-export const actAddAdvanceAPI = (advance_item) => {
+export const actAddAdvanceAPI = (advance_item, employee_id, page) => {
   return (dispatch) => {
     dispatch(actAddAdvanceRequest());
     api
       .post(`advance/create`, advance_item)
       .then((result) => {
         dispatch(actAddAdvanceSuccess(result.data));
+        dispatch(actGetAdvancesAPI(employee_id, page));
       })
       .catch((err) => {
         dispatch(actAddAdvanceFailed(err.response));
@@ -64,13 +65,14 @@ const actAddAdvanceFailed = (err) => {
   };
 };
 //DELETE
-export const actDeleteAdvanceAPI = (date, employee_id) => {
+export const actDeleteAdvanceAPI = (date, employee_id, page) => {
   return (dispatch) => {
     dispatch(actDeleteAdvanceRequest());
     api
       .delete(`advance/delete?date=${date}&employee_id=${employee_id}`)
       .then((result) => {
         dispatch(actDeleteAdvanceSuccess(date));
+        dispatch(actGetAdvancesAPI(employee_id, page));
       })
       .catch((err) => {
         dispatch(actDeleteAdvanceFailed(err.response));
@@ -95,7 +97,7 @@ const actDeleteAdvanceFailed = (err) => {
   };
 };
 export const actClearAdvances = () => {
-  return{
+  return {
     type: ActionTypes.CLEAR_ADVANCE_DATA,
-  }
+  };
 };

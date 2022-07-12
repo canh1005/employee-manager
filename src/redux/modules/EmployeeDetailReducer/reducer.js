@@ -4,7 +4,7 @@ let initialState = {
   loading: false,
   data: null,
   error: null,
-  userEdited: null,
+  employeeEdited: null,
 };
 
 export const employeeDetailReducer = (state = initialState, action) => {
@@ -25,13 +25,14 @@ export const employeeDetailReducer = (state = initialState, action) => {
     case ActionTypes.UPDATE_EMPLOYEE_REQUEST:
       return { ...state };
     case ActionTypes.UPDATE_EMPLOYEE_SUCCESS:
-      state.userEdited = action.data;
+      state.employeeEdited = action.data;
+      state.error = {status: 200, message: "Update employee success"}
       return { ...state };
     case ActionTypes.UPDATE_EMPLOYEE_FAILED:
       state.error = action.err;
       return { ...state };
     case ActionTypes.EMPLOYEE_EDITED:
-      state.userEdited = action.payload;
+      state.employeeEdited = action.payload;
       return { ...state };
     case ActionTypes.EMPLOYEE_DETAIL_CLEAR:
       state.data = null;

@@ -1,11 +1,11 @@
 import * as ActionTypes from "./contances";
 import { api } from "../../../utils/api";
 
-export const actGetEmployeeByTeamAPI = (team_id) => {
+export const actGetEmployeeByTeamAPI = (team_id, page) => {
   return (dispatch) => {
     dispatch(actGetEmployeeByTeamRequest());
     api
-      .get(`employee/getEmployeeByTeam?team_id=${team_id}&page=0`)
+      .get(`employee/getEmployeeByTeam?team_id=${team_id}&page=${page}`)
       .then((result) => {
         dispatch(actGetEmployeeByTeamSuccess(result.data.data));
       })

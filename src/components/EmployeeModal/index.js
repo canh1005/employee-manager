@@ -32,7 +32,7 @@ function EmployeeModal(props) {
   const employeeID = useParams().id;
   const listTeam = useSelector((state) => state.teamReducer.data);
   const employeeEdit = useSelector(
-    (state) => state.employeeDetailReducer.userEdited
+    (state) => state.employeeDetailReducer.employeeEdited
   );
   const dispatch = useDispatch();
   const handleClose = () =>
@@ -74,7 +74,6 @@ function EmployeeModal(props) {
     },
   });
   useEffect(() => {
-    console.log("employee modal mount!");
     if (employeeEdit) {
       setEmployee({
         id: employeeID,
@@ -119,7 +118,6 @@ function EmployeeModal(props) {
           frmValid: false,
         },
       });
-      console.log("employee modal unmount!");
     };
   }, [employeeEdit]);
   const handleGenderChange = (event) => {

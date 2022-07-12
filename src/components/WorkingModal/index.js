@@ -1,7 +1,7 @@
 import { DatePicker } from "@mui/lab";
 import { Button, Modal, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,6 @@ import { actAddWorkingAPI } from "redux/modules/WorkingReducer/action";
 import { checkEmpty } from "../../utils/Validations";
 import { modalStyled } from "material-ui";
 import queryString from "query-string";
-import Notification from "components/Commons/Notifications/Notification";
 
 function WorkingModal(props) {
   //Get data form store and declare a dispatch action
@@ -17,11 +16,6 @@ function WorkingModal(props) {
 
   const dispatch = useDispatch();
 
-  const [notify, setNotify] = useState({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
   const { open, setOpen, filter } = props;
   const classes = modalStyled();
   const employeeID = useParams().id;
@@ -38,7 +32,6 @@ function WorkingModal(props) {
   });
 
 
-  console.log("working", working);
   const handleClose = () => setOpen(false);
   const handleDate = (event) => {
     let formatDate = moment(event).format("YYYY-MM-DD");
@@ -94,7 +87,6 @@ function WorkingModal(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     setOpen(false);
-    console.log("working", working);
     dispatch(actAddWorkingAPI(queryString.stringify(filter), working));
   };
   return (

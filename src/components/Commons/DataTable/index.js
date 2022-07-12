@@ -16,7 +16,7 @@ import { dataTableStyled } from "material-ui";
 export default function DataTable({ rows, columns, ...props }) {
   console.log(props);
   const emptyRows = props.size - props.rowsPerPage;
-  console.log(emptyRows);
+  console.log({emptyRows});
   const classes = dataTableStyled();
   return (
     <TableContainer component={Paper} className={classes.root}>

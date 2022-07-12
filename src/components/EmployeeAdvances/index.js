@@ -15,7 +15,7 @@ import DataTable from "components/Commons/DataTable";
 import ResponsiveDialog from "components/Commons/Dialog";
 import Loading from "components/Commons/Loading";
 import { Paginations } from "components/Commons/Pagination";
-import queryString from 'query-string'
+import queryString from "query-string";
 import Notification from "components/Commons/Notifications/Notification";
 
 const advancesColumns = [
@@ -58,10 +58,13 @@ function EmployeeAdvances() {
   const [filter, setFilter] = useState({
     page: 0,
   });
-
   useEffect(() => {
     dispatch(actGetAdvancesAPI(employeeID, filter.page));
-    console.log("advances mount!");
+    return () => {
+      dispatch(actClearAdvances());
+    };
+  }, [filter]);
+  useEffect(() => {
     if (error) {
       switch (error.status) {
         case 400:
@@ -83,9 +86,6 @@ function EmployeeAdvances() {
           break;
       }
     }
-    return () => {
-      dispatch(actClearAdvances())
-    }
   }, [error]);
 
   const handleOpenDialog = (date) => {
@@ -101,8 +101,10 @@ function EmployeeAdvances() {
       ...confirmDialog,
       isOpen: false,
     });
-    console.log("advanceDate",date);
-    dispatch(actDeleteAdvanceAPI(moment(date).format("YYYY-MM-DD"),employeeID));
+    console.log("advanceDate", date);
+    dispatch(
+      actDeleteAdvanceAPI(moment(date).format("YYYY-MM-DD"), employeeID, filter.page)
+    );
   };
   const renderAdvancesInfo = () => {
     if (advancesInfo) {
@@ -116,7 +118,15 @@ function EmployeeAdvances() {
           </Button>
         ),
       }));
-      return <DataTable rows={advancesInfoRows} columns={advancesColumns} />;
+      return (
+        <DataTable
+          rows={advancesInfoRows}
+          columns={advancesColumns}
+          size={advancesInfo.size}
+          rowsPerPage={advancesInfo.numberOfElements}
+          lastPage={advancesInfo.last}
+        />
+      );
     }
   };
   return (
@@ -129,11 +139,12 @@ function EmployeeAdvances() {
       <div style={{ width: "100%" }}>
         {loading ? <Loading /> : renderAdvancesInfo()}
       </div>
-      <AdvanceModal open={openModal} setOpen={setOpenModal} />
+      <AdvanceModal open={openModal} setOpen={setOpenModal} filter={filter}/>
       <ResponsiveDialog
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
       />
+
       <Paginations
         filter={filter}
         setPage={setFilter}

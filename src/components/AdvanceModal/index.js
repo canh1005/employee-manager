@@ -10,7 +10,7 @@ import { modalStyled } from "material-ui";
 
 
 function AdvanceModal(props) {
-  const { open, setOpen } = props;
+  const { open, setOpen, filter } = props;
   const classes = modalStyled();
   const dispatch = useDispatch();
   const employeeID = useParams().id;
@@ -38,8 +38,7 @@ function AdvanceModal(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     setOpen(false);
-    console.log("working", advance);
-    dispatch(actAddAdvanceAPI(advance));
+    dispatch(actAddAdvanceAPI( advance, employeeID, filter.page));
   };
   return (
     <>

@@ -1,3 +1,4 @@
+import moment from "moment";
 import * as ActionTypes from "./constances";
 
 let initialState = {
@@ -23,7 +24,7 @@ export const advancesReducer = (state = initialState, action) => {
     case ActionTypes.ADD_ADVANCE_REQUEST:
       return { ...state };
     case ActionTypes.ADD_ADVANCE_SUCCESS:
-      state.data.content = [...state.data.content, action.data];
+      state.data.content = [...state.data.content, action.data.data];
       state.error = { status: 200, message: "Add advances success!" };
       return { ...state };
     case ActionTypes.ADD_ADVANCE_FAILED:
@@ -33,9 +34,8 @@ export const advancesReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.DELETE_ADVANCE_SUCCESS:
       state.loading = false;
-      console.log("action data", action.data);
       state.data.content = state.data.content.filter(
-        (item) => item.date !== action.data
+        (item) => moment(item.date).format("YYYY-MM-DD") !== action.data
       );
       state.error = { status: 200, message: "Delete advances success!" };
       return { ...state };

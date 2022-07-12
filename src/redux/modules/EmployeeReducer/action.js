@@ -1,6 +1,5 @@
 import * as ActionTypes from "./constances";
 import { api } from "utils/api";
-import { actSearchAPI } from "../SearchEmployeeReducer/action";
 import { useNavigate } from "react-router-dom";
 
 //Add
@@ -11,7 +10,7 @@ export const actAddEmployeeAPI = (employee, filter) => {
       .post(`employee/create`, employee)
       .then((result) => {
         dispatch(actAddEmployeeSuccess(result.data));
-        dispatch(actSearchAPI(filter));
+        dispatch(actListPageEmployeeAPI(filter));
       })
       .catch((err) => {
         dispatch(actAddEmployeeFailed(err.response));
@@ -36,34 +35,27 @@ const actAddEmployeeFailed = (err) => {
 };
 
 //DELETE employee
-export const actDeleteEmployeeAPI = (ids) => {
+export const actDeleteEmployeeAPI = (ids, filter, navigate) => {
   return (dispatch) => {
     dispatch(actDeleteEmployeeRequest());
     api
       .delete(`employee/delete?${ids}`)
       .then((result) => {
+        console.log("filter action", filter);
+        // dispatch(actDeleteEmployeeSuccess(ids));
+        // dispatch(actListPageEmployeeAPI(filter));
         dispatch(actDeleteEmployeeSuccess(ids));
-        
+        if (result.data && filter !== "") {
+          dispatch(actListPageEmployeeAPI(filter));
+        } else {
+          navigate("/", { replace: true });
+        }
       })
       .catch((err) => {
         dispatch(actDeleteEmployeeFailed(err.response));
       });
   };
 };
-// export const actDeleteEmployeeSingleAPI = (id) => {
-//   return (dispatch) => {
-//     dispatch(actDeleteEmployeeRequest());
-//     api
-//       .delete(`employee/delete-by-id?employee_id=${id}`)
-//       .then((result) => {
-//         console.log("Delete success");
-//         dispatch(actDeleteEmployeeSuccess(id))
-//       })
-//       .catch((error) => {
-//         dispatch(actDeleteEmployeeFailed(error.response))
-//       });
-//   };
-// };
 const actDeleteEmployeeRequest = () => {
   return {
     type: ActionTypes.DELETE_EMPLOYEE_REQUEST,
@@ -98,18 +90,18 @@ export const actListPageEmployeeAPI = (filter) => {
 };
 const actSearchRequest = () => {
   return {
-    type: ActionTypes.SEARCH_REQUEST,
+    type: ActionTypes.GET_LIST_EMPLOYEE_REQUEST,
   };
 };
 const actSearchSuccess = (data) => {
   return {
-    type: ActionTypes.SEARCH_SUCCESS,
+    type: ActionTypes.GET_LIST_EMPLOYEE_SUCCESS,
     data,
   };
 };
 const actSearchFailed = (err) => {
   return {
-    type: ActionTypes.SEARCH_FAILED,
+    type: ActionTypes.GET_LIST_EMPLOYEE_FAILED,
     err,
   };
 };
@@ -118,5 +110,12 @@ const actSearchFailed = (err) => {
 export const actClearData = () => {
   return {
     type: ActionTypes.CLEAR_DATA,
+  };
+};
+
+export const actGetEmployeeFilter = (filter) => {
+  return {
+    type: ActionTypes.EMPLOYEE_FILTER,
+    payload: filter,
   };
 };

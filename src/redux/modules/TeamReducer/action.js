@@ -34,14 +34,14 @@ const actGetTeamFailed = (err) => {
   };
 };
 //Get team page
-export const actGetTeamPageAPI = (page) => {
+export const actGetTeamPageAPI = (page, pageTeam) => {
   return (dispatch) => {
     dispatch(actGetTeamPageRequest());
     api
       .get(`team/getPage?page=${page}`)
       .then((result) => {
         dispatch(actGetTeamPageSuccess(result.data.data));
-        dispatch(actGetEmployeeByTeamAPI(result.data.data.content[0].id));
+        dispatch(actGetEmployeeByTeamAPI(result.data.data.content[0].id, pageTeam));
         dispatch(actSelectedTeamData(result.data.data.content[0]))
       })
       .catch((err) => {

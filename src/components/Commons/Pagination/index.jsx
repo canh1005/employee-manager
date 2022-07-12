@@ -3,6 +3,8 @@ import Pagination from "@mui/material/Pagination";
 
 export function Paginations(props) {
   const { numberOfPage, setPage, filter } = props;
+  console.log("filter page",filter);
+
   useEffect(() => {
     console.log("page mount!");
     return () => {

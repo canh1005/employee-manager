@@ -20,7 +20,6 @@ export const workingReducer = (state = initialState, action) => {
       state.loading = false;
       state.error = action.err;
       return { ...state };
-    
     //Delete working
     case ActionTypes.DELETE_WORKING_REQUEST:
       return { ...state };
@@ -39,7 +38,7 @@ export const workingReducer = (state = initialState, action) => {
     case ActionTypes.ADD_WORKING_FAILED:
       state.error = action.err;
       return { ...state };
-    case ActionTypes.CLEAR_DATA:
+    case ActionTypes.CLEAR_WORKING_DATA:
       state.data = null;
       state.error = null;
     default:

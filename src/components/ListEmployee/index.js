@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox, Tooltip, Typography } from "@mui/material";
 import EmployeeModal from "../EmployeeModal";
 import { Paginations } from "components/Commons/Pagination";
@@ -15,6 +15,7 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import {
   actClearData,
   actDeleteEmployeeAPI,
+  actGetEmployeeFilter,
   actListPageEmployeeAPI,
 } from "redux/modules/EmployeeReducer/action";
 import { listEmpStyled } from "material-ui";
@@ -25,11 +26,14 @@ function ListEmployee() {
   //Style of list employee
   const classes = listEmpStyled();
   //Get data form store and declare a dispatch action
-  const loading = useSelector((state) => state.searchReducer.loading);
-  const searchList = useSelector((state) => state.searchReducer.data);
+  const loading = useSelector((state) => state.employeeReducer.loading);
+  const searchList = useSelector((state) => state.employeeReducer.data);
   const getTeam = useSelector((state) => state.teamReducer.data);
   const dispatch = useDispatch();
   const error = useSelector((state) => state.employeeReducer.error);
+  const employeeFilter = useSelector(
+    (state) => state.employeeReducer.employeeFilter
+  );
 
   const navigate = useNavigate();
 
@@ -50,17 +54,16 @@ function ListEmployee() {
     type: "info",
     message: "",
   });
-
+  useEffect(() => {
+    return () => {
+      dispatch(actClearData());
+    };
+  }, []);
   useEffect(() => {
     const paramsString = queryString.stringify(filter);
     dispatch(actListPageEmployeeAPI(paramsString));
     dispatch(actGetTeamAPI());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    console.log("list employee mount!");
-    return () => {
-      console.log("list employee unmount!");
-      dispatch(actClearData());
-    };
   }, [filter]);
 
   useEffect(() => {
@@ -105,7 +108,7 @@ function ListEmployee() {
     }
     setSelected(newSelected);
   };
-  
+
   const handleSelectAll = (e) => {
     if (e.target.checked) {
       const checkedAll = searchList.content.map((item) => item.id.toString());
@@ -117,6 +120,7 @@ function ListEmployee() {
   //Handle open employee detail
   const handleEmployeeDetail = (employee) => {
     navigate(`${employee.id}`, { replace: true });
+    dispatch(actGetEmployeeFilter(queryString.stringify(filter)));
   };
 
   const handleKeywordChange = (keyword) => {
@@ -142,14 +146,25 @@ function ListEmployee() {
       isOpen: false,
     });
     console.log("employee_id", employee_id);
+    // dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`));
     // dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`, queryString.stringify(filter)));
-    if(selected && selected.length > 0){
+    if (selected && selected.length > 0) {
       let selectedObj = {
         ids: selected,
-      }
-      dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)));
-    }else{
-      dispatch(actDeleteEmployeeAPI(`ids=${employee_id}`));
+      };
+      dispatch(
+        actDeleteEmployeeAPI(
+          queryString.stringify(selectedObj),
+          queryString.stringify(filter)
+        )
+      );
+    } else {
+      dispatch(
+        actDeleteEmployeeAPI(
+          `ids=${employee_id}`,
+          queryString.stringify(filter)
+        )
+      );
     }
   };
 
@@ -220,7 +235,15 @@ function ListEmployee() {
           </>
         ),
       }));
-      return <DataTable columns={columns} rows={rows} size={searchList.size} rowsPerPage={searchList.numberOfElements} lastPage={searchList.last} />;
+      return (
+        <DataTable
+          columns={columns}
+          rows={rows}
+          size={searchList.size}
+          rowsPerPage={searchList.numberOfElements}
+          lastPage={searchList.last}
+        />
+      );
     }
   };
 
@@ -229,8 +252,12 @@ function ListEmployee() {
       ids: selected,
     };
     console.log("Check", queryString.stringify(selectedObj));
-    // dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)), queryString.stringify(filter));
-    dispatch(actDeleteEmployeeAPI(queryString.stringify(selectedObj)));
+    dispatch(
+      actDeleteEmployeeAPI(
+        queryString.stringify(selectedObj),
+        queryString.stringify(filter)
+      )
+    );
   };
 
   return (
@@ -258,7 +285,9 @@ function ListEmployee() {
         </Box>
       </Box>
 
-      <EmployeeModal open={openModal} setOpenModal={setOpenModal} />
+      {openModal.isOpen && (
+        <EmployeeModal open={openModal} setOpenModal={setOpenModal} />
+      )}
       {loading ? <Loading /> : renderEmployeeTable()}
       <Paginations
         filter={filter}

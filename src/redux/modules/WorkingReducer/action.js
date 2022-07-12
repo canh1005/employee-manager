@@ -127,8 +127,8 @@ const actAddWorkingFailed = (err) => {
     err,
   };
 };
-export const actClearData = () => {
+export const actClearWorkingData = () => {
   return {
-    type: ActionTypes.CLEAR_DATA,
+    type: ActionTypes.CLEAR_WORKING_DATA,
   };
 };

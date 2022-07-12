@@ -7,6 +7,7 @@ import {
   actDeleteWorkingAPI,
   actClearData,
   actGetWorkingPageAPI,
+  actClearWorkingData,
 } from "redux/modules/WorkingReducer/action";
 import moment from "moment";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -67,13 +68,11 @@ function EmployeeWorking() {
   useEffect(() => {
     dispatch(actGetWorkingPageAPI(queryString.stringify(filter)));
     console.log("working mount");
-
     return () => {
-      console.log("working unmount");
+      dispatch(actClearWorkingData());
     };
   }, [filter]);
   useEffect(() => {
-    console.log("working modal mount!");
     if (error) {
       switch (error.status) {
         case 400:
@@ -94,9 +93,6 @@ function EmployeeWorking() {
           break;
       }
     }
-    return () => {
-      console.log("working modal unmount!");
-    };
   }, [error]);
 
   const handleDeleteDialog = (working_id) => {
@@ -134,7 +130,15 @@ function EmployeeWorking() {
           </Button>
         ),
       }));
-      return <DataTable rows={workingInfoRows} columns={workingColumns} size={workingInfo.size} rowsPerPage={workingInfo.numberOfElements} lastPage={workingInfo.last}/>;
+      return (
+        <DataTable
+          rows={workingInfoRows}
+          columns={workingColumns}
+          size={workingInfo.size}
+          rowsPerPage={workingInfo.numberOfElements}
+          lastPage={workingInfo.last}
+        />
+      );
     }
   };
   return (
@@ -154,15 +158,12 @@ function EmployeeWorking() {
       {openModal && (
         <WorkingModal open={openModal} setOpen={setOpenModal} filter={filter} />
       )}
-      {workingInfo && (
-        <Paginations
-          filter={filter}
-          setPage={setFilter}
-          numberOfPage={workingInfo && workingInfo.totalPages}
-        />
-      )}
+      <Paginations
+        filter={filter}
+        setPage={setFilter}
+        numberOfPage={workingInfo && workingInfo.totalPages}
+      />
       <Notification notify={notify} setNotify={setNotify} />
-
     </>
   );
 }

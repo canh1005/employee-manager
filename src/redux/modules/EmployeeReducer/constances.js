@@ -8,9 +8,12 @@ export const DELETE_EMPLOYEE_SUCCESS = '/delete_employee_success';
 export const DELETE_EMPLOYEE_FAILED = '/delete_employee_failed';
 
 //GET employee
-export const SEARCH_REQUEST = '/search_request';
-export const SEARCH_SUCCESS = '/search_success';
-export const SEARCH_FAILED = '/search_failed';
+export const GET_LIST_EMPLOYEE_REQUEST = '/get_list_employee_request';
+export const GET_LIST_EMPLOYEE_SUCCESS = '/get_list_employee_success';
+export const GET_LIST_EMPLOYEE_FAILED = '/get_list_employee_failed';
+
+//Employee filter
+export const EMPLOYEE_FILTER = '/employee_filter'
 
 //CLEAR_DATA
 export const CLEAR_DATA = '/clear_data'

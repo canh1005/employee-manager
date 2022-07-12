@@ -9,7 +9,10 @@ import {
   actSelectedTeamData,
 } from "redux/modules/TeamReducer/action";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import { actGetEmployeeByTeamAPI, actGetEmployeeByTeamFirstLoad } from "redux/modules/GetEmployeeByTeamReducer/action";
+import {
+  actGetEmployeeByTeamAPI,
+  actGetEmployeeByTeamFirstLoad,
+} from "redux/modules/GetEmployeeByTeamReducer/action";
 import { teamPageStyled } from "material-ui";
 import Loading from "components/Commons/Loading";
 import { Paginations } from "components/Commons/Pagination";
@@ -83,12 +86,18 @@ function TeamPage() {
   });
 
   useEffect(() => {
-    dispatch(actGetTeamPageAPI(teamFilter.page));
-    console.log("Team mount!");
+    dispatch(actGetTeamPageAPI(teamFilter.page, employeeByTeamFilter.page));
     return () => {
       dispatch(actClearTeamData());
     };
   }, [teamFilter]);
+  useEffect(() => {
+    if (selectedTeam) {
+      dispatch(
+        actGetEmployeeByTeamAPI(selectedTeam.id, employeeByTeamFilter.page)
+      );
+    }
+  }, [employeeByTeamFilter]);
   useEffect(() => {
     if (error) {
       if (error.status === 400) {
@@ -110,8 +119,8 @@ function TeamPage() {
   }, [error]);
 
   const handleDetail = (team) => {
-    dispatch(actGetEmployeeByTeamAPI(team.id));
-    dispatch(actSelectedTeamData(team))
+    dispatch(actGetEmployeeByTeamAPI(team.id, employeeByTeamFilter.page));
+    dispatch(actSelectedTeamData(team));
   };
 
   const renderTeamTable = () => {
@@ -200,7 +209,7 @@ function TeamPage() {
         </Typography>
         <Typography className={classes.title} variant="h5">
           Result all employee {selectedTeam && selectedTeam.name} team - Total{" "}
-          {employeeByTeam ? employeeByTeam.content.length : 0} employees
+          {employeeByTeam ? employeeByTeam.totalElements : 0} employees
         </Typography>
       </Box>
       <Box className={classes.bodyContent}>
@@ -214,7 +223,6 @@ function TeamPage() {
         </Box>
         <Box>
           {renderEmployeeTable()}
-
           <Paginations
             filter={employeeByTeamFilter}
             setPage={setEmployeeByTeamFilter}

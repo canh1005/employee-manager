@@ -23,10 +23,14 @@ import ResponsiveDialog from "../../Commons/Dialog";
 import AddImageModal from "components/AddImageModal";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import { actDeleteEmployeeAPI } from "redux/modules/EmployeeReducer/action";
-import Loading from "components/Commons/Loading";
+import Notification from "components/Commons/Notifications/Notification";
 
 function EmployeeInfoDetail() {
   const employeeInfo = useSelector((state) => state.employeeDetailReducer.data);
+  const error = useSelector((state) => state.employeeDetailReducer.error);
+  const employeeFilter = useSelector(
+    (state) => state.employeeReducer.employee_filter
+  );
   const dispatch = useDispatch();
 
   const employeeId = useParams().id;
@@ -36,13 +40,18 @@ function EmployeeInfoDetail() {
     isOpen: false,
     title: "",
   });
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    type: "info",
+    message: "",
+  });
   const [openEditModel, setOpenEditModel] = useState({
     isOpen: false,
   });
   const [openAddImgModal, setOpenAddImgModal] = useState({
     isOpen: false,
   });
-  
+
   useEffect(() => {
     dispatch(actEmployeeDetailAPI(employeeId));
     dispatch(actGetTeamAPI());
@@ -52,6 +61,31 @@ function EmployeeInfoDetail() {
       dispatch(actEmployeeDetailClear());
     };
   }, []);
+  useEffect(() => {
+    if (error) {
+      switch (error.status) {
+        case 400:
+          setNotify({
+            ...notify,
+            type: "error",
+            message: error.data && error.data.message,
+            isOpen: true,
+          });
+          break;
+        case 200:
+          setNotify({
+            ...notify,
+            type: "success",
+            message: error && error.message,
+            isOpen: true,
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  }, [error]);
+
   const renderEmployeeInfo = () => {
     if (employeeInfo) {
       return (
@@ -95,8 +129,8 @@ function EmployeeInfoDetail() {
       ...confirmDialog,
       isOpen: false,
     });
-    dispatch(actDeleteEmployeeAPI(`ids=${employeeId}`));
-    navigate("/", { replace: true });
+    // dispatch(actDeleteEmployeeAPI(`ids=${employeeId}`, employeeFilter));
+    dispatch(actDeleteEmployeeAPI(`ids=${employeeId}`, "", navigate));
   };
   return (
     <>
@@ -136,6 +170,7 @@ function EmployeeInfoDetail() {
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
       />
+      <Notification notify={notify} setNotify={setNotify} />
       <AddImageModal open={openAddImgModal} setOpen={setOpenAddImgModal} />
     </>
   );
