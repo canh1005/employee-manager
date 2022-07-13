@@ -24,10 +24,12 @@ import AddImageModal from "components/AddImageModal";
 import { actGetTeamAPI } from "redux/modules/TeamReducer/action";
 import { actDeleteEmployeeAPI } from "redux/modules/EmployeeReducer/action";
 import Notification from "components/Commons/Notifications/Notification";
+import Loading from "components/Commons/Loading";
 
 function EmployeeInfoDetail() {
   const employeeInfo = useSelector((state) => state.employeeDetailReducer.data);
   const error = useSelector((state) => state.employeeDetailReducer.error);
+  const imgLoading = useSelector((state) => state.imageReducer.loading);
   const employeeFilter = useSelector(
     (state) => state.employeeReducer.employee_filter
   );
@@ -141,14 +143,22 @@ function EmployeeInfoDetail() {
             component="label"
             onClick={() => setOpenAddImgModal({ isOpen: true })}
           >
-            <Avatar
-              className={classes.img}
-              alt={employeeInfo ? `${employeeInfo.fullName} avatar` : ""}
-              src={employeeInfo ? employeeInfo.imgName : ""}
-            />
-            <Typography variant="span" className={classes.imgOverlay}>
-              Upload Photo
-            </Typography>
+            {imgLoading ? (
+              <Box style={{ position: "absolute", top: 0, left: "-50px" }}>
+                <Loading />
+              </Box>
+            ) : (
+              <>
+                <Avatar
+                  className={classes.img}
+                  alt={employeeInfo ? `${employeeInfo.fullName} avatar` : ""}
+                  src={employeeInfo ? employeeInfo.imgName : ""}
+                />
+                <Typography variant="span" className={classes.imgOverlay}>
+                  Upload Photo
+                </Typography>
+              </>
+            )}
           </Button>
         </Box>
         <Box className={classes.employeeInfoBtn}>

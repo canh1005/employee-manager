@@ -41,8 +41,9 @@ export const actGetTeamPageAPI = (page, pageTeam) => {
       .get(`team/getPage?page=${page}`)
       .then((result) => {
         dispatch(actGetTeamPageSuccess(result.data.data));
-        dispatch(actGetEmployeeByTeamAPI(result.data.data.content[0].id, pageTeam));
-        dispatch(actSelectedTeamData(result.data.data.content[0]))
+        // dispatch(actGetEmployeeByTeamAPI(result.data.data.content[0].id, pageTeam));
+        dispatch(actSelectedFirstTeamData(result.data.data.content[0]))
+        // dispatch(actSelectedTeamData(result.data.data.content[0]))
       })
       .catch((err) => {
         dispatch(actGetTeamPageFailed(err));
@@ -110,3 +111,9 @@ export const actSelectedTeamData = (data) => {
     payload: data,
   }
 };
+const actSelectedFirstTeamData = data =>{
+  return{
+    type: ActionTypes.SELECTED_FIRST_TEAM_DATA,
+    payload: data,
+  }
+}

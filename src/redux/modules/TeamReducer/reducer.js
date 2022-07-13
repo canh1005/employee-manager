@@ -4,7 +4,8 @@ let initialState = {
   loading: false,
   data: null,
   error: null,
-  selectedTeam: null,
+  selectedTeam: "",
+  selectedFirstTeam: "",
 };
 
 export const teamReducer = (state = initialState, action) => {
@@ -37,6 +38,14 @@ export const teamReducer = (state = initialState, action) => {
     case ActionTypes.CLEAR_TEAM_DATA:
       state.data = null;
       state.error = null;
+      return { ...state };
+    //Select first team
+    case ActionTypes.SELECTED_FIRST_TEAM_DATA:
+      if(state.selectedFirstTeam === ""){
+        state.selectedFirstTeam = action.payload
+      }else{
+        state.selectedFirstTeam = state.selectedFirstTeam
+      }
       return { ...state };
     default:
       return { ...state };

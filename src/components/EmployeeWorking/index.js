@@ -30,7 +30,7 @@ const workingColumns = [
   },
   {
     field: "hour",
-    headerName: "Hour",
+    headerName: "Hours",
   },
   {
     field: "option",
@@ -123,7 +123,7 @@ function EmployeeWorking() {
       const workingInfoRows = workingInfo.content.map((row, index) => ({
         no: index + 1,
         date: moment(row.date).format("DD-MM-YYYY"),
-        hour: row.hour,
+        hour: `${row.hour} hours`,
         option: (
           <Button>
             <DeleteIcon onClick={() => handleDeleteDialog(row.id)} />

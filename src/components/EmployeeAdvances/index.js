@@ -111,7 +111,7 @@ function EmployeeAdvances() {
       const advancesInfoRows = advancesInfo.content.map((row, index) => ({
         no: index + 1,
         date: moment(row.date).format("DD-MM-YYYY"),
-        money: row.money,
+        money: `$ ${row.money}`,
         option: (
           <Button key={index} onClick={() => handleOpenDialog(row.date)}>
             <DeleteIcon />

@@ -148,9 +148,9 @@ function EmployeeAdvances(props) {
           <Typography>
             Number of working day: {statisticInfo.numberOfWorkingDay}
           </Typography>
-          <Typography>Total get: {statisticInfo.totalGet}</Typography>
-          <Typography>Total advances: {statisticInfo.totalAdvances}</Typography>
-          <Typography>Summary: {statisticInfo.totalSalary}</Typography>
+          <Typography>Total get: ${statisticInfo.totalGet}</Typography>
+          <Typography>Total advances: ${statisticInfo.totalAdvances}</Typography>
+          <Typography>Summary: ${statisticInfo.totalSalary}</Typography>
         </Box>
       );
     }

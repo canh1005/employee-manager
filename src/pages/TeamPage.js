@@ -64,6 +64,9 @@ function TeamPage() {
   const error = useSelector((state) => state.teamReducer.error);
   const loading = useSelector((state) => state.teamReducer.loading);
   const selectedTeam = useSelector((state) => state.teamReducer.selectedTeam);
+  const selectedFirstTeam = useSelector(
+    (state) => state.teamReducer.selectedFirstTeam
+  );
   const dispatch = useDispatch();
   const [openInput, setOpenInput] = useState(false);
 
@@ -97,7 +100,14 @@ function TeamPage() {
         actGetEmployeeByTeamAPI(selectedTeam.id, employeeByTeamFilter.page)
       );
     }
-  }, [employeeByTeamFilter]);
+  }, [employeeByTeamFilter, selectedTeam]);
+  useEffect(() => {
+    if (selectedFirstTeam) {
+      dispatch(
+        actGetEmployeeByTeamAPI(selectedFirstTeam.id, employeeByTeamFilter.page)
+      );
+    }
+  }, [selectedFirstTeam]);
   useEffect(() => {
     if (error) {
       if (error.status === 400) {
@@ -208,13 +218,16 @@ function TeamPage() {
           </form>
         </Typography>
         <Typography className={classes.title} variant="h5">
-          Result all employee {selectedTeam && selectedTeam.name} team - Total{" "}
-          {employeeByTeam ? employeeByTeam.totalElements : 0} employees
+          Result all employee{" "}
+          {selectedTeam === "" ? selectedFirstTeam.name : selectedTeam.name}{" "}
+          team - Total {employeeByTeam ? employeeByTeam.totalElements : 0}{" "}
+          employees
         </Typography>
       </Box>
       <Box className={classes.bodyContent}>
         <Box>
           {loading ? <Loading /> : <>{renderTeamTable()}</>}
+
           <Paginations
             filter={teamFilter}
             setPage={setTeamFilter}

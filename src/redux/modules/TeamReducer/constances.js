@@ -8,6 +8,7 @@ export const GET_TEAM_PAGE_FAILED = '/get_team_page_failed';
 
 export const CLEAR_TEAM_DATA = "/clear_team_data";
 export const SELECTED_TEAM_DATA = "/selected_team_data";
+export const SELECTED_FIRST_TEAM_DATA = "/selected_first_team_data";
 
 export const ADD_TEAM_REQUEST = '/add_team_request';
 export const ADD_TEAM_SUCCESS = '/add_team_success';
