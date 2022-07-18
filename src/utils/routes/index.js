@@ -10,44 +10,44 @@ import EmployeePage from "pages/EmployeePage";
 import PageNotFound from "pages/PageNotFound";
 
 export const routes = [
-    {
+  {
+    path: "/",
+    element: <HomeTemple />,
+    children: [
+      {
         path: "/",
-        element: <HomeTemple />,
+        element: <EmployeePage />,
+      },
+      {
+        path: ":id",
+        element: <EmployeeDetailPage />,
         children: [
-            {
-                path: "/",
-                element: <EmployeePage />,
-            },
-            {
-                path: ":id",
-                element: <EmployeeDetailPage />,
-                children: [
-                    {
-                        path: "info",
-                        element: <EmployeeInfo />,
-                    },
-                    {
-                        path: "working",
-                        element: <EmployeeWorking />,
-                    },
-                    {
-                        path: "advances",
-                        element: <EmployeeAdvances />,
-                    },
-                    {
-                        path: "statistics",
-                        element: <EmployeeStatistic />,
-                    },
-                ],
-            },
-            {
-                path: "team",
-                element: <TeamPage />,
-            },
+          {
+            path: "info",
+            element: <EmployeeInfo />,
+          },
+          {
+            path: "working",
+            element: <EmployeeWorking />,
+          },
+          {
+            path: "advances",
+            element: <EmployeeAdvances />,
+          },
+          {
+            path: "statistics",
+            element: <EmployeeStatistic />,
+          },
         ],
-    },
-    {
+      },
+      {
+        path: "team",
+        element: <TeamPage />,
+      },
+      {
         path: "*",
-        element: <PageNotFound/>
-    }
+        element: <PageNotFound />,
+      },
+    ],
+  },
 ];

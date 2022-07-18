@@ -1,12 +1,13 @@
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { modalStyled } from "material-ui";
-import React, { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { actAddImageAPI } from "redux/modules/ImageReducer/action";
 
 function AddImageModal(props) {
   const { open, setOpen } = props;
+  const employeeInfo = useSelector((state) => state.employeeDetailReducer.data);
   const employeeID = useParams().id;
   const dispatch = useDispatch();
   const imgRef = useRef(null);
@@ -16,9 +17,27 @@ function AddImageModal(props) {
       "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png",
     imgFile: "",
   });
-  const handleImgClick=()=>{
+
+  useEffect(() => {
+    if(employeeInfo){
+      setImage({
+        ...image,
+        profileImg: employeeInfo.imgName,
+      })
+    }
+    return(()=>{
+      console.log("img unmount!");
+      setImage({
+        ...image,
+        imgFile: "",
+      })
+    })
+  }, [employeeInfo && employeeInfo.imgName]);
+  
+  
+  const handleImgClick = () => {
     imgRef.current.click();
-  }
+  };
   const handleImageChange = (event) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -40,7 +59,7 @@ function AddImageModal(props) {
     frmData.append("employeeId", employeeID);
     console.log("frmData", frmData.get("file"));
     setOpen({ isOpen: false });
-    dispatch(actAddImageAPI(frmData,employeeID));
+    dispatch(actAddImageAPI(frmData, employeeID));
   };
   return (
     <Modal
@@ -60,13 +79,19 @@ function AddImageModal(props) {
             marginBottom: "20px",
           }}
         >
-          <img src={image.profileImg} alt="" width="200px" height="200px" onClick={handleImgClick}/>
+          <img
+            src={image.profileImg}
+            alt=""
+            width="200px"
+            height="200px"
+            onClick={handleImgClick}
+          />
           <input
             type="file"
             name="image-upload"
             accept="image/*"
             onChange={handleImageChange}
-            style={{width: "170px"}}
+            style={{ width: "170px" }}
             ref={imgRef}
           />
         </Box>
@@ -83,6 +108,7 @@ function AddImageModal(props) {
             color="primary"
             type="submit"
             onClick={handleSubmit}
+            disabled={image.imgFile !== "" ? false : true}
           >
             Submit
           </Button>

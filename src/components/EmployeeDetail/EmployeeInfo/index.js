@@ -181,7 +181,7 @@ function EmployeeInfoDetail() {
         setConfirmDialog={setConfirmDialog}
       />
       <Notification notify={notify} setNotify={setNotify} />
-      <AddImageModal open={openAddImgModal} setOpen={setOpenAddImgModal} />
+      {openAddImgModal.isOpen && <AddImageModal open={openAddImgModal} setOpen={setOpenAddImgModal} />}
     </>
   );
 }
