@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  Box,
   Paper,
   Table,
   TableBody,
@@ -9,14 +8,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { dataTableStyled } from "material-ui";
 
 export default function DataTable({ rows, columns, ...props }) {
   console.log(props);
   const emptyRows = props.size - props.rowsPerPage;
-  console.log({emptyRows});
+  console.log({ emptyRows });
   const classes = dataTableStyled();
   return (
     <TableContainer component={Paper} className={classes.root}>
@@ -34,7 +32,7 @@ export default function DataTable({ rows, columns, ...props }) {
               {rows.map((row, index) => {
                 return (
                   <>
-                    <TableRow key={index}>
+                    <TableRow sx={{ height: "50px" }} key={index}>
                       {columns.map((column, index) => {
                         return (
                           <TableCell key={index}>{row[column.field]}</TableCell>
@@ -45,7 +43,7 @@ export default function DataTable({ rows, columns, ...props }) {
                 );
               })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: 100 * emptyRows }}>
+                <TableRow style={{ height: 50 * emptyRows }}>
                   <TableCell colSpan={12} />
                 </TableRow>
               )}
@@ -55,11 +53,6 @@ export default function DataTable({ rows, columns, ...props }) {
               <TableRow>
                 <TableCell colSpan={12} sx={{ textAlign: "center" }}>No data found!</TableCell>
               </TableRow>
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 100 * (emptyRows - 1) }}>
-                  <TableCell colSpan={12} />
-                </TableRow>
-              )}
             </>
           )}
         </TableBody>

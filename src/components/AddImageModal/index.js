@@ -19,14 +19,13 @@ function AddImageModal(props) {
   });
 
   useEffect(() => {
-    if(employeeInfo){
+    if(employeeInfo && employeeInfo.imgName !== null){
       setImage({
         ...image,
         profileImg: employeeInfo.imgName,
       })
     }
     return(()=>{
-      console.log("img unmount!");
       setImage({
         ...image,
         imgFile: "",

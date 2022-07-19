@@ -11,7 +11,6 @@ import {
   Button,
   Card,
   CardContent,
-  Input,
   Typography,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
@@ -30,9 +29,6 @@ function EmployeeInfoDetail() {
   const employeeInfo = useSelector((state) => state.employeeDetailReducer.data);
   const error = useSelector((state) => state.employeeDetailReducer.error);
   const imgLoading = useSelector((state) => state.imageReducer.loading);
-  const employeeFilter = useSelector(
-    (state) => state.employeeReducer.employee_filter
-  );
   const dispatch = useDispatch();
 
   const employeeId = useParams().id;
@@ -66,6 +62,8 @@ function EmployeeInfoDetail() {
   useEffect(() => {
     if (error) {
       switch (error.status) {
+        case 404:
+          navigate("*", { replace: true })
         case 400:
           setNotify({
             ...notify,
@@ -131,7 +129,6 @@ function EmployeeInfoDetail() {
       ...confirmDialog,
       isOpen: false,
     });
-    // dispatch(actDeleteEmployeeAPI(`ids=${employeeId}`, employeeFilter));
     dispatch(actDeleteEmployeeAPI(`ids=${employeeId}`, "", navigate));
   };
   return (

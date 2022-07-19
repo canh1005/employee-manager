@@ -11,7 +11,7 @@ export const actEmployeeDetailAPI = (id) => {
         dispatch(actEmployeeDetailSuccess(result.data.data));
       })
       .catch((err) => {
-        dispatch(actEmployeeDetailFailed(err));
+        dispatch(actEmployeeDetailFailed(err.response));
       });
   };
 };

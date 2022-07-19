@@ -119,7 +119,7 @@ function ListEmployee() {
   };
   //Handle open employee detail
   const handleEmployeeDetail = (employee) => {
-    navigate(`${employee.id}`, { replace: true });
+    navigate(`${employee.id}/info`, { replace: true });
     dispatch(actGetEmployeeFilter(queryString.stringify(filter)));
   };
 
@@ -204,7 +204,7 @@ function ListEmployee() {
         headerName: "Option",
       },
     ];
-    if (searchList) {
+    if (searchList && searchList.content) {
       const rows = searchList.content.map((employee, index) => ({
         checkBox: (
           <Checkbox

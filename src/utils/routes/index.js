@@ -11,15 +11,18 @@ import PageNotFound from "pages/PageNotFound";
 
 export const routes = [
   {
-    path: "/",
+    path: "",
     element: <HomeTemple />,
     children: [
       {
-        path: "/",
+        path: "employee",
         element: <EmployeePage />,
+        children: [
+
+        ]
       },
       {
-        path: ":id",
+        path: "employee/:id",
         element: <EmployeeDetailPage />,
         children: [
           {
@@ -50,4 +53,5 @@ export const routes = [
       },
     ],
   },
+
 ];

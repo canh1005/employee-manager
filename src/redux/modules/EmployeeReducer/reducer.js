@@ -19,6 +19,7 @@ export const employeeReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.GET_LIST_EMPLOYEE_FAILED:
       state.loading = false;
+      state.data = { content: [] };
       state.error = action.err;
       return { ...state };
     //Add employee
